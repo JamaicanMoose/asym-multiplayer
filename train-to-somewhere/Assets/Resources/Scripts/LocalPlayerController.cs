@@ -4,6 +4,7 @@ using DarkRift;
 using DarkRift.Client.Unity;
 using DarkRift.Client;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class LocalPlayerController : MonoBehaviour
 {
@@ -17,9 +18,18 @@ public class LocalPlayerController : MonoBehaviour
     CharacterController characterController;
     PlayerObject player;
 
-    public UnityClient Client;
+    UnityClient client;
 
     Vector3 lastPosition;
+    Transform mainCameraTransform;
+
+    private void Awake()
+    {
+        client = GameObject.Find("/Network").GetComponent<UnityClient>();
+        Assert.IsNotNull(client);
+
+        mainCameraTransform = GameObject.FindGameObjectWithTag("MainCamera").transform;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -33,7 +43,8 @@ public class LocalPlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
+        //Vector3 moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
+        Vector3 moveDirection = mainCameraTransform.right * Input.GetAxis("Horizontal") + mainCameraTransform.forward * Input.GetAxis("Vertical");
         moveDirection *= moveSpeed;
         if (Input.GetButtonDown("Jump"))
             moveDirection *= 100f;
@@ -48,7 +59,7 @@ public class LocalPlayerController : MonoBehaviour
                 writer.Write(transform.position.z);
 
                 using (Message message = Message.Create(MOVEMENT_TAG, writer))
-                    Client.SendMessage(message, SendMode.Unreliable);
+                    client.SendMessage(message, SendMode.Unreliable);
             }
 
             lastPosition = transform.position;

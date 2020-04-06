@@ -4,6 +4,7 @@ using DarkRift.Client.Unity;
 using DarkRift.Client;
 using DarkRift;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class PlayerSpawner : MonoBehaviour
 {
@@ -11,8 +12,6 @@ public class PlayerSpawner : MonoBehaviour
     ushort SPAWN_TAG = 0;
     ushort DESPAWN_TAG = 2;
 
-    [SerializeField]
-    [Tooltip("The DarkRift client to communicate on.")]
     UnityClient client;
 
     [SerializeField]
@@ -23,17 +22,12 @@ public class PlayerSpawner : MonoBehaviour
     [Tooltip("The network controllable player prefab.")]
     GameObject networkPrefab;
 
-    [SerializeField]
-    [Tooltip("The network player manager.")]
     NetworkPlayerManager networkPlayerManager;
 
     void Awake()
     {
-        if (client == null)
-        {
-            Debug.LogError("Client unassigned in PlayerSpawner.");
-            Application.Quit();
-        }
+
+        IniFile.IniWriteValue(IniFile.Sections.Train, IniFile.Keys.Address, "127.0.0.1");
 
         if (controllablePrefab == null)
         {
@@ -46,6 +40,11 @@ public class PlayerSpawner : MonoBehaviour
             Debug.LogError("Network Prefab unassigned in PlayerSpawner.");
             Application.Quit();
         }
+
+        client = gameObject.GetComponent<UnityClient>();
+        Assert.IsNotNull(client);
+        networkPlayerManager = gameObject.GetComponent<NetworkPlayerManager>();
+        Assert.IsNotNull(networkPlayerManager);
 
         //Subscribe our MessageReceived function to the client.MessageReceived event
         client.MessageReceived += MessageReceived;

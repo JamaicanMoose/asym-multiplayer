@@ -4,11 +4,10 @@ using UnityEngine;
 using DarkRift;
 using DarkRift.Client;
 using DarkRift.Client.Unity;
+using UnityEngine.Assertions;
 
 public class NetworkPlayerManager : MonoBehaviour
 {
-    [SerializeField]
-    [Tooltip("The DarkRift client to communicate on.")]
     UnityClient client;
 
     ushort MOVE_TAG = 1;
@@ -29,6 +28,9 @@ public class NetworkPlayerManager : MonoBehaviour
 
     private void Awake()
     {
+        client = gameObject.GetComponent<UnityClient>();
+        Assert.IsNotNull(client);
+
         client.MessageReceived += MessageReceived;
     }
 
