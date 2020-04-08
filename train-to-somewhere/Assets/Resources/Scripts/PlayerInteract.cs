@@ -5,11 +5,11 @@ using UnityEngine;
 public class PlayerInteract : MonoBehaviour
 {
     public float interactDistance = 1.0f;
-    public float holdTime = float.PositiveInfinity;
     public float groundY = 2.94f;
     
     private Interactable inter;
 
+    private float holdTime = float.PositiveInfinity;
     private float time;
     private int interLayer;
 
