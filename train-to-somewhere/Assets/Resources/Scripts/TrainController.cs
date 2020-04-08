@@ -8,7 +8,6 @@ public class TrainController : MonoBehaviour
 
     public float speed = 2f;
     public float slowdownRate = .1f;
-    public ScrollingBackground backgroundController;
 
     void Start()
     {
@@ -22,6 +21,5 @@ public class TrainController : MonoBehaviour
             speed -= slowdownRate * Time.deltaTime;
         else
             speed = 0;
-        backgroundController.bgSpeed = speed;
     }
 }

@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - CameraAnchor
+  - NetworkManager
   layers:
   - Default
   - TransparentFX

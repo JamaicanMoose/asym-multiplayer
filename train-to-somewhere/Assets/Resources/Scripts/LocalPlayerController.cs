@@ -25,7 +25,7 @@ public class LocalPlayerController : MonoBehaviour
 
     private void Awake()
     {
-        client = GameObject.Find("/Network").GetComponent<UnityClient>();
+        client = GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<UnityClient>();
         Assert.IsNotNull(client);
 
         mainCameraTransform = GameObject.FindGameObjectWithTag("MainCamera").transform;
@@ -53,6 +53,7 @@ public class LocalPlayerController : MonoBehaviour
 
         if (Vector3.Distance(lastPosition, transform.position) > moveDistance)
         {
+            Debug.Log("SENDING MOVE");
             using (DarkRiftWriter writer = DarkRiftWriter.Create())
             {
                 writer.Write(transform.position.x);

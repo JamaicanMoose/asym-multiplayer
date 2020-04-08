@@ -12,6 +12,8 @@ public class NetworkPlayerManager : MonoBehaviour
 
     ushort MOVE_TAG = 1;
 
+    public static float DEFAULT_PLAYER_Y = 3.4f;
+
     Dictionary<ushort, PlayerObject> networkPlayers = new Dictionary<ushort, PlayerObject>();
 
     public void Add(ushort id, PlayerObject player)
@@ -43,7 +45,7 @@ public class NetworkPlayerManager : MonoBehaviour
                 using (DarkRiftReader reader = message.GetReader())
                 {
                     ushort id = reader.ReadUInt16();
-                    Vector3 newPosition = new Vector3(reader.ReadSingle(), 1.07f, reader.ReadSingle());
+                    Vector3 newPosition = new Vector3(reader.ReadSingle(), DEFAULT_PLAYER_Y, reader.ReadSingle());
 
                     if (networkPlayers.ContainsKey(id))
                         networkPlayers[id].SetMovePosition(newPosition);

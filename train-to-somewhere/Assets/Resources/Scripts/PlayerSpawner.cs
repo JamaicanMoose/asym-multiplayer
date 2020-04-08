@@ -16,11 +16,11 @@ public class PlayerSpawner : MonoBehaviour
 
     [SerializeField]
     [Tooltip("The controllable player prefab.")]
-    GameObject controllablePrefab;
+    public GameObject controllablePrefab;
 
     [SerializeField]
     [Tooltip("The network controllable player prefab.")]
-    GameObject networkPrefab;
+    public GameObject networkPrefab;
 
     NetworkPlayerManager networkPlayerManager;
 
@@ -54,10 +54,12 @@ public class PlayerSpawner : MonoBehaviour
     {
         if(e.GetMessage().Tag == SPAWN_TAG)
         {
+            Debug.Log("SPAWN MESSAGE RECEIVED");
             SpawnPlayer(sender, e);
         }
         else if(e.GetMessage().Tag == DESPAWN_TAG)
         {
+            Debug.Log("DESPAWN MESSAGE RECEIVED");
             DespawnPlayer(sender, e);
         }
     }
@@ -81,11 +83,13 @@ public class PlayerSpawner : MonoBehaviour
                 ushort id = reader.ReadUInt16();
 
                 //1.07 appears to be default y value
-                Vector3 position = new Vector3(reader.ReadSingle(), 1.07f, reader.ReadSingle());
+                Vector3 position = new Vector3(reader.ReadSingle(), NetworkPlayerManager.DEFAULT_PLAYER_Y, reader.ReadSingle());
 
                 if(id != client.ID)
                 {
+                    Debug.Log($"SPAWNING {id}");
                     GameObject obj = Instantiate(networkPrefab, position, Quaternion.identity) as GameObject;
+                    obj.transform.parent = gameObject.transform;
                     networkPlayerManager.Add(id, obj.GetComponent<PlayerObject>());
                 }
             }
