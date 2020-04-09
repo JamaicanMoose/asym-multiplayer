@@ -11,6 +11,7 @@ public class TrainCarTracker: MonoBehaviour
     Quaternion cameraLocalRotation = Quaternion.Euler(12, 100, 0);
 
     private Vector3 targetPos;
+    private Quaternion targetRotation;
 
     // Start is called before the first frame update
     void Start()
@@ -28,6 +29,7 @@ public class TrainCarTracker: MonoBehaviour
                 Transform cameraAnchorTransform = trainCarTransform.Find("CameraAnchor");
                
                 targetPos = cameraAnchorTransform.position;
+                targetRotation = cameraAnchorTransform.rotation;
          
 
             }
@@ -40,8 +42,15 @@ public class TrainCarTracker: MonoBehaviour
         if(mainCameraTransform.position != targetPos)
         {
             mainCameraTransform.position = Vector3.Lerp(mainCameraTransform.position, targetPos, .05f);
+            mainCameraTransform.rotation = Quaternion.Lerp(mainCameraTransform.rotation, targetRotation, .1f);
             if (Vector3.Distance(mainCameraTransform.position, targetPos) < .1f)
+            {
                 mainCameraTransform.position = targetPos;
+                mainCameraTransform.rotation = targetRotation;
+            }
+          
+           
+        
         }
         else
         {
@@ -56,6 +65,7 @@ public class TrainCarTracker: MonoBehaviour
                     Transform cameraAnchorTransform = trainCarTransform.Find("CameraAnchor");
                     // Calculate camera position & rotation
                     targetPos = cameraAnchorTransform.position;
+                    targetRotation = cameraAnchorTransform.rotation;
                     //mainCameraTransform.SetPositionAndRotation(cameraAnchorTransform.position, cameraAnchorTransform.rotation);
                     // Reparent player
                     gameObject.transform.parent = trainCarTransform;
