@@ -62,4 +62,5 @@ crashlytics-build.properties
 *.cs.meta
 *.fbx.meta
 *.ini.meta
+*.png.meta
 
