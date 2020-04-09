@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Assertions;
-using UnityEngine.Animations;
 
 public class PlayerInteract : MonoBehaviour
 {
@@ -11,15 +8,12 @@ public class PlayerInteract : MonoBehaviour
 
     private Interactable inter = null;
 
-    private float holdTime = float.PositiveInfinity;
     private float time;
-    private int interLayer;
 
     InteractionVolume interactionVolume;
 
     private void Awake()
     {
-        interLayer = LayerMask.GetMask("InteractableLayer");
         interactionVolume = gameObject.transform.Find("Interaction Volume").GetComponent<InteractionVolume>();
         Assert.IsNotNull(interactionVolume);
     }
@@ -27,24 +21,33 @@ public class PlayerInteract : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        // If we are currently holding an interactable, 
+        // we should always be interacting with that interactable.
         Pickup holding = gameObject.GetComponentInChildren<Pickup>();
-        // If we are currently holding an object, interacting should instead drop the object.
-        if (holding != null && Input.GetButtonDown("Fire1"))
+        if (holding != null)
         {
-            holding.transform.parent = transform.parent;
-            gameObject.GetComponent<PositionConstraint>().constraintActive = false;
-            gameObject.GetComponent<PositionConstraint>().RemoveSource(0);
-            return;
+            inter = holding.interactable;
+            inter.interactingPlayerTransform = transform;
         }
 
-        inter = null;
+        // If the interactable we are currently interacting with is no longer in the volume then abort.
+        else if (inter != null && !interactionVolume.insideInteractionVolume.Exists(g => g.GetComponent<Interactable>() == inter))
+        {
+            inter.AbortUse();
+            inter = null;
+        }
+
         foreach (GameObject g in interactionVolume.insideInteractionVolume)
         {
-            inter = g.GetComponent<Interactable>();
             if (inter != null)
                 break;
+            if (g.GetComponent<Interactable>().interactingPlayerTransform != null)
+                continue;
+            inter = g.GetComponent<Interactable>();
         }
+
+
+        //if the interactable we're currently interacting with leaves the interaction volume we should abort
 
         if (inter)
         {
@@ -53,7 +56,7 @@ public class PlayerInteract : MonoBehaviour
             if (Input.GetButtonDown("Fire1") && !inter.inUse)
             {
                 time = Time.time;
-                inter.inUse = true;
+                inter.interactingPlayerTransform = transform;
                 inter.StartUse();
             }
             else if (Input.GetButton("Fire1"))
@@ -61,17 +64,17 @@ public class PlayerInteract : MonoBehaviour
                 if (Time.time - time > inter.holdTime)
                 {
                     time = float.PositiveInfinity;
-                    
                     inter.AfterUse();
-                    inter.inUse = false;
-                } else
+                    inter = null;
+                }
+                else
                 {
                     if (inter.inUse)
                     {
                         inter.DuringUse();
                     }
                 }
-            // Cancel the hold timer if let go
+                // Cancel the hold timer if let go
             }
             else
             {
@@ -79,8 +82,8 @@ public class PlayerInteract : MonoBehaviour
                 if (inter.inUse)
                 {
                     inter.AbortUse();
-                    inter.inUse = false;
                 }
+                inter = null;
             }
         }
     }

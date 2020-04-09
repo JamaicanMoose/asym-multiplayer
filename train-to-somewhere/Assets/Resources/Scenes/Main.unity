@@ -653,6 +653,7 @@ GameObject:
   - component: {fileID: 1425397966}
   - component: {fileID: 1425397965}
   - component: {fileID: 1425397964}
+  - component: {fileID: 1425397968}
   - component: {fileID: 1425397963}
   - component: {fileID: 1425397967}
   m_Layer: 0
@@ -690,10 +691,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inUse: 0
   holdTime: 2
+  interactingPlayerTransform: {fileID: 0}
   startUse:
-    m_PersistentCalls:
-      m_Calls: []
-  duringUse:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1425397967}
@@ -706,7 +705,10 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 1
+        m_CallState: 2
+  duringUse:
+    m_PersistentCalls:
+      m_Calls: []
   afterUse:
     m_PersistentCalls:
       m_Calls:
@@ -807,6 +809,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2089c60dad07b947ab2a671fd361106, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1425397968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1425397961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 076c2f74f36692648a4500e83f4641cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uniqueID: test-interactable
 --- !u!1 &1799326020
 GameObject:
   m_ObjectHideFlags: 0
@@ -820,6 +835,7 @@ GameObject:
   - component: {fileID: 1799326023}
   - component: {fileID: 1799326022}
   - component: {fileID: 1799326027}
+  - component: {fileID: 1799326025}
   - component: {fileID: 1799326026}
   m_Layer: 0
   m_Name: TestPickup
@@ -902,6 +918,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1799326020}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1799326025
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1799326020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 076c2f74f36692648a4500e83f4641cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uniqueID: test-pickup
 --- !u!114 &1799326026
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -914,7 +943,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f39fa4bf048501c4b96833e8ac6b09ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isHeld: 0
   pickupTime: 0
+  interactable: {fileID: 0}
 --- !u!54 &1799326027
 Rigidbody:
   m_ObjectHideFlags: 0
