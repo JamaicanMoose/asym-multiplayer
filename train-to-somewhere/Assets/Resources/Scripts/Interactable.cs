@@ -9,6 +9,7 @@ public class Interactable : MonoBehaviour
     public float holdTime = 2.0f;
     public UnityEvent afterUse;
     public UnityEvent duringUse;
+    public UnityEvent abortUse;
 
     // Call this when the object has been fully interacted with
     public void AfterUse()
@@ -24,6 +25,14 @@ public class Interactable : MonoBehaviour
         if (duringUse != null)
         {
             duringUse.Invoke();
+        }
+    }
+
+    public void AbortUse()
+    {
+        if (abortUse != null)
+        {
+            abortUse.Invoke();
         }
     }
 }
