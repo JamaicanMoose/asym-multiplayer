@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.Animations;
 
 public class PlayerInteract : MonoBehaviour
 {
@@ -26,6 +27,17 @@ public class PlayerInteract : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        Pickup holding = gameObject.GetComponentInChildren<Pickup>();
+        // If we are currently holding an object, interacting should instead drop the object.
+        if (holding != null && Input.GetButtonDown("Fire1"))
+        {
+            holding.transform.parent = transform.parent;
+            gameObject.GetComponent<PositionConstraint>().constraintActive = false;
+            gameObject.GetComponent<PositionConstraint>().RemoveSource(0);
+            return;
+        }
+
         inter = null;
         foreach (GameObject g in interactionVolume.insideInteractionVolume)
         {
@@ -42,6 +54,7 @@ public class PlayerInteract : MonoBehaviour
             {
                 time = Time.time;
                 inter.inUse = true;
+                inter.StartUse();
             }
             else if (Input.GetButton("Fire1"))
             {
@@ -49,7 +62,6 @@ public class PlayerInteract : MonoBehaviour
                 {
                     time = float.PositiveInfinity;
                     
-                    Debug.Log("Finished!");
                     inter.AfterUse();
                     inter.inUse = false;
                 } else

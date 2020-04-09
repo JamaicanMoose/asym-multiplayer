@@ -7,16 +7,16 @@ public class Interactable : MonoBehaviour
 {
     public bool inUse = false;
     public float holdTime = 2.0f;
-    public UnityEvent afterUse;
-    public UnityEvent duringUse;
-    public UnityEvent abortUse;
+    public UnityEvent startUse = new UnityEvent();
+    public UnityEvent duringUse = new UnityEvent();
+    public UnityEvent afterUse = new UnityEvent();
+    public UnityEvent abortUse = new UnityEvent();
 
-    // Call this when the object has been fully interacted with
-    public void AfterUse()
+    public void StartUse()
     {
-        if (afterUse != null)
+        if (startUse != null)
         {
-            afterUse.Invoke();
+            startUse.Invoke();
         }
     }
 
@@ -25,6 +25,14 @@ public class Interactable : MonoBehaviour
         if (duringUse != null)
         {
             duringUse.Invoke();
+        }
+    }
+
+    public void AfterUse()
+    {
+        if (afterUse != null)
+        {
+            afterUse.Invoke();
         }
     }
 

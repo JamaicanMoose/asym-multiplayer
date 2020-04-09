@@ -6,6 +6,7 @@ TagManager:
   tags:
   - CameraAnchor
   - NetworkManager
+  - LocalPlayer
   layers:
   - Default
   - TransparentFX

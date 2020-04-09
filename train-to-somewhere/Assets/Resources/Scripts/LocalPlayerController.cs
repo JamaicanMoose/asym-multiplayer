@@ -48,7 +48,7 @@ public class LocalPlayerController : MonoBehaviour
         //Vector3 moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
         Vector3 moveDirection = mainCameraTransform.right * Input.GetAxis("Horizontal") + mainCameraTransform.forward * Input.GetAxis("Vertical");
         moveDirection.y = 0f;
-        if (Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump") && moveDirection != Vector3.zero)
         {
             characterController.SimpleMove(moveDirection * moveSpeed * 100f);
             transform.forward = moveDirection;
@@ -67,7 +67,6 @@ public class LocalPlayerController : MonoBehaviour
 
         if (Vector3.Distance(lastPosition, transform.position) > moveDistance)
         {
-            Debug.Log("SENDING MOVE");
             using (DarkRiftWriter writer = DarkRiftWriter.Create())
             {
                 writer.Write(transform.position.x);
@@ -79,6 +78,5 @@ public class LocalPlayerController : MonoBehaviour
 
             lastPosition = transform.position;
         }
-
     }
 }
