@@ -21,6 +21,7 @@ public class LocalPlayerController : MonoBehaviour
     UnityClient client;
 
     Vector3 lastPosition;
+    Vector3 lastMoveVector;
     Transform mainCameraTransform;
 
     private void Awake()
@@ -38,6 +39,7 @@ public class LocalPlayerController : MonoBehaviour
         player = GetComponent<PlayerObject>();
 
         lastPosition = transform.position;
+        lastMoveVector = transform.forward;
     }
 
     // Update is called once per frame
@@ -45,11 +47,23 @@ public class LocalPlayerController : MonoBehaviour
     {
         //Vector3 moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
         Vector3 moveDirection = mainCameraTransform.right * Input.GetAxis("Horizontal") + mainCameraTransform.forward * Input.GetAxis("Vertical");
-        moveDirection *= moveSpeed;
+        moveDirection.y = 0f;
         if (Input.GetButtonDown("Jump"))
-            moveDirection *= 100f;
-        characterController.SimpleMove(moveDirection);
+        {
+            characterController.SimpleMove(moveDirection * moveSpeed * 100f);
+            transform.forward = moveDirection;
+        } else
+        {
+            characterController.SimpleMove(moveDirection * moveSpeed);
+        }
         player.SetMovePosition(transform.position);
+        lastMoveVector = moveDirection;
+
+        if (transform.forward.normalized != lastMoveVector.normalized)
+        {
+            transform.forward = Vector3.RotateTowards(transform.forward, lastMoveVector, 10 * Time.deltaTime, 0.0f);
+            Debug.DrawRay(transform.position, lastMoveVector, Color.red);
+        }
 
         if (Vector3.Distance(lastPosition, transform.position) > moveDistance)
         {
