@@ -59,7 +59,6 @@ sysinfo.txt
 crashlytics-build.properties
 
 # Custom meta file clauses
-*.cs.meta
 *.fbx.meta
 *.ini.meta
 *.png.meta
