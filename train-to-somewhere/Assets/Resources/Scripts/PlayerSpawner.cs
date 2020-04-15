@@ -71,7 +71,7 @@ public class PlayerSpawner : MonoBehaviour
         {
             //Each spawn packet is 5 bytes.
             //ID is one byte, each position float is 2 bytes
-            if(reader.Length % 5 != 0)
+            if(reader.Length % 11 != 0)
             {
                 Debug.LogWarning("Received malformed spawn packet");
                 return;
@@ -84,11 +84,12 @@ public class PlayerSpawner : MonoBehaviour
 
                 //1.07 appears to be default y value
                 Vector3 position = new Vector3(reader.ReadSingle(), NetworkPlayerManager.DEFAULT_PLAYER_Y, reader.ReadSingle());
-
-                if(id != client.ID)
+                Quaternion rotation = Quaternion.Euler(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+                if (id != client.ID)
                 {
                     Debug.Log($"SPAWNING {id}");
-                    GameObject obj = Instantiate(networkPrefab, position, Quaternion.identity) as GameObject;
+                    GameObject obj = Instantiate(networkPrefab, position, rotation) as GameObject;
+                    
                     obj.transform.parent = gameObject.transform;
                     networkPlayerManager.Add(id, obj.GetComponent<PlayerObject>());
                 }

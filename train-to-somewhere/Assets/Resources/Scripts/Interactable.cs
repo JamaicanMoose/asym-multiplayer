@@ -16,7 +16,7 @@ public class Interactable : MonoBehaviour
         if (gameObject.GetComponent<NetworkTrackable>() == null)
         {
             NetworkTrackable trackable = gameObject.AddComponent<NetworkTrackable>() as NetworkTrackable;
-            trackable.uniqueID = System.Guid.NewGuid().ToString();
+            //trackable.uniqueID = System.Guid.NewGuid().ToString();
         }
     }
 

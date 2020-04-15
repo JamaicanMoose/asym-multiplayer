@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using DarkRift.Client.Unity;
+using DarkRift;
 using UnityEngine.Assertions;
 
 public class PlayerInteract : MonoBehaviour
@@ -12,9 +14,18 @@ public class PlayerInteract : MonoBehaviour
 
     InteractionVolume interactionVolume;
 
+    private UnityClient Client;
+    const ushort USE_TAG = 6;
+
+    const ushort START_USE = 1;
+    const ushort DURING_USE = 2;
+    const ushort AFTER_USE = 3;
+    const ushort ABORT_USE = 4;
+
     private void Awake()
     {
         interactionVolume = gameObject.transform.Find("Interaction Volume").GetComponent<InteractionVolume>();
+        Client = GameObject.Find("Network").GetComponent<UnityClient>();
         Assert.IsNotNull(interactionVolume);
     }
 
@@ -34,6 +45,7 @@ public class PlayerInteract : MonoBehaviour
         else if (inter != null && !interactionVolume.insideInteractionVolume.Exists(g => g.GetComponent<Interactable>() == inter))
         {
             inter.AbortUse();
+            SendUseMessage(inter.gameObject.GetComponent<NetworkTrackable>().uniqueID, ABORT_USE);
             inter = null;
         }
 
@@ -58,6 +70,8 @@ public class PlayerInteract : MonoBehaviour
                 time = Time.time;
                 inter.interactingPlayerTransform = transform;
                 inter.StartUse();
+                SendUseMessage(inter.gameObject.GetComponent<NetworkTrackable>().uniqueID, START_USE);
+          
             }
             else if (Input.GetButton("Fire1"))
             {
@@ -65,6 +79,7 @@ public class PlayerInteract : MonoBehaviour
                 {
                     time = float.PositiveInfinity;
                     inter.AfterUse();
+                    SendUseMessage(inter.gameObject.GetComponent<NetworkTrackable>().uniqueID, AFTER_USE);
                     inter = null;
                 }
                 else
@@ -72,6 +87,7 @@ public class PlayerInteract : MonoBehaviour
                     if (inter.inUse)
                     {
                         inter.DuringUse();
+                        SendUseMessage(inter.gameObject.GetComponent<NetworkTrackable>().uniqueID, DURING_USE);
                     }
                 }
                 // Cancel the hold timer if let go
@@ -82,9 +98,25 @@ public class PlayerInteract : MonoBehaviour
                 if (inter.inUse)
                 {
                     inter.AbortUse();
+                    SendUseMessage(inter.gameObject.GetComponent<NetworkTrackable>().uniqueID, ABORT_USE);
                 }
                 inter = null;
             }
         }
+    }
+
+    //This function sends the use state of an object to the server
+    void SendUseMessage(ushort objID, ushort useTag)
+    {
+        using (DarkRiftWriter writer = DarkRiftWriter.Create())
+        {
+            writer.Write(objID);
+            writer.Write(useTag);
+            using (Message useMessage = Message.Create(USE_TAG, writer))
+            {
+                Client.SendMessage(useMessage, SendMode.Reliable);
+            }
+        }
+
     }
 }

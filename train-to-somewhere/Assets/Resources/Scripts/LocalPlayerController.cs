@@ -57,6 +57,7 @@ public class LocalPlayerController : MonoBehaviour
             characterController.SimpleMove(moveDirection * moveSpeed);
         }
         player.SetMovePosition(transform.position);
+      
         lastMoveVector = moveDirection;
 
         if (transform.forward.normalized != lastMoveVector.normalized)
@@ -64,7 +65,7 @@ public class LocalPlayerController : MonoBehaviour
             transform.forward = Vector3.RotateTowards(transform.forward, lastMoveVector, 10 * Time.deltaTime, 0.0f);
             Debug.DrawRay(transform.position, lastMoveVector, Color.red);
         }
-
+        player.SetRotation(transform.rotation.eulerAngles);
         if (Vector3.Distance(lastPosition, transform.position) > moveDistance)
         {
             using (DarkRiftWriter writer = DarkRiftWriter.Create())
@@ -72,6 +73,10 @@ public class LocalPlayerController : MonoBehaviour
                 writer.Write(transform.position.x);
                 writer.Write(transform.position.z);
 
+                Vector3 rotation = transform.rotation.eulerAngles;
+                writer.Write(rotation.x);
+                writer.Write(rotation.y);
+                writer.Write(rotation.z);
                 using (Message message = Message.Create(MOVEMENT_TAG, writer))
                     client.SendMessage(message, SendMode.Unreliable);
             }

@@ -46,9 +46,13 @@ public class NetworkPlayerManager : MonoBehaviour
                 {
                     ushort id = reader.ReadUInt16();
                     Vector3 newPosition = new Vector3(reader.ReadSingle(), DEFAULT_PLAYER_Y, reader.ReadSingle());
-
+                    Vector3 newRotation = new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
                     if (networkPlayers.ContainsKey(id))
+                    {
                         networkPlayers[id].SetMovePosition(newPosition);
+                        networkPlayers[id].SetRotation(newRotation);
+                    }
+                        
                 }
             }
         }
