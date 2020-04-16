@@ -62,62 +62,64 @@ public class Pickup : MonoBehaviour
 
     private void Update()
     {
-        if(isHeld)
+        if (isHeld)
         {
             transform.position = transform.parent.position + transform.parent.forward;
-            if (Vector3.Distance(transform.position, lastPostion) > moveDistance)
+
+        }
+        if (Vector3.Distance(transform.position, lastPostion) > moveDistance)
+        {
+            lastPostion = transform.position;
+
+            using (DarkRiftWriter writer = DarkRiftWriter.Create())
             {
-                lastPostion = transform.position;
-              
-                using (DarkRiftWriter writer = DarkRiftWriter.Create())
+                writer.Write(GetComponent<NetworkTrackable>().uniqueID);
+                if (isHeld)
                 {
-                    writer.Write(GetComponent<NetworkTrackable>().uniqueID);
-                    if (isHeld)
+                    if (transform.parent.parent.GetComponent<NetworkTrackable>() != null)
+                        writer.Write(transform.parent.parent.GetComponent<NetworkTrackable>().uniqueID);
+                    else
                     {
-                        if (transform.parent.parent.GetComponent<NetworkTrackable>() != null)
-                            writer.Write(transform.parent.parent.GetComponent<NetworkTrackable>().uniqueID);
-                        else
-                        {
-                            ushort defaultID = 0;
-                            writer.Write(defaultID);
-                        }
-                        Vector3 positionRelativetoCar = transform.parent.parent.InverseTransformPoint(transform.position);
-                        writer.Write(positionRelativetoCar.x);
-                        writer.Write(positionRelativetoCar.y);
-                        writer.Write(positionRelativetoCar.z);
+                        ushort defaultID = 0;
+                        writer.Write(defaultID);
+                    }
+                    Vector3 positionRelativetoCar = transform.parent.parent.InverseTransformPoint(transform.position);
+                    writer.Write(positionRelativetoCar.x);
+                    writer.Write(positionRelativetoCar.y);
+                    writer.Write(positionRelativetoCar.z);
+                }
+                else
+                {
+                    if (transform.parent != null)
+                    {
+
+                        writer.Write(transform.parent.GetComponent<NetworkTrackable>().uniqueID);
+                        writer.Write(transform.localPosition.x);
+                        writer.Write(transform.localPosition.y);
+                        writer.Write(transform.localPosition.z);
                     }
                     else
                     {
-                        if (transform.parent != null)
-                        {
-
-                            writer.Write(transform.parent.GetComponent<NetworkTrackable>().uniqueID);
-                            writer.Write(transform.localPosition.x);
-                            writer.Write(transform.localPosition.y);
-                            writer.Write(transform.localPosition.z);
-                        }
-                        else
-                        {
-                            ushort defaultID = 0;
-                            writer.Write(defaultID);
-                            Vector3 defaultPosition = Vector3.zero;
-                            writer.Write(defaultPosition.x);
-                            writer.Write(defaultPosition.y);
-                            writer.Write(defaultPosition.z);
-                        }
-
-
+                        ushort defaultID = 0;
+                        writer.Write(defaultID);
+                        Vector3 defaultPosition = Vector3.zero;
+                        writer.Write(defaultPosition.x);
+                        writer.Write(defaultPosition.y);
+                        writer.Write(defaultPosition.z);
                     }
 
-                    Vector3 angles = transform.rotation.eulerAngles;
-                    writer.Write(angles.x);
-                    writer.Write(angles.y);
-                    writer.Write(angles.z);
 
-                    using (Message message = Message.Create(PICKUP_MOVE_TAG, writer))
-                        client.SendMessage(message, SendMode.Unreliable);
                 }
-            }
+
+                Vector3 angles = transform.rotation.eulerAngles;
+                writer.Write(angles.x);
+                writer.Write(angles.y);
+                writer.Write(angles.z);
+
+                using (Message message = Message.Create(PICKUP_MOVE_TAG, writer))
+                    client.SendMessage(message, SendMode.Unreliable);
+            
+             }
         }
         
     }
