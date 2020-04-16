@@ -106,11 +106,11 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 1
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!114 &6703112603053321748
 MonoBehaviour:
@@ -124,7 +124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 076c2f74f36692648a4500e83f4641cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uniqueID: test-pickup
+  uniqueID: 0
 --- !u!114 &6703112603053321751
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -139,4 +139,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isHeld: 0
   pickupTime: 0
+  moveDistance: 0.05
   interactable: {fileID: 0}
