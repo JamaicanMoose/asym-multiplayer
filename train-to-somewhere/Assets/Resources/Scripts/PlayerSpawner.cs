@@ -26,9 +26,6 @@ public class PlayerSpawner : MonoBehaviour
 
     void Awake()
     {
-
-        IniFile.IniWriteValue(IniFile.Sections.Train, IniFile.Keys.Address, "127.0.0.1");
-
         if (controllablePrefab == null)
         {
             Debug.LogError("Controllable Prefab unassigned in PlayerSpawner.");
