@@ -7,6 +7,7 @@ public class TrainController : MonoBehaviour
     // Start is called before the first frame update
 
     public float speed = 2f;
+    public float acceleration = 0.0f;
     public float slowdownRate = .1f;
 
     void Start()
@@ -18,9 +19,14 @@ public class TrainController : MonoBehaviour
     void FixedUpdate()
     {
         if (speed > 0)
-            speed -= slowdownRate * Time.deltaTime;
+        {
+            acceleration -= slowdownRate;
+            speed += acceleration * Time.deltaTime;
+        }
         else
+        {
             speed = 0;
+        }
 
         transform.position = Vector3.MoveTowards(transform.position, transform.position - new Vector3(0.0f, 0.0f, 100.0f), speed * Time.deltaTime);
     }
