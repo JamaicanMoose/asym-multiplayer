@@ -7,6 +7,8 @@ TagManager:
   - CameraAnchor
   - NetworkManager
   - LocalPlayer
+  - Coal
+  - Train
   layers:
   - Default
   - TransparentFX

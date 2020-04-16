@@ -30,4 +30,9 @@ public class TrainController : MonoBehaviour
 
         transform.position = Vector3.MoveTowards(transform.position, transform.position - new Vector3(0.0f, 0.0f, 100.0f), speed * Time.deltaTime);
     }
+
+    public void ChangeAcceleration(float change)
+    {
+        acceleration += change;
+    }
 }
