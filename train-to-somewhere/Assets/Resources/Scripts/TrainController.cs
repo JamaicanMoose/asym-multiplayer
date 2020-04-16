@@ -11,15 +11,17 @@ public class TrainController : MonoBehaviour
 
     void Start()
     {
-       
+
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (speed > 0)
             speed -= slowdownRate * Time.deltaTime;
         else
             speed = 0;
+
+        transform.position = Vector3.MoveTowards(transform.position, transform.position - new Vector3(0.0f, 0.0f, 100.0f), speed * Time.deltaTime);
     }
 }
