@@ -15,12 +15,13 @@ public class LocalPlayerController : MonoBehaviour
     float moveDistance = 0.05f;
 
     public float moveSpeed = 2.5f;
-    public float dashSpeed = 10f;
+    public float dashSpeed = 15f;
     public float dashTime = .3f;
 
     bool dashing = false;
 
-    CharacterController characterController;
+   
+    Rigidbody rb;
     PlayerObject player;
 
     UnityClient client;
@@ -29,18 +30,24 @@ public class LocalPlayerController : MonoBehaviour
     Vector3 lastMoveVector;
     Transform mainCameraTransform;
 
+    public Collider defaultCollider;
+    public Collider holdCollider;
+
     private void Awake()
     {
         client = GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<UnityClient>();
         Assert.IsNotNull(client);
 
         mainCameraTransform = GameObject.FindGameObjectWithTag("MainCamera").transform;
+        defaultCollider.enabled = true;
+        holdCollider.enabled = false;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        characterController = gameObject.GetComponent<CharacterController>();
+        rb = gameObject.GetComponent<Rigidbody>();
+
         player = GetComponent<PlayerObject>();
 
         lastPosition = transform.position;
@@ -50,9 +57,11 @@ public class LocalPlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Vector3 moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
+     
         Vector3 moveDirection = mainCameraTransform.right * Input.GetAxis("Horizontal") + mainCameraTransform.forward * Input.GetAxis("Vertical");
+      
         moveDirection.y = 0f;
+        moveDirection.Normalize();
         if (Input.GetButtonDown("Jump") && moveDirection != Vector3.zero)
         {
             dashing = true;
@@ -60,11 +69,13 @@ public class LocalPlayerController : MonoBehaviour
         }
         if(dashing)
         {
-            characterController.SimpleMove(moveDirection * dashSpeed);
+        
+            rb.velocity = moveDirection * dashSpeed;
         }
         else
         {
-            characterController.SimpleMove(moveDirection * moveSpeed);
+       
+            rb.velocity = moveDirection * moveSpeed;
         }
         player.SetMovePosition(transform.position);
       
@@ -100,5 +111,21 @@ public class LocalPlayerController : MonoBehaviour
         yield return new WaitForSeconds(dashTime);
         dashing = false;
 
+    }
+
+    //Set the characters collider based on whether it is holding an object or not
+    //this is currently called from the pickup script
+    public void SetCollider(bool holding)
+    {
+        if(holding)
+        {
+            holdCollider.enabled = true;
+            defaultCollider.enabled = false;
+        }
+        else
+        {
+            holdCollider.enabled = false;
+            defaultCollider.enabled = true;
+        }
     }
 }

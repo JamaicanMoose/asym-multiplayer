@@ -13,8 +13,11 @@ public class Pickup : MonoBehaviour
     const ushort PICKUP_MOVE_TAG = 5;
     ushort ID;
     private UnityClient client;
-
+    LocalPlayerController playerController;
     Vector3 lastPostion;
+
+    Rigidbody rb;
+    Collider cd;
 
     private void Awake()
     {
@@ -25,9 +28,15 @@ public class Pickup : MonoBehaviour
         interactable.afterUse.AddListener(OnInteractComplete);
 
         client = GameObject.Find("Network").GetComponent<UnityClient>();
+        playerController = GameObject.Find("Character").GetComponent<LocalPlayerController>();
         lastPostion = transform.position;
 
         ID = GetComponent<NetworkTrackable>().uniqueID;
+
+        rb = GetComponent<Rigidbody>();
+        rb.isKinematic = false;
+        cd = GetComponent<Collider>();
+        cd.enabled = true;
     }
 
     public void OnInteractComplete()
@@ -35,11 +44,19 @@ public class Pickup : MonoBehaviour
         if (isHeld)
         {
             transform.parent = interactable.interactingPlayerTransform.parent;
+            rb.isKinematic = false;
+            cd.enabled = true;
             isHeld = false;
+            playerController.SetCollider(isHeld);
         } else
         {
             transform.parent = interactable.interactingPlayerTransform;
+            transform.position = transform.parent.position + transform.parent.forward;
+            transform.rotation = transform.parent.rotation;
+            rb.isKinematic = true;
+            cd.enabled = false;
             isHeld = true;
+            playerController.SetCollider(isHeld);
         }
     }
 
@@ -47,6 +64,7 @@ public class Pickup : MonoBehaviour
     {
         if(isHeld)
         {
+            transform.position = transform.parent.position + transform.parent.forward;
             if (Vector3.Distance(transform.position, lastPostion) > moveDistance)
             {
                 lastPostion = transform.position;
