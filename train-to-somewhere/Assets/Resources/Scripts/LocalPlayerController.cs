@@ -15,6 +15,11 @@ public class LocalPlayerController : MonoBehaviour
     float moveDistance = 0.05f;
 
     public float moveSpeed = 2.5f;
+    public float dashSpeed = 10f;
+    public float dashTime = .3f;
+
+    bool dashing = false;
+
     CharacterController characterController;
     PlayerObject player;
 
@@ -50,9 +55,14 @@ public class LocalPlayerController : MonoBehaviour
         moveDirection.y = 0f;
         if (Input.GetButtonDown("Jump") && moveDirection != Vector3.zero)
         {
-            characterController.SimpleMove(moveDirection * moveSpeed * 100f);
-            transform.forward = moveDirection;
-        } else
+            dashing = true;
+            StartCoroutine(DashTimer());
+        }
+        if(dashing)
+        {
+            characterController.SimpleMove(moveDirection * dashSpeed);
+        }
+        else
         {
             characterController.SimpleMove(moveDirection * moveSpeed);
         }
@@ -83,5 +93,12 @@ public class LocalPlayerController : MonoBehaviour
 
             lastPosition = transform.position;
         }
+    }
+
+    IEnumerator DashTimer()
+    {
+        yield return new WaitForSeconds(dashTime);
+        dashing = false;
+
     }
 }
