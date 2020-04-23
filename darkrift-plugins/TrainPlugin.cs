@@ -290,7 +290,7 @@ namespace TrainPlugin
                         playerWriter.Write(player.angleZ);
                     }
 
-                    using (Message playerMessage = Message.Create(0, playerWriter))
+                    using (Message playerMessage = Message.Create(SPAWN_TAG, playerWriter))
                     {
                         foreach (IClient client in ClientManager.GetAllClients())
                             client.SendMessage(playerMessage, SendMode.Reliable);

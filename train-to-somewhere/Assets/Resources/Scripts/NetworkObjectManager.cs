@@ -80,6 +80,8 @@ public class NetworkObjectManager : MonoBehaviour
     public Dictionary<ushort, NetworkObject> objects = new Dictionary<ushort, NetworkObject>();
 
     bool SpawnedTrains = false;
+
+    bool initializedObjects = false;
     bool SpawnedObjects = false;
     public bool SpawnedPlayers = false;
     public bool InitializedPlayers = false;
@@ -106,18 +108,20 @@ public class NetworkObjectManager : MonoBehaviour
 
     private void Update()
     {
-        if(SpawnedTrains && !SpawnedObjects)
+        if(SpawnedTrains && initializedObjects && !SpawnedObjects)
         {
+            Debug.Log("Spawn objects");
             SpawnObjects();
         }
         else if(SpawnedObjects && InitializedPlayers && !SpawnedPlayers)
         {
-            playerManager.SpawnPlayers();
-            blockCanvas.enabled = false;
-            CheckObjectMotion();
+            playerManager.SpawnPlayers();            
+            
         }
-        else
+        
+        if(SpawnedPlayers)
         {
+            blockCanvas.enabled = false;
             CheckObjectMotion();
         }
     }
@@ -186,7 +190,8 @@ public class NetworkObjectManager : MonoBehaviour
                 
                 }           
 
-            }         
+            }
+            initializedObjects = true;
         }
         //Messages with PICKUP_TAG contain the new position and rotation of an object with "Pickup" attached
         else if(e.GetMessage().Tag == PICKUP_TAG)

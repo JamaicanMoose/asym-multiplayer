@@ -122,7 +122,7 @@ public class NetworkPlayerManager : MonoBehaviour
             }
         }
         objectManager.InitializedPlayers = true;
-        objectManager.SpawnedPlayers = false;
+      
     }
 
     public void SpawnPlayers()
