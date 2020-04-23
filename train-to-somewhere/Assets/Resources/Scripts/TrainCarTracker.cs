@@ -13,12 +13,17 @@ public class TrainCarTracker: MonoBehaviour
     private Vector3 targetPos = new Vector3(-16.64f, 12.27f, 4.65f);
     private Quaternion targetRotation = Quaternion.Euler(12, 100, 0);
 
+    private LocalPlayerController playerController;
+    private PlayerObject playerObj;
     // Start is called before the first frame update
     void Start()
     {    
         mainCameraTransform = GameObject.FindGameObjectWithTag("MainCamera").transform;
         mainCameraTransform.position = targetPos;
         mainCameraTransform.rotation = targetRotation;
+
+        playerController = GetComponent<LocalPlayerController>();
+        playerObj = GetComponent<PlayerObject>();
     }
 
     // Update is called once per frame
@@ -39,7 +44,10 @@ public class TrainCarTracker: MonoBehaviour
                 targetRotation = cameraAnchorTransform.rotation;
 
                 // Reparent player
+                Vector3 playerWorldPosition = transform.position;
                 gameObject.transform.parent = trainCarTransform;
+                playerObj.SetMovePosition(trainCarTransform.InverseTransformPoint(playerWorldPosition));
+                playerController.parentCarID = trainCarTransform.GetComponent<NetworkTrackable>().uniqueID;
 
             }
         }

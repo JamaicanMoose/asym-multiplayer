@@ -15,6 +15,7 @@ public class PlayerInteract : MonoBehaviour
     InteractionVolume interactionVolume;
 
     private UnityClient Client;
+    private NetworkObjectManager objManager;
     const ushort USE_TAG = 6;
 
     const ushort START_USE = 1;
@@ -27,6 +28,7 @@ public class PlayerInteract : MonoBehaviour
         interactionVolume = gameObject.transform.Find("Interaction Volume").GetComponent<InteractionVolume>();
         Client = GameObject.Find("Network").GetComponent<UnityClient>();
         Assert.IsNotNull(interactionVolume);
+        objManager = GameObject.Find("Network").GetComponent<NetworkObjectManager>();
     }
 
     // Update is called once per frame
@@ -45,7 +47,8 @@ public class PlayerInteract : MonoBehaviour
         else if (inter != null && !interactionVolume.insideInteractionVolume.Exists(g => g.GetComponent<Interactable>() == inter))
         {
             inter.AbortUse();
-            SendUseMessage(inter.gameObject.GetComponent<NetworkTrackable>().uniqueID, ABORT_USE);
+            if (objManager.objects[inter.gameObject.GetComponent<NetworkTrackable>().uniqueID].ObjType != 1)
+                SendUseMessage(inter.gameObject.GetComponent<NetworkTrackable>().uniqueID, ABORT_USE);
             inter = null;
         }
 
@@ -70,7 +73,13 @@ public class PlayerInteract : MonoBehaviour
                 time = Time.time;
                 inter.interactingPlayerTransform = transform;
                 inter.StartUse();
-                SendUseMessage(inter.gameObject.GetComponent<NetworkTrackable>().uniqueID, START_USE);
+
+                //1 is tag for pickups
+                if(objManager.objects[inter.gameObject.GetComponent<NetworkTrackable>().uniqueID].ObjType != 1)
+                {
+                    SendUseMessage(inter.gameObject.GetComponent<NetworkTrackable>().uniqueID, START_USE);
+                }
+                     
           
             }
             else if (Input.GetButton("Fire1"))
@@ -79,7 +88,8 @@ public class PlayerInteract : MonoBehaviour
                 {
                     time = float.PositiveInfinity;
                     inter.AfterUse();
-                    SendUseMessage(inter.gameObject.GetComponent<NetworkTrackable>().uniqueID, AFTER_USE);
+                    if (objManager.objects[inter.gameObject.GetComponent<NetworkTrackable>().uniqueID].ObjType != 1)
+                        SendUseMessage(inter.gameObject.GetComponent<NetworkTrackable>().uniqueID, AFTER_USE);
                     inter = null;
                 }
                 else
@@ -87,7 +97,8 @@ public class PlayerInteract : MonoBehaviour
                     if (inter.inUse)
                     {
                         inter.DuringUse();
-                        SendUseMessage(inter.gameObject.GetComponent<NetworkTrackable>().uniqueID, DURING_USE);
+                        if (objManager.objects[inter.gameObject.GetComponent<NetworkTrackable>().uniqueID].ObjType != 1)
+                            SendUseMessage(inter.gameObject.GetComponent<NetworkTrackable>().uniqueID, DURING_USE);
                     }
                 }
                 // Cancel the hold timer if let go
@@ -98,7 +109,8 @@ public class PlayerInteract : MonoBehaviour
                 if (inter.inUse)
                 {
                     inter.AbortUse();
-                    SendUseMessage(inter.gameObject.GetComponent<NetworkTrackable>().uniqueID, ABORT_USE);
+                    if (objManager.objects[inter.gameObject.GetComponent<NetworkTrackable>().uniqueID].ObjType != 1)
+                        SendUseMessage(inter.gameObject.GetComponent<NetworkTrackable>().uniqueID, ABORT_USE);
                 }
                 inter = null;
             }

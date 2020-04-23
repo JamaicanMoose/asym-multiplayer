@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using DarkRift.Client.Unity;
 using DarkRift.Client;
 using DarkRift;
@@ -15,6 +16,8 @@ public class NetworkObjectManager : MonoBehaviour
     const ushort OBJECT_TAG = 4;
     const ushort PICKUP_TAG = 5;
     const ushort USE_TAG = 6;
+    const ushort NUM_PLAYERS_TAG = 7;
+    const ushort LAUNCH_TAG = 8;
 
     //Tags for the use state of interactable object use messages
     const ushort START_USE = 1;
@@ -54,13 +57,25 @@ public class NetworkObjectManager : MonoBehaviour
     [Tooltip("The Train object in the scene")]
     public GameObject train;
 
+    [SerializeField]
+    [Tooltip("The NetworkPlayerManager prefab.")]
+    public NetworkPlayerManager playerManager;
+
+  
+    public Text numPlayerText;
+    public Canvas blockCanvas;
+    public float MoveDistance = .05f;
     //Key is cars Networktrackable.UniqueID, Value is the cars transform
-    Dictionary<ushort, Transform> cars = new Dictionary<ushort, Transform>();
+    public Dictionary<ushort, Transform> cars = new Dictionary<ushort, Transform>();
 
     //Key is objects Networktrackable.UniqueID, Value is the gameobject
     //This is for interactable objects only
-    Dictionary<ushort, GameObject> objects = new Dictionary<ushort, GameObject>();
+    public Dictionary<ushort, NetworkObject> objects = new Dictionary<ushort, NetworkObject>();
 
+    bool SpawnedTrains = false;
+    bool SpawnedObjects = false;
+    public bool SpawnedPlayers = false;
+    public bool InitializedPlayers = false;
 
     private void Awake()
     {
@@ -80,6 +95,24 @@ public class NetworkObjectManager : MonoBehaviour
         Assert.IsNotNull(client);
 
         client.MessageReceived += ClientMessageReceived;
+    }
+
+    private void Update()
+    {
+        if(SpawnedTrains && !SpawnedObjects)
+        {
+            SpawnObjects();
+        }
+        else if(SpawnedObjects && InitializedPlayers && !SpawnedPlayers)
+        {
+            playerManager.SpawnPlayers();
+            blockCanvas.enabled = false;
+            CheckObjectMotion();
+        }
+        else
+        {
+            CheckObjectMotion();
+        }
     }
 
     void ClientMessageReceived(object sender, MessageReceivedEventArgs e)
@@ -118,14 +151,14 @@ public class NetworkObjectManager : MonoBehaviour
                     newCar.transform.localPosition = new Vector3(0, 2.9f, -16.13f + 16.13f * i);
                     newCar.GetComponent<NetworkTrackable>().uniqueID = carID;
                     cars.Add(carID, newCar.transform);
-                    Debug.Log("Car type: " + carType + " ID: " + carID);
+               
                 }
             }
+            SpawnedTrains = true;
         }
         //Message with OBJECT_TAG are for spawning Interactable Objects
         else if (e.GetMessage().Tag == OBJECT_TAG)
-        {
-            
+        {            
             using (Message message = e.GetMessage())
             using (DarkRiftReader reader = message.GetReader())
             {
@@ -135,50 +168,15 @@ public class NetworkObjectManager : MonoBehaviour
                 {
                     ushort objID = reader.ReadUInt16();
                     ushort objType = reader.ReadUInt16();
-                    ushort parentCarID = reader.ReadUInt16();
-
-                    float localX = reader.ReadSingle();
-                    float localY = reader.ReadSingle();
-                    float localZ = reader.ReadSingle();
-
-                    float angleX = reader.ReadSingle();
-                    float angleY = reader.ReadSingle();
-                    float angleZ = reader.ReadSingle();
-
-                    GameObject newObj;
-
-                    switch(objType)
-                    {
-                        case 0:
-                            newObj = Instantiate(testInteractablePrefab);
-                            break;
-                        case 1:
-                            newObj = Instantiate(testPickupPrefab);
-                            break;
-                        default:
-                            newObj = Instantiate(testInteractablePrefab);
-                            break;
-                    }
-
-                    newObj.GetComponent<NetworkTrackable>().uniqueID = objID;
-                    objects.Add(objID, newObj);
-                    Transform parentCar;
-                    Vector3 localPosition = new Vector3(localX, localY, localZ);
-
-                    newObj.transform.root.eulerAngles = new Vector3(angleX, angleY, angleZ);
-
-                    if (cars.TryGetValue(parentCarID, out parentCar))
-                    {
-                        newObj.transform.parent = parentCar;
-                        newObj.transform.localPosition = localPosition;
-                    }
-                    else
-                    {
-                        StartCoroutine(parentAssign(parentCarID, newObj, localPosition));
-                    }                
+                    Vector3 localPosition = new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+                    Vector3 eulerRotation = new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+               
+                    NetworkObject netObj = new NetworkObject(objID, objType, localPosition, eulerRotation);
+                    objects.Add(objID, netObj);              
+                
                 }           
 
-            }
+            }         
         }
         //Messages with PICKUP_TAG contain the new position and rotation of an object with "Pickup" attached
         else if(e.GetMessage().Tag == PICKUP_TAG)
@@ -187,30 +185,26 @@ public class NetworkObjectManager : MonoBehaviour
             using (DarkRiftReader reader = message.GetReader())
             {
                 
-                    ushort objID = reader.ReadUInt16();
-                    if (objects.ContainsKey(objID))
-                    {
+                ushort objID = reader.ReadUInt16();
+                if (objects.ContainsKey(objID))
+                {
+                    GameObject obj = objects[objID].gObj;
+                    Vector3 newLocalPosition = new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+              
+                    float angleX = reader.ReadSingle();
+                    float angleY = reader.ReadSingle();
+                    float angleZ = reader.ReadSingle();
 
-                       Debug.Log("Pickup Move message received");
+                    obj.transform.localPosition = newLocalPosition;
+                    obj.GetComponent<Pickup>().lastPostion = newLocalPosition;
+                    Vector3 newRotation = new Vector3(angleX, angleY, angleZ);
+                    obj.transform.eulerAngles = newRotation;
 
-                         GameObject obj = objects[objID];
-                        obj.transform.SetParent(cars[reader.ReadUInt16()]);
-                        float x = reader.ReadSingle();
-                        float y = reader.ReadSingle();
-                        float z = reader.ReadSingle();
-                        float angleX = reader.ReadSingle();
-                        float angleY = reader.ReadSingle();
-                        float angleZ = reader.ReadSingle();
-
-                        obj.transform.localPosition = new Vector3(x, y, z);
-                        obj.transform.eulerAngles = new Vector3(angleX, angleY, angleZ);
-                    }
-                    else
-                    {
-                        reader.Dispose();
-                    }
-                
-                
+                    objects[objID].localPosition = newLocalPosition;
+                    objects[objID].rotation = newRotation;
+          
+                }
+                    
         
             }
                 
@@ -224,7 +218,7 @@ public class NetworkObjectManager : MonoBehaviour
                 ushort objID = reader.ReadUInt16();
                 if (objects.ContainsKey(objID))
                 {
-                    GameObject obj = objects[objID];
+                    GameObject obj = objects[objID].gObj;
                     ushort useTag = reader.ReadUInt16();
 
                     switch(useTag)
@@ -242,22 +236,126 @@ public class NetworkObjectManager : MonoBehaviour
                             obj.GetComponent<Interactable>().AbortUse();
                             break;
                     }
-                }
+                }                
                 else
                 {
                     Debug.LogWarning("Warning, received ID does not match an object");
                 }
             }
         }
+        else if(e.GetMessage().Tag == NUM_PLAYERS_TAG)
+        {
+            using (Message message = e.GetMessage())
+            using (DarkRiftReader reader = message.GetReader())
+            {
+                int numPlayers = reader.ReadInt32();
+                numPlayerText.text = "Players: " + numPlayers.ToString();
+            }
+        }
     }
 
-    //This function is for assigning the parent car of a newly created object after a delay
-    //This delay is because objects and cars are created simultaneously and to protect against
-    //assiging an objects parent as a nonexistent transform
-    IEnumerator parentAssign(ushort parentID, GameObject obj, Vector3 localPosition)
+    public void SendMovementMessage(ushort objID)
     {
-        yield return new WaitForSeconds(1);
-        obj.transform.parent = cars[parentID];
-        obj.transform.localPosition = localPosition;
+        GameObject obj = objects[objID].gObj;
+        using (DarkRiftWriter writer = DarkRiftWriter.Create())
+        {
+            writer.Write(obj.GetComponent<NetworkTrackable>().uniqueID);
+
+
+
+
+            Vector3 localPosition = obj.transform.localPosition;
+
+            writer.Write(localPosition.x);
+            writer.Write(localPosition.y);
+            writer.Write(localPosition.z);
+            
+
+            Vector3 angles = obj.transform.rotation.eulerAngles;
+            writer.Write(angles.x);
+            writer.Write(angles.y);
+            writer.Write(angles.z);
+
+            using (Message message = Message.Create(PICKUP_TAG, writer))
+                client.SendMessage(message, SendMode.Unreliable);
+
+           
+        }
+    }
+
+    private void CheckObjectMotion()
+    {
+        foreach(NetworkObject nObj in objects.Values)
+        {
+
+            if (Vector3.Distance(nObj.localPosition, train.transform.InverseTransformPoint(nObj.gObj.transform.position)) > MoveDistance)
+            {
+                Debug.Log("Object moved");
+                SendMovementMessage(nObj.ID);
+                nObj.localPosition = train.transform.InverseTransformPoint(nObj.gObj.transform.position);
+                nObj.rotation = nObj.gObj.transform.eulerAngles;
+            }
+
+        }
+    }
+
+    private void SpawnObjects()
+    {
+        foreach(NetworkObject nObj in objects.Values)
+        {
+            GameObject newObj;
+            switch(nObj.ObjType)
+            {
+                case 0:
+                    newObj = Instantiate(testInteractablePrefab, train.transform.TransformPoint(nObj.localPosition), Quaternion.Euler(nObj.rotation.x, nObj.rotation.y, nObj.rotation.z), train.transform);
+                    break;
+                case 1:
+                    newObj = Instantiate(testPickupPrefab, train.transform.TransformPoint(nObj.localPosition), Quaternion.Euler(nObj.rotation.x, nObj.rotation.y, nObj.rotation.z), train.transform);
+                    newObj.GetComponent<Pickup>().lastPostion = train.transform.InverseTransformPoint(nObj.localPosition);
+                    newObj.GetComponent<Pickup>().ID = nObj.ID;
+                    break;
+                default:
+                    newObj = Instantiate(testInteractablePrefab, train.transform.TransformPoint(nObj.localPosition), Quaternion.Euler(nObj.rotation.x, nObj.rotation.y, nObj.rotation.z), train.transform);
+                    break;
+            }     
+   
+            newObj.GetComponent<NetworkTrackable>().uniqueID = nObj.ID;
+            nObj.gObj = newObj;
+        }
+        SpawnedObjects = true;
+    }
+
+    public void LaunchGame()
+    {
+        Debug.Log("LAUNCH GAME");
+        using (DarkRiftWriter writer = DarkRiftWriter.Create())
+        {
+            ushort yes = 1;
+            writer.Write(yes);
+            
+            using (Message message = Message.Create(LAUNCH_TAG, writer))
+                client.SendMessage(message, SendMode.Reliable);
+
+        }
+    }
+
+}
+
+public class NetworkObject
+{
+    public ushort ID;
+    public ushort ObjType;  
+
+    public Vector3 localPosition;
+    public Vector3 rotation;
+
+    public GameObject gObj;
+
+    public NetworkObject(ushort id, ushort type,  Vector3 pos, Vector3 rot)
+    {
+        ID = id;
+        ObjType = type;
+        localPosition = pos;
+        rotation = rot;        
     }
 }

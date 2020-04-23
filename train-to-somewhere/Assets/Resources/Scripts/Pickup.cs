@@ -11,10 +11,12 @@ public class Pickup : MonoBehaviour
     public Interactable interactable;
 
     const ushort PICKUP_MOVE_TAG = 5;
-    ushort ID;
-    private UnityClient client;
-    LocalPlayerController playerController;
-    Vector3 lastPostion;
+    public ushort ID;
+
+    public LocalPlayerController playerController;
+    Transform parentCarTransform;
+    NetworkObjectManager objManager;
+    public Vector3 lastPostion = Vector3.zero;
 
     Rigidbody rb;
     Collider cd;
@@ -27,11 +29,14 @@ public class Pickup : MonoBehaviour
         interactable.holdTime = pickupTime;
         interactable.afterUse.AddListener(OnInteractComplete);
 
-        client = GameObject.Find("Network").GetComponent<UnityClient>();
-        playerController = GameObject.Find("Character").GetComponent<LocalPlayerController>();
-        lastPostion = transform.position;
+       
+        //playerController = GameObject.Find("Character").GetComponent<LocalPlayerController>();
+        
+        objManager = GameObject.Find("Network").GetComponent<NetworkObjectManager>();
 
-        ID = GetComponent<NetworkTrackable>().uniqueID;
+       
+
+       
 
         rb = GetComponent<Rigidbody>();
         rb.isKinematic = false;
@@ -39,18 +44,19 @@ public class Pickup : MonoBehaviour
         cd.enabled = true;
     }
 
+
+
     public void OnInteractComplete()
     {
+        Debug.Log("On interact complete");
         if (isHeld)
-        {
-            transform.parent = interactable.interactingPlayerTransform.parent;
+        {     
             rb.isKinematic = false;
             cd.enabled = true;
             isHeld = false;
             playerController.SetCollider(isHeld);
         } else
         {
-            transform.parent = interactable.interactingPlayerTransform;
             transform.position = transform.parent.position + transform.parent.forward;
             transform.rotation = transform.parent.rotation;
             rb.isKinematic = true;
@@ -64,62 +70,7 @@ public class Pickup : MonoBehaviour
     {
         if (isHeld)
         {
-            transform.position = transform.parent.position + transform.parent.forward;
-
-        }
-        if (Vector3.Distance(transform.position, lastPostion) > moveDistance)
-        {
-            lastPostion = transform.position;
-
-            using (DarkRiftWriter writer = DarkRiftWriter.Create())
-            {
-                writer.Write(GetComponent<NetworkTrackable>().uniqueID);
-                if (isHeld)
-                {
-                    if (transform.parent.parent.GetComponent<NetworkTrackable>() != null)
-                        writer.Write(transform.parent.parent.GetComponent<NetworkTrackable>().uniqueID);
-                    else
-                    {
-                        ushort defaultID = 0;
-                        writer.Write(defaultID);
-                    }
-                    Vector3 positionRelativetoCar = transform.parent.parent.InverseTransformPoint(transform.position);
-                    writer.Write(positionRelativetoCar.x);
-                    writer.Write(positionRelativetoCar.y);
-                    writer.Write(positionRelativetoCar.z);
-                }
-                else
-                {
-                    if (transform.parent != null)
-                    {
-
-                        writer.Write(transform.parent.GetComponent<NetworkTrackable>().uniqueID);
-                        writer.Write(transform.localPosition.x);
-                        writer.Write(transform.localPosition.y);
-                        writer.Write(transform.localPosition.z);
-                    }
-                    else
-                    {
-                        ushort defaultID = 0;
-                        writer.Write(defaultID);
-                        Vector3 defaultPosition = Vector3.zero;
-                        writer.Write(defaultPosition.x);
-                        writer.Write(defaultPosition.y);
-                        writer.Write(defaultPosition.z);
-                    }
-
-
-                }
-
-                Vector3 angles = transform.rotation.eulerAngles;
-                writer.Write(angles.x);
-                writer.Write(angles.y);
-                writer.Write(angles.z);
-
-                using (Message message = Message.Create(PICKUP_MOVE_TAG, writer))
-                    client.SendMessage(message, SendMode.Unreliable);
-            
-             }
+            transform.position = playerController.transform.position + playerController.transform.forward;           
         }
         
     }

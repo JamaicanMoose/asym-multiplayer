@@ -33,6 +33,8 @@ public class LocalPlayerController : MonoBehaviour
     public Collider defaultCollider;
     public Collider holdCollider;
 
+    public ushort parentCarID = 1;
+
     private void Awake()
     {
         client = GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<UnityClient>();
@@ -50,7 +52,7 @@ public class LocalPlayerController : MonoBehaviour
 
         player = GetComponent<PlayerObject>();
 
-        lastPosition = transform.position;
+        lastPosition = transform.localPosition;
         lastMoveVector = transform.forward;
     }
 
@@ -77,7 +79,7 @@ public class LocalPlayerController : MonoBehaviour
        
             rb.velocity = moveDirection * moveSpeed;
         }
-        player.SetMovePosition(transform.position);
+        player.SetMovePosition(transform.localPosition);
       
         lastMoveVector = moveDirection;
 
@@ -87,12 +89,21 @@ public class LocalPlayerController : MonoBehaviour
             Debug.DrawRay(transform.position, lastMoveVector, Color.red);
         }
         player.SetRotation(transform.rotation.eulerAngles);
-        if (Vector3.Distance(lastPosition, transform.position) > moveDistance)
+
+        
+
+        //This checks if we have moved far enough from server position to send another update
+        if (Vector3.Distance(lastPosition, transform.localPosition) > moveDistance)
         {
             using (DarkRiftWriter writer = DarkRiftWriter.Create())
             {
-                writer.Write(transform.position.x);
-                writer.Write(transform.position.z);
+                //The parentCarID field is updated from the TrainCarTracker script.
+                writer.Write(parentCarID);
+
+                writer.Write(transform.localPosition.x);
+                writer.Write(transform.localPosition.y);
+                writer.Write(transform.localPosition.z);
+          
 
                 Vector3 rotation = transform.rotation.eulerAngles;
                 writer.Write(rotation.x);
@@ -102,7 +113,7 @@ public class LocalPlayerController : MonoBehaviour
                     client.SendMessage(message, SendMode.Unreliable);
             }
 
-            lastPosition = transform.position;
+            lastPosition = transform.localPosition;
         }
     }
 

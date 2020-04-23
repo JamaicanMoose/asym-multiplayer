@@ -25,6 +25,7 @@ public class Interactable : MonoBehaviour
         inUse = true;
         if (startUse != null)
         {
+          
             startUse.Invoke();
         }
     }

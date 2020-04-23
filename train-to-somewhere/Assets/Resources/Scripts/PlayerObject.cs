@@ -10,14 +10,15 @@ public class PlayerObject : MonoBehaviour
 
     private void Awake()
     {
-        movePosition = transform.position;
+        movePosition = transform.localPosition;
+        Debug.Log("Move position is: " + movePosition);
         rotation = transform.rotation.eulerAngles;
     }
 
     // Update is called once per frame
     void LateUpdate()
     {
-        transform.position = movePosition;
+        transform.localPosition = movePosition;
         transform.rotation = Quaternion.Euler(rotation.x, rotation.y, rotation.z);
     }
 
