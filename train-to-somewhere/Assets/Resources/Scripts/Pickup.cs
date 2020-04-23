@@ -72,6 +72,18 @@ public class Pickup : MonoBehaviour
         {
             transform.position = playerController.transform.position + playerController.transform.forward;           
         }
+        if(Input.GetKeyDown(KeyCode.F))
+        {
+            rb.isKinematic = false;
+            cd.enabled = true;
+            isHeld = false;
+            playerController.SetCollider(isHeld);
+
+            Vector3 forceVector = (playerController.transform.forward + Vector3.up * 2) * 3;
+          
+            rb.AddForce(forceVector, ForceMode.Impulse);
+
+        }
         
     }
 }
