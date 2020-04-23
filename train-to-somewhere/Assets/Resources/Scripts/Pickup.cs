@@ -29,7 +29,8 @@ public class Pickup : MonoBehaviour
         interactable.holdTime = pickupTime;
         interactable.afterUse.AddListener(OnInteractComplete);
 
-       
+        if (!playerController)
+            playerController = GameObject.FindGameObjectWithTag("LocalPlayer").GetComponent<LocalPlayerController>();
         //playerController = GameObject.Find("Character").GetComponent<LocalPlayerController>();
         
         objManager = GameObject.Find("Network").GetComponent<NetworkObjectManager>();
