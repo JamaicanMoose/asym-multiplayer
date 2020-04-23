@@ -7,6 +7,7 @@ public class PlayerObject : MonoBehaviour
 
     Vector3 movePosition;
     Vector3 rotation;
+    public float foodLevel = 100;
 
     private void Awake()
     {

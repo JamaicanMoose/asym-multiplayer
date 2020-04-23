@@ -834,6 +834,8 @@ MonoBehaviour:
     type: 3}
   caboosePrefab: {fileID: 6840677106124473317, guid: ee8f83c1394e0e94c9730a24aa006e7f,
     type: 3}
+  kitchencarPrefab: {fileID: 8935407549618170238, guid: bdf8b6d00cd87b94d819aec21f7bc483,
+    type: 3}
   testPickupPrefab: {fileID: 6703112603053321753, guid: a70291887ea0c8a46a671565b5e98f21,
     type: 3}
   testInteractablePrefab: {fileID: 5326886448848416152, guid: 3e3cca649558ffc4799b7093d3839acc,

@@ -10,6 +10,8 @@ public class LocalPlayerController : MonoBehaviour
 {
     ushort MOVEMENT_TAG = 1;
 
+    public float dashFoodCost = .1f;
+
     [SerializeField]
     [Tooltip("The distance we can move before we send a position update.")]
     float moveDistance = 0.05f;
@@ -64,14 +66,24 @@ public class LocalPlayerController : MonoBehaviour
       
         moveDirection.y = 0f;
         moveDirection.Normalize();
+        PlayerObject po = gameObject.GetComponent<PlayerObject>();
         if (Input.GetButtonDown("Jump") && moveDirection != Vector3.zero)
         {
-            dashing = true;
-            StartCoroutine(DashTimer());
+            float costPerDash = dashFoodCost * (dashTime / Time.deltaTime);
+            Debug.Log(costPerDash);
+            if (po.foodLevel >= costPerDash)
+            {
+                dashing = true;
+                StartCoroutine(DashTimer());
+            }
+            else
+            {
+                // Do some animation to indicate that the player is exhausted
+            }
         }
         if(dashing)
         {
-        
+            po.foodLevel -= dashFoodCost;
             rb.velocity = moveDirection * dashSpeed;
         }
         else

@@ -108,6 +108,7 @@ namespace TrainPlugin
         const ushort ENGINE = 0;
         const ushort TESTCAR = 1;
         const ushort CABOOSE = 2;
+        const ushort KITCHEN_CAR = 3;
 
         //INTERACTABLE OBJECT TYPES
         const ushort TEST_INTERACTABLE = 0;
@@ -131,10 +132,12 @@ namespace TrainPlugin
             TrainCar engine = new TrainCar(UniqueID(), ENGINE);
             TrainCar testCar1 = new TrainCar(UniqueID(), TESTCAR);
             TrainCar testCar2 = new TrainCar(UniqueID(), TESTCAR);
+            TrainCar kitchencar = new TrainCar(UniqueID(), KITCHEN_CAR);
             TrainCar caboose = new TrainCar(UniqueID(), CABOOSE);
             testTrain.Cars.Add(engine);
             testTrain.Cars.Add(testCar1);
             testTrain.Cars.Add(testCar2);
+            testTrain.Cars.Add(kitchencar);
             testTrain.Cars.Add(caboose);
         }
 
@@ -242,17 +245,17 @@ namespace TrainPlugin
 
         void ClientMessageReceived(object sender, MessageReceivedEventArgs e)
         {
-            if(e.GetMessage().Tag == MOVE_TAG)
+            switch (e.GetMessage().Tag)
             {
-                MovementMessageReceived(sender, e);
-;           }
-            else if(e.GetMessage().Tag ==  PICKUP_MOVE_TAG)
-            {
-                PickupMoveMessageReceived(sender, e);
-            }
-            else if(e.GetMessage().Tag == USE_TAG)
-            {
-                UseMessageReceived(sender, e);
+                case MOVE_TAG:
+                    MovementMessageReceived(sender, e);
+                    break;
+                case PICKUP_MOVE_TAG:
+                    PickupMoveMessageReceived(sender, e);
+                    break;
+                case USE_TAG:
+                    UseMessageReceived(sender, e);
+                    break;
             }
         }
 

@@ -29,6 +29,7 @@ public class NetworkObjectManager : MonoBehaviour
     const ushort ENGINE = 0;
     const ushort DEFAULT_CAR = 1;
     const ushort CABOOSE = 2;
+    const ushort KITCHEN_CAR = 3;
 
     
     UnityClient client;
@@ -44,6 +45,10 @@ public class NetworkObjectManager : MonoBehaviour
     [SerializeField]
     [Tooltip("The caboose prefab.")]
     public GameObject caboosePrefab;
+
+    [SerializeField]
+    [Tooltip("The kitchen car prefab.")]
+    public GameObject kitchencarPrefab;
 
     [SerializeField]
     [Tooltip("The testPickup prefab")]
@@ -140,6 +145,9 @@ public class NetworkObjectManager : MonoBehaviour
                             break;
                         case CABOOSE:
                             newCar = Instantiate(caboosePrefab);
+                            break;
+                        case KITCHEN_CAR:
+                            newCar = Instantiate(kitchencarPrefab);
                             break;
                         default:
                             newCar = Instantiate(carPrefab);
