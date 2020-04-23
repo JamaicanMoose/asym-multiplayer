@@ -18,6 +18,8 @@ public class NetworkObjectManager : MonoBehaviour
     const ushort USE_TAG = 6;
     const ushort NUM_PLAYERS_TAG = 7;
     const ushort LAUNCH_TAG = 8;
+    const ushort DESTROY_OBJ_TAG = 9;
+    const ushort SPAWN_OBJ_TAG = 10;
 
     //Tags for the use state of interactable object use messages
     const ushort START_USE = 1;
@@ -260,6 +262,51 @@ public class NetworkObjectManager : MonoBehaviour
                 numPlayerText.text = "Players: " + numPlayers.ToString();
             }
         }
+        else if(e.GetMessage().Tag == DESTROY_OBJ_TAG)
+        {
+            using (Message message = e.GetMessage())
+            using (DarkRiftReader reader = message.GetReader())
+            {
+                ushort objID = reader.ReadUInt16();
+                GameObject toDestroy = objects[objID].gObj;
+                Destroy(toDestroy);
+                objects.Remove(objID);
+            }
+        }
+        else if (e.GetMessage().Tag == SPAWN_OBJ_TAG)
+        {
+            using (Message message = e.GetMessage())
+            using (DarkRiftReader reader = message.GetReader())
+            {
+                ushort objID = reader.ReadUInt16();
+                ushort objType = reader.ReadUInt16();
+                Vector3 localPosition = new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+                Vector3 eulerRotation = new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+
+                NetworkObject netObj = new NetworkObject(objID, objType, localPosition, eulerRotation);
+            
+
+                GameObject newObj;
+                switch (netObj.ObjType)
+                {
+                    case 0:
+                        newObj = Instantiate(testInteractablePrefab, train.transform.TransformPoint(netObj.localPosition), Quaternion.Euler(netObj.rotation.x, netObj.rotation.y, netObj.rotation.z), train.transform);
+                        break;
+                    case 1:
+                        newObj = Instantiate(testPickupPrefab, train.transform.TransformPoint(netObj.localPosition), Quaternion.Euler(netObj.rotation.x, netObj.rotation.y, netObj.rotation.z), train.transform);
+                        newObj.GetComponent<Pickup>().lastPostion = train.transform.InverseTransformPoint(netObj.localPosition);
+                        newObj.GetComponent<Pickup>().ID = netObj.ID;
+                        break;
+                    default:
+                        newObj = Instantiate(testInteractablePrefab, train.transform.TransformPoint(netObj.localPosition), Quaternion.Euler(netObj.rotation.x, netObj.rotation.y, netObj.rotation.z), train.transform);
+                        break;
+                }
+
+                newObj.GetComponent<NetworkTrackable>().uniqueID = netObj.ID;
+                objects.Add(objID, netObj);
+            }
+        }
+
     }
 
     public void SendMovementMessage(ushort objID)
@@ -342,6 +389,35 @@ public class NetworkObjectManager : MonoBehaviour
             writer.Write(yes);
             
             using (Message message = Message.Create(LAUNCH_TAG, writer))
+                client.SendMessage(message, SendMode.Reliable);
+
+        }
+    }
+
+    public void DestroyObject(ushort objectID)
+    {
+        using (DarkRiftWriter writer = DarkRiftWriter.Create())
+        {        
+            writer.Write(objectID);
+            using (Message message = Message.Create(DESTROY_OBJ_TAG, writer))
+                client.SendMessage(message, SendMode.Reliable);
+
+        }
+
+    }
+
+    public void SpawnObject(ushort objType, Vector3 position, Vector3 eulerRotation)
+    {
+        using (DarkRiftWriter writer = DarkRiftWriter.Create())
+        {
+            writer.Write(objType);
+            writer.Write(position.x);
+            writer.Write(position.y);
+            writer.Write(position.z);
+            writer.Write(eulerRotation.x);
+            writer.Write(eulerRotation.y);
+            writer.Write(eulerRotation.z);
+            using (Message message = Message.Create(SPAWN_OBJ_TAG, writer))
                 client.SendMessage(message, SendMode.Reliable);
 
         }
