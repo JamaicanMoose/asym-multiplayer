@@ -2,12 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TTSClient : MonoBehaviour
+public class TTSNetworkedPlayer : MonoBehaviour
 {
-    [HideInInspector]
-    public ushort localPlayerId;
-
-
     // Start is called before the first frame update
     void Start()
     {

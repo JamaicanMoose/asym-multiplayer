@@ -2,11 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TTSClient : MonoBehaviour
+public class TTSServer : MonoBehaviour
 {
-    [HideInInspector]
-    public ushort localPlayerId;
 
+    //Client ID -> TTSID
+    public Dictionary<ushort, ushort> clientPlayerMap;
+
+    private void Awake()
+    {
+        clientPlayerMap = new Dictionary<ushort, ushort>();
+    }
 
     // Start is called before the first frame update
     void Start()

@@ -5,9 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - CameraAnchor
+  - NetworkManager
   - LocalPlayer
-  - StartMenu
-  - Network
+  - Coal
+  - Train
   layers:
   - Default
   - TransparentFX
@@ -17,7 +18,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - InteractableLayer
   - 
   - 
   - 
