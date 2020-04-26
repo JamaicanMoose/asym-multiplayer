@@ -10,6 +10,7 @@ public class TTSMessage
     public const ushort GAME_OBJECT_INIT = 1; //Setup GameObject on client
     public const ushort GAME_OBJECT_SYNC = 2; //Sync diff between server & client
     public const ushort PLAYER_ASSOC = 3;
+    public const ushort MOVEMENT_INPUT = 4;
 }
 
 public class TTSGameObjectInitMessage : IDarkRiftSerializable
@@ -104,6 +105,42 @@ public class TTSGameObjectInitMessage : IDarkRiftSerializable
         e.Writer.Write(name);
         e.Writer.Write(prefabID);
     }
+}
+
+public class TTSInputMessage : IDarkRiftSerializable
+{
+
+    public Vector3 MoveDirection;
+    public bool Dashing;
+
+    public TTSInputMessage()
+    {
+       
+    }
+
+    public TTSInputMessage(Vector3 moveDirection, bool dashing)
+    {
+        MoveDirection = moveDirection;
+        Dashing = dashing;
+    }
+
+
+    public void Deserialize(DeserializeEvent e)
+    {      
+        MoveDirection.x = e.Reader.ReadSingle();
+        MoveDirection.y = e.Reader.ReadSingle();
+        MoveDirection.z = e.Reader.ReadSingle();
+        Dashing = e.Reader.ReadBoolean();     
+    }
+
+    public void Serialize(SerializeEvent e)
+    {
+        e.Writer.Write(MoveDirection.x);
+        e.Writer.Write(MoveDirection.y);
+        e.Writer.Write(MoveDirection.z);
+        e.Writer.Write(Dashing);       
+    }
+
 }
 
 public class TTSGameObjectSyncMessage : TTSMessage

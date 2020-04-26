@@ -11,11 +11,16 @@ public class TTSClientLobby : MonoBehaviour
 {
     UnityClient client;
     public Text ipField;
+    TTSClient ttsClient;
+
+    private bool connected = false;
 
     private void Awake()
     {
         client = gameObject.GetComponent<UnityClient>();
         client.MessageReceived += TTSMessageHandler;
+
+        ttsClient = gameObject.GetComponent<TTSClient>();
     }
 
     // Start is called before the first frame update
@@ -32,8 +37,19 @@ public class TTSClientLobby : MonoBehaviour
 
     public void TTSOnConnectClick()
     {
-        IPAddress ip = IPAddress.Parse(ipField.text);
-        client.Connect(ip, 4296, IPVersion.IPv4);
+        if(!connected)
+        {
+            IPAddress ip = IPAddress.Parse(ipField.text);
+            client.Connect(ip, 4296, IPVersion.IPv4);
+        }
+
+        if (client.Connected)
+            connected = true;
+        else
+        {
+            connected = false;
+        }
+
     }
 
     void TTSMessageHandler(object sender, MessageReceivedEventArgs e)
@@ -62,6 +78,7 @@ public class TTSClientLobby : MonoBehaviour
                 break;
             case TTSMessage.START_GAME:
                 //INIT STATE HERE
+                ttsClient.AssignLocalPlayer();
                 GameObject.FindGameObjectWithTag("StartMenu").SetActive(false);
                 break;
         }

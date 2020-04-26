@@ -17,10 +17,15 @@ public class TTSLobby : MonoBehaviour
     XmlUnityServer darkRiftServer;
     bool acceptingConnections = true;
 
+    private int spawnCount = 0;
+
+    TTSServer server;
+
     private void Awake()
     {
         externalIP.text = new WebClient().DownloadString("http://icanhazip.com");
         darkRiftServer = gameObject.GetComponent<XmlUnityServer>();
+        server = gameObject.GetComponent<TTSServer>();
     }
 
 
@@ -35,6 +40,8 @@ public class TTSLobby : MonoBehaviour
     {
         if (!acceptingConnections)
             e.Client.Disconnect();
+
+        e.Client.MessageReceived += server.ClientMessageReceived;
     }
 
 
@@ -55,12 +62,15 @@ public class TTSLobby : MonoBehaviour
 
     void TSSInitGame()
     {
-        Transform world = GameObject.Find("World2").transform;
+        Transform world = GameObject.Find("World").transform;
+        Transform train = GameObject.Find("Train").transform;
         Dictionary<ushort, ushort> clientPlayerMap = GameObject.FindGameObjectWithTag("Network").GetComponent<TTSServer>().clientPlayerMap;
+        Dictionary<ushort, Transform> idTransformMap = GameObject.FindGameObjectWithTag("Network").GetComponent<TTSIDMap>().idMap;
         foreach (IClient c in darkRiftServer.Server.ClientManager.GetAllClients())
         {
             GameObject player = GameObject.Instantiate(Resources.Load($"Prefabs/NetworkPlayer", typeof(GameObject))) as GameObject;
-            player.transform.parent = world;
+            player.transform.parent = train;
+            player.transform.localPosition = UniqueSpawnPosition();
             player.GetComponent<TTSID>().Init();
             clientPlayerMap[c.ID] = player.GetComponent<TTSID>().id;
             using (DarkRiftWriter playerAssocWriter = DarkRiftWriter.Create())
@@ -82,6 +92,7 @@ public class TTSLobby : MonoBehaviour
             {
                 if (t == world) continue;
                 initObjectsWriter.Write(new TTSGameObjectInitMessage(t.gameObject));
+                idTransformMap.Add(t.gameObject.GetComponent<TTSID>().id, t);
             }
             using (Message initObjectsMessage = Message.Create(TTSMessage.GAME_OBJECT_INIT, initObjectsWriter))
             {
@@ -105,5 +116,15 @@ public class TTSLobby : MonoBehaviour
             }
         }
         //UNFREEZE GAME
+    }
+
+    private Vector3 UniqueSpawnPosition()
+    {
+        Vector3 startPosition = new Vector3(0, 3.5f, -1);
+        Vector3 offSet = new Vector3(0, 0, 2);
+        spawnCount++;
+
+        //First spawn position is (0, 3.5f, 1), each position is +2z offset
+        return startPosition + offSet * spawnCount;
     }
 }
