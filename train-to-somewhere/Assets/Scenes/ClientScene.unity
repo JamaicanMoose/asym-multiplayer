@@ -512,7 +512,7 @@ GameObject:
   - component: {fileID: 1208820832}
   - component: {fileID: 1208820831}
   m_Layer: 5
-  m_Name: InputField
+  m_Name: IpField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -807,6 +807,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1421027763}
+        m_MethodName: UpdateConf
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1313565917
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -921,6 +932,7 @@ GameObject:
   - component: {fileID: 1421027761}
   - component: {fileID: 1421027760}
   - component: {fileID: 1421027759}
+  - component: {fileID: 1421027763}
   m_Layer: 5
   m_Name: StartMenu
   m_TagString: StartMenu
@@ -1008,6 +1020,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1421027763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1421027758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 889f2059adb3f76419cc4492b52aedf7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1604357211
 GameObject:
   m_ObjectHideFlags: 0
