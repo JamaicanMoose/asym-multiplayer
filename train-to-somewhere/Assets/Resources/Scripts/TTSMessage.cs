@@ -11,6 +11,7 @@ public class TTSMessage
     public const ushort GAME_OBJECT_SYNC = 2; //Sync diff between server & client
     public const ushort PLAYER_ASSOC = 3;
     public const ushort MOVEMENT_INPUT = 4;
+    public const ushort PLAYER_SYNC = 5;
 }
 
 public class TTSGameObjectInitMessage : IDarkRiftSerializable
@@ -143,7 +144,48 @@ public class TTSInputMessage : IDarkRiftSerializable
 
 }
 
-public class TTSGameObjectSyncMessage : TTSMessage
+public class TTSGameObjectSyncMessage : IDarkRiftSerializable
 {
+    public ushort ttsid;
+    public Vector3 position;
+    public Quaternion rotation;
 
+    public TTSGameObjectSyncMessage()
+    {
+
+    }
+
+    public TTSGameObjectSyncMessage(ushort id, Transform t)
+    {
+        ttsid = id;
+        position = t.position;
+        rotation = t.localRotation;
+    }
+
+
+    public void Deserialize(DeserializeEvent e)
+    {
+        ttsid = e.Reader.ReadUInt16();
+        position.x = e.Reader.ReadSingle();
+        position.y = e.Reader.ReadSingle();
+        position.z = e.Reader.ReadSingle();
+        rotation.w = e.Reader.ReadSingle();
+        rotation.x = e.Reader.ReadSingle();
+        rotation.y = e.Reader.ReadSingle();
+        rotation.z = e.Reader.ReadSingle();
+    }
+
+    public void Serialize(SerializeEvent e)
+    {
+        e.Writer.Write(ttsid);
+        e.Writer.Write(position.x);
+        e.Writer.Write(position.y);
+        e.Writer.Write(position.z);
+        e.Writer.Write(rotation.w);
+        e.Writer.Write(rotation.x);
+        e.Writer.Write(rotation.y);
+        e.Writer.Write(rotation.z);
+    }
+     
+    
 }

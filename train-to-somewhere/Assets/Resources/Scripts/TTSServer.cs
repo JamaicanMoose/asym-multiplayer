@@ -13,14 +13,43 @@ public class TTSServer : MonoBehaviour
     public Dictionary<ushort, ushort> clientPlayerMap;
     private TTSIDMap idMap;
 
-  
+
+    public float playerMoveDistance = 0.05f;
+
+    XmlUnityServer darkRiftServer;
 
     private void Awake()
     {
         clientPlayerMap = new Dictionary<ushort, ushort>();
         idMap = GameObject.Find("Network").GetComponent<TTSIDMap>();
+
+        darkRiftServer = GetComponent<XmlUnityServer>();
     }
 
+    private void Update()
+    {
+            foreach(ushort playerID in clientPlayerMap.Values)
+            {
+                if(Vector3.Distance(idMap.idMap[playerID].localPosition, idMap.idMap[playerID].GetComponent<PositionTracker>().lastSyncPostion) > playerMoveDistance)
+                {
+                    using (DarkRiftWriter playerPositionWriter = DarkRiftWriter.Create())
+                    {
+
+                        playerPositionWriter.Write(new TTSGameObjectSyncMessage(playerID, idMap.idMap[playerID]));
+                        
+                        using (Message playerPositionMessage = Message.Create(TTSMessage.PLAYER_SYNC, playerPositionWriter))
+                        {
+                            foreach (IClient c in darkRiftServer.Server.ClientManager.GetAllClients())
+                                c.SendMessage(playerPositionMessage, SendMode.Unreliable);
+                        }
+                    }
+               
+                    idMap.idMap[playerID].GetComponent<PositionTracker>().lastSyncPostion = idMap.idMap[playerID].localPosition;
+
+                }
+            }
+        
+    }
 
 
     public void ClientMessageReceived(object sender, MessageReceivedEventArgs e)

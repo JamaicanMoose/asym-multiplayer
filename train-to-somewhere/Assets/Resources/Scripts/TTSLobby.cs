@@ -100,6 +100,7 @@ public class TTSLobby : MonoBehaviour
                     c.SendMessage(initObjectsMessage, SendMode.Reliable);
             }
         }
+
     }
 
     public void TTSStartGame()
