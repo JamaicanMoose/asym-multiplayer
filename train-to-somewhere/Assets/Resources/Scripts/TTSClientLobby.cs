@@ -13,6 +13,8 @@ public class TTSClientLobby : MonoBehaviour
     public Text ipField;
     TTSClient ttsClient;
 
+    public GameObject connectButton;
+
     private bool connected = false;
 
     private void Awake()
@@ -43,8 +45,12 @@ public class TTSClientLobby : MonoBehaviour
             client.Connect(ip, 4296, IPVersion.IPv4);
         }
 
-        if (client.Connected)
+        if (client.ConnectionState == ConnectionState.Connected)
+        {
+            connectButton.GetComponent<Image>().color = Color.green;
+            connectButton.GetComponentInChildren<Text>().text = "Connected";
             connected = true;
+        }          
         else
         {
             connected = false;
