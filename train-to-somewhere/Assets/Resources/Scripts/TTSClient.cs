@@ -46,7 +46,8 @@ public class TTSClient : MonoBehaviour
     }
 
     void SyncPlayer(MessageReceivedEventArgs e)
-    {      
+    {
+          
         TTSGameObjectSyncMessage syncData;
         using (Message m = e.GetMessage() as Message)
         {
@@ -64,21 +65,12 @@ public class TTSClient : MonoBehaviour
             Transform toSync = idMap[playerID];
             toSync.localPosition = localPosition;
             toSync.localRotation = localRotation;  
-        }     
+        }
 
     }
 
-    public void AssignLocalPlayer()
+    public Transform GetLocalPlayer()
     {
-        GameObject toReplace = idMap[localPlayerId].gameObject;
-        ushort ttsID = toReplace.GetComponent<TTSID>().id;
-        Transform parent = toReplace.transform.parent;
-        Vector3 localPosition = toReplace.transform.localPosition;
-        Quaternion rotation = toReplace.transform.rotation;
-        Destroy(toReplace);
-        GameObject localPlayer = Instantiate(controllablePlayerPrefab, localPosition, rotation, parent);
-        localPlayer.GetComponent<TTSID>().id = ttsID;
-
-        idMap[ttsID] = localPlayer.transform;
+        return idMap[localPlayerId];
     }
 }
