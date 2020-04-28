@@ -18,7 +18,7 @@ public class CameraTracker : MonoBehaviour
     private void Awake()
     {
         GameObject network = GameObject.FindGameObjectWithTag("Network");
-        localPlayer = network.GetComponent<TTSClient>().GetLocalPlayer();
+        localPlayer = network.GetComponent<TTSGeneric>().GetLocalPlayer();
     }
 
     void Update()

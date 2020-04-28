@@ -6,7 +6,7 @@ using DarkRift.Server.Unity;
 using DarkRift.Server;
 using DarkRift;
 
-public class TTSServer : MonoBehaviour
+public class TTSServer : TTSGeneric
 {
 
     //Client ID -> TTSID
@@ -90,5 +90,10 @@ public class TTSServer : MonoBehaviour
 
         player.GetComponent<TTSNetworkedPlayer>().SetVelocity(moveDirection, dashing);
 
+    }
+
+    public override Transform GetLocalPlayer()
+    {
+        return idMap.idMap[clientPlayerMap[(ushort)65000]];
     }
 }

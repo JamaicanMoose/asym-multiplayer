@@ -5,7 +5,7 @@ using DarkRift.Client;
 using DarkRift.Client.Unity;
 using DarkRift;
 
-public class TTSClient : MonoBehaviour
+public class TTSClient : TTSGeneric
 {
     [HideInInspector]
     public ushort localPlayerId;
@@ -69,7 +69,7 @@ public class TTSClient : MonoBehaviour
 
     }
 
-    public Transform GetLocalPlayer()
+    public override Transform GetLocalPlayer()
     {
         return idMap[localPlayerId];
     }
