@@ -18,12 +18,21 @@ public class TTSServer : TTSGeneric
 
     XmlUnityServer darkRiftServer;
 
+    bool dashing = false;
+    bool lastDashing = false;
+    Vector3 lastMoveVector = Vector3.zero;
+    Transform mainCameraTransform;
+    
+
+
     private void Awake()
     {
         clientPlayerMap = new Dictionary<ushort, ushort>();
         idMap = GameObject.Find("Network").GetComponent<TTSIDMap>();
 
         darkRiftServer = GetComponent<XmlUnityServer>();
+
+        mainCameraTransform = GameObject.FindWithTag("MainCamera").transform;
     }
 
     private void Update()
@@ -48,7 +57,24 @@ public class TTSServer : TTSGeneric
 
                 }
             }
-        
+
+        Vector3 moveDirection = mainCameraTransform.right * Input.GetAxis("Horizontal") + mainCameraTransform.forward * Input.GetAxis("Vertical");
+
+        moveDirection.y = 0f;
+        moveDirection.Normalize();
+
+        dashing = Input.GetKey(KeyCode.Space);
+
+        if (moveDirection != lastMoveVector || dashing != lastDashing)
+        {
+            MovePlayer(65000, moveDirection, dashing);
+        }
+
+       lastMoveVector = moveDirection;
+       lastDashing = dashing;
+ 
+
+
     }
 
 
@@ -58,7 +84,15 @@ public class TTSServer : TTSGeneric
         switch(messageTag)
         {
             case (TTSMessage.MOVEMENT_INPUT):
-                MovePlayer(e);
+                TTSInputMessage newInput;
+                using (Message m = e.GetMessage() as Message)
+                {
+                    using (DarkRiftReader r = m.GetReader())
+                    {
+                        newInput = r.ReadSerializable<TTSInputMessage>();
+                    }
+                }
+                MovePlayer(e.Client.ID, newInput.MoveDirection, newInput.Dashing);
                 break;
 
             default:
@@ -69,27 +103,11 @@ public class TTSServer : TTSGeneric
         }
     }
 
-    private void MovePlayer(MessageReceivedEventArgs e)
+    private void MovePlayer(ushort clientID, Vector3 moveDirection, bool dashing)
     {
-        ushort clientID = e.Client.ID;
         ushort playerTTSID = clientPlayerMap[clientID];
-
-        TTSInputMessage newInput;
-        using (Message m = e.GetMessage() as Message)
-        {
-            using (DarkRiftReader r = m.GetReader())
-            {
-                 newInput = r.ReadSerializable<TTSInputMessage>();
-            }
-        }
-        Vector3 moveDirection = newInput.MoveDirection;
-        bool dashing = newInput.Dashing;
-
         GameObject player = idMap.idMap[playerTTSID].gameObject;
-
-
         player.GetComponent<TTSNetworkedPlayer>().SetVelocity(moveDirection, dashing);
-
     }
 
     public override Transform GetLocalPlayer()
