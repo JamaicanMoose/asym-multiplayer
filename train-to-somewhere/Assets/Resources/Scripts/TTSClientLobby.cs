@@ -77,8 +77,7 @@ public class TTSClientLobby : MonoBehaviour
                 }
                 break;
             case TTSMessage.START_GAME:
-                //INIT STATE HERE
-                ttsClient.AssignLocalPlayer();
+                GameObject.FindGameObjectWithTag("Network").GetComponent<TTSGeneric>().GameStart();
                 GameObject.FindGameObjectWithTag("StartMenu").SetActive(false);
                 break;
         }

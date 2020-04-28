@@ -30,7 +30,7 @@ public class TTSServer : TTSGeneric
     {
             foreach(ushort playerID in clientPlayerMap.Values)
             {
-                if(Vector3.Distance(idMap.idMap[playerID].localPosition, idMap.idMap[playerID].GetComponent<PositionTracker>().lastSyncPostion) > playerMoveDistance)
+                if(Vector3.Distance(idMap.idMap[playerID].localPosition, idMap.idMap[playerID].GetComponent<TTSNetworkedPlayer>().lastSyncPostion) > playerMoveDistance)
                 {
                     using (DarkRiftWriter playerPositionWriter = DarkRiftWriter.Create())
                     {
@@ -44,7 +44,7 @@ public class TTSServer : TTSGeneric
                         }
                     }
                
-                    idMap.idMap[playerID].GetComponent<PositionTracker>().lastSyncPostion = idMap.idMap[playerID].localPosition;
+                    idMap.idMap[playerID].GetComponent<TTSNetworkedPlayer>().lastSyncPostion = idMap.idMap[playerID].localPosition;
 
                 }
             }

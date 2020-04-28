@@ -33,6 +33,7 @@ public class TTSLobby : MonoBehaviour
     void Start()
     {
         darkRiftServer.Server.ClientManager.ClientConnected += TTSPlayerConnected;
+        
     }
 
 
@@ -66,8 +67,18 @@ public class TTSLobby : MonoBehaviour
         Transform train = GameObject.Find("Train").transform;
         Dictionary<ushort, ushort> clientPlayerMap = GameObject.FindGameObjectWithTag("Network").GetComponent<TTSServer>().clientPlayerMap;
         Dictionary<ushort, Transform> idTransformMap = GameObject.FindGameObjectWithTag("Network").GetComponent<TTSIDMap>().idMap;
+
+        //spawn server player, client ID for serverPlayer is defined as 65000       
+        GameObject serverPlayer = GameObject.Instantiate(Resources.Load($"Prefabs/NetworkPlayer", typeof(GameObject))) as GameObject;
+        serverPlayer.transform.parent = train;
+        serverPlayer.transform.localPosition = UniqueSpawnPosition();
+        serverPlayer.GetComponent<TTSID>().Init();
+        clientPlayerMap[65000] = serverPlayer.GetComponent<TTSID>().id;
+  
+
         foreach (IClient c in darkRiftServer.Server.ClientManager.GetAllClients())
         {
+      
             GameObject player = GameObject.Instantiate(Resources.Load($"Prefabs/NetworkPlayer", typeof(GameObject))) as GameObject;
             player.transform.parent = train;
             player.transform.localPosition = UniqueSpawnPosition();
@@ -108,6 +119,9 @@ public class TTSLobby : MonoBehaviour
         acceptingConnections = false;
         TSSInitGame();
         GameObject.FindGameObjectWithTag("StartMenu").SetActive(false);
+
+        GameObject.FindGameObjectWithTag("Network").GetComponent<TTSGeneric>().GameStart();
+
         using (DarkRiftWriter startGameWriter = DarkRiftWriter.Create())
         {
             using (Message startGameMessage = Message.Create(TTSMessage.START_GAME, startGameWriter))
@@ -116,7 +130,7 @@ public class TTSLobby : MonoBehaviour
                     c.SendMessage(startGameMessage, SendMode.Reliable);
             }
         }
-        //UNFREEZE GAME
+   
     }
 
     private Vector3 UniqueSpawnPosition()
@@ -125,7 +139,7 @@ public class TTSLobby : MonoBehaviour
         Vector3 offSet = new Vector3(0, 0, 2);
         spawnCount++;
 
-        //First spawn position is (0, 3.5f, 1), each position is +2z offset
+        //Server player spawn position is (0, 3.5f, 1), each position is +2z offset
         return startPosition + offSet * spawnCount;
     }
 }

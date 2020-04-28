@@ -9,8 +9,12 @@ public class TTSNetworkedPlayer : MonoBehaviour
     public float moveSpeed = 2.5f;
     public float dashSpeed = 15f;
 
+    public Vector3 lastSyncPostion;
+    private Vector3 lastMoveVector;
     private void Awake()
     {
+        lastSyncPostion = transform.localPosition;
+        lastMoveVector = Vector3.zero;
         rb = GetComponent<Rigidbody>();
     }
     // Update is called once per frame
@@ -32,6 +36,14 @@ public class TTSNetworkedPlayer : MonoBehaviour
         }
 
         rb.velocity = newVelocity;
+        lastMoveVector = direction;
+
+        if (transform.forward.normalized != lastMoveVector.normalized)
+        {
+            transform.forward = Vector3.RotateTowards(transform.forward, lastMoveVector, 10 * Time.deltaTime, 0.0f);
+            Debug.DrawRay(transform.position, lastMoveVector, Color.red);
+        }
+    
     }
 
 

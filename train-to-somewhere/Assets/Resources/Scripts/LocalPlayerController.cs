@@ -5,6 +5,7 @@ using DarkRift.Client.Unity;
 using DarkRift.Client;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.SceneManagement;
 
 public class LocalPlayerController : MonoBehaviour
 {
@@ -33,21 +34,33 @@ public class LocalPlayerController : MonoBehaviour
     public Collider holdCollider;
 
     private UnityClient client;
+    private TTSServer ttsServer;
+
+    private bool ServerPlayer = false;
     private void Awake()
     {
-        client = GameObject.Find("Network").GetComponent<UnityClient>();
-
+        if (SceneManager.GetActiveScene().name == "ServerScene")
+            ServerPlayer = true;
+        if(!ServerPlayer)
+        {
+            client = GameObject.Find("Network").GetComponent<UnityClient>();         
+        }
+        else
+        {
+            ttsServer = GameObject.Find("Network").GetComponent<TTSServer>();
+        }
         mainCameraTransform = GameObject.FindGameObjectWithTag("MainCamera").transform;
         defaultCollider.enabled = true;
         holdCollider.enabled = false;
+
+
+
     }
 
     // Start is called before the first frame update
     void Start()
     {
         rb = gameObject.GetComponent<Rigidbody>();
-
-
 
         lastPosition = transform.localPosition;
         lastMoveVector = Vector3.zero; ;
@@ -64,19 +77,23 @@ public class LocalPlayerController : MonoBehaviour
 
         dashing = Input.GetKey(KeyCode.Space);
 
-        if(moveDirection != lastMoveVector || dashing != lastDashing)
-        {
-            using (DarkRiftWriter moveInputWriter = DarkRiftWriter.Create())
+      
+            if (moveDirection != lastMoveVector || dashing != lastDashing)
             {
-
-                moveInputWriter.Write(new TTSInputMessage(moveDirection, dashing));
-                using (Message moveInputMessage = Message.Create(TTSMessage.MOVEMENT_INPUT, moveInputWriter))
+                using (DarkRiftWriter moveInputWriter = DarkRiftWriter.Create())
                 {
-                    client.SendMessage(moveInputMessage, SendMode.Unreliable);
-                }
-            }
 
-        }    
+                    moveInputWriter.Write(new TTSInputMessage(moveDirection, dashing));
+                    using (Message moveInputMessage = Message.Create(TTSMessage.MOVEMENT_INPUT, moveInputWriter))
+                    {
+                        client.SendMessage(moveInputMessage, SendMode.Unreliable);
+                    }
+                }
+
+            }
+        
+   
+        
 
         lastMoveVector = moveDirection;
         lastDashing = dashing;
