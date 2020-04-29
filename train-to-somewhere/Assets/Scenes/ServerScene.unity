@@ -748,7 +748,7 @@ PrefabInstance:
     - target: {fileID: 8514174286919291631, guid: 1b47e4d55109db145b8b596376ea4a9e,
         type: 3}
       propertyPath: m_Name
-      value: Caboose
+      value: TrainCar
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1b47e4d55109db145b8b596376ea4a9e, type: 3}
@@ -1587,6 +1587,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1394759560}
     m_Modifications:
+    - target: {fileID: 1897473621100498679, guid: 1b47e4d55109db145b8b596376ea4a9e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8017489785888029203, guid: 1b47e4d55109db145b8b596376ea4a9e,
         type: 3}
       propertyPath: m_LocalPosition.x
