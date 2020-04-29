@@ -67,15 +67,15 @@ public class TTSClient : TTSGeneric
 
         switch(e.GetMessage().Tag)
         {
-            case TTSMessage.PLAYER_SYNC:
-                SyncPlayer(e);
+            case TTSMessage.GAME_OBJECT_SYNC:
+                SyncObject(e);
                 break;
             default:
                 break;
         }
     }
 
-    void SyncPlayer(MessageReceivedEventArgs e)
+    void SyncObject(MessageReceivedEventArgs e)
     {
           
         TTSGameObjectSyncMessage syncData;

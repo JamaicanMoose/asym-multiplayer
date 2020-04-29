@@ -8,7 +8,7 @@ public class TrainController : MonoBehaviour
 
     public float speed = 2f;
     public float acceleration = 0.0f;
-    public float slowdownRate = .1f;
+    public float slowdownRate = 0.0ff;
 
     void Start()
     {

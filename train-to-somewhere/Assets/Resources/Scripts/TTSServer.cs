@@ -37,6 +37,7 @@ public class TTSServer : TTSGeneric
 
     private void Update()
     {
+        //Check all players for motion to send to clients
             foreach(ushort playerID in clientPlayerMap.Values)
             {
                 if(Vector3.Distance(idMap.idMap[playerID].localPosition, idMap.idMap[playerID].GetComponent<TTSNetworkedPlayer>().lastSyncPostion) > playerMoveDistance)
@@ -46,7 +47,7 @@ public class TTSServer : TTSGeneric
 
                         playerPositionWriter.Write(new TTSGameObjectSyncMessage(playerID, idMap.idMap[playerID]));
                         
-                        using (Message playerPositionMessage = Message.Create(TTSMessage.PLAYER_SYNC, playerPositionWriter))
+                        using (Message playerPositionMessage = Message.Create(TTSMessage.GAME_OBJECT_SYNC, playerPositionWriter))
                         {
                             foreach (IClient c in darkRiftServer.Server.ClientManager.GetAllClients())
                                 c.SendMessage(playerPositionMessage, SendMode.Unreliable);
@@ -58,6 +59,7 @@ public class TTSServer : TTSGeneric
                 }
             }
 
+        //check for server player input and move server player
         Vector3 moveDirection = mainCameraTransform.right * Input.GetAxis("Horizontal") + mainCameraTransform.forward * Input.GetAxis("Vertical");
 
         moveDirection.y = 0f;

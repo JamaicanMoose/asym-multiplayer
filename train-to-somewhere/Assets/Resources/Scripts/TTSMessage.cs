@@ -11,7 +11,6 @@ public class TTSMessage
     public const ushort GAME_OBJECT_SYNC = 2; //Sync diff between server & client
     public const ushort PLAYER_ASSOC = 3;
     public const ushort MOVEMENT_INPUT = 4;
-    public const ushort PLAYER_SYNC = 5;
 }
 
 public class TTSGameObjectInitMessage : IDarkRiftSerializable
@@ -158,7 +157,7 @@ public class TTSGameObjectSyncMessage : IDarkRiftSerializable
     public TTSGameObjectSyncMessage(ushort id, Transform t)
     {
         ttsid = id;
-        position = t.position;
+        position = t.localPosition;
         rotation = t.localRotation;
     }
 
