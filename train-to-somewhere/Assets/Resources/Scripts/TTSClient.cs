@@ -5,6 +5,11 @@ using DarkRift.Client;
 using DarkRift.Client.Unity;
 using DarkRift;
 
+/*
+ * TTSClient Unity Script
+ * - Add script to same GameObject as DR2 UnityClient & TTSIDMap
+ */
+
 public class TTSClient : TTSGeneric
 {
     [HideInInspector]
@@ -26,7 +31,7 @@ public class TTSClient : TTSGeneric
     // Start is called before the first frame update
     void Start()
     {
-        idMap = GameObject.FindGameObjectWithTag("Network").GetComponent<TTSIDMap>().idMap;
+        idMap = GetComponent<TTSIDMap>().idMap;
         client = GetComponent<UnityClient>();
         client.Client.MessageReceived += ClientMessageReceived;
         mainCameraTransform = GameObject.FindGameObjectWithTag("MainCamera").transform;

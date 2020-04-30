@@ -230,9 +230,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5053446064237937893}
-  - component: {fileID: 4402854379423527726}
-  - component: {fileID: 609252940510167245}
   - component: {fileID: 8494947104264725508}
+  - component: {fileID: 609252940510167245}
+  - component: {fileID: 4402854379423527726}
   m_Layer: 0
   m_Name: clientNetworkPlayer
   m_TagString: Untagged
@@ -256,6 +256,33 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8494947104264725508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5053446064237937892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bf0e24c663491c4ca4c6447977b7b41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabID: clientNetworkPlayer
+--- !u!114 &609252940510167245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5053446064237937892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d074d5cdaef1a15419540eaf146631ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 0
+  syncDistanceTrig: 0.05
 --- !u!114 &4402854379423527726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -271,29 +298,3 @@ MonoBehaviour:
   moveSpeed: 2.5
   dashSpeed: 15
   lastSyncPostion: {x: 0, y: 0, z: 0}
---- !u!114 &609252940510167245
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5053446064237937892}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d074d5cdaef1a15419540eaf146631ca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: 0
---- !u!114 &8494947104264725508
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5053446064237937892}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8bf0e24c663491c4ca4c6447977b7b41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  prefabID: clientNetworkPlayer
