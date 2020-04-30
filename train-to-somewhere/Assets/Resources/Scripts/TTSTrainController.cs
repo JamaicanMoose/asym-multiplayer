@@ -7,6 +7,12 @@ public class TTSTrainController : MonoBehaviour
 {
     bool gameStarted = false;
 
+    List<string> trainCars = new List<string>()
+        {
+            "TrainCar",
+            "TrainCar"
+        };
+
     public float speed = 2f;
     public float trainEngineAcceleration = 0.0f;
     public float maxTrainEngineAcceleration = 7.0f;
@@ -17,6 +23,23 @@ public class TTSTrainController : MonoBehaviour
     private void Awake()
     {
         GameObject.FindGameObjectWithTag("Network").GetComponent<TTSGeneric>().GameStarted += StartTrain;
+    }
+
+    public void BuildTrain()
+    {
+        Transform previousCar = gameObject.transform.Find("TrainEngine");
+        Vector3 carOffset = new Vector3(0, 0, 16);
+        foreach (string carPrefabID in trainCars)
+        {
+            GameObject carPrefab = Resources.Load($"Prefabs/{carPrefabID}", typeof(GameObject)) as GameObject;
+            GameObject car = GameObject.Instantiate(carPrefab, transform);
+            car.transform.position = previousCar.position + carOffset;
+            car.GetComponent<TTSID>().Init();
+
+            previousCar.Find("Colliders/Back").gameObject.SetActive(false);
+
+            previousCar = car.transform;
+        }
     }
 
     private void StartTrain(object sender, EventArgs e)

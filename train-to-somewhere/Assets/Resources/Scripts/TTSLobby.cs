@@ -33,7 +33,6 @@ public class TTSLobby : MonoBehaviour
     void Start()
     {
         darkRiftServer.Server.ClientManager.ClientConnected += TTSPlayerConnected;
-        
     }
 
 
@@ -67,6 +66,8 @@ public class TTSLobby : MonoBehaviour
         Transform train = GameObject.Find("Train").transform;
         Dictionary<ushort, ushort> clientPlayerMap = GameObject.FindGameObjectWithTag("Network").GetComponent<TTSServer>().clientPlayerMap;
         Dictionary<ushort, Transform> idTransformMap = GameObject.FindGameObjectWithTag("Network").GetComponent<TTSIDMap>().idMap;
+
+        train.gameObject.GetComponent<TTSTrainController>().BuildTrain();
 
         //spawn server player, client ID for serverPlayer is defined as 65000       
         GameObject serverPlayer = GameObject.Instantiate(Resources.Load($"Prefabs/NetworkPlayer", typeof(GameObject))) as GameObject;
