@@ -8,9 +8,9 @@ namespace TTS
 {
     public class TrackedDataSerializeEventArgs : EventArgs
     {
-        public List<TTS.GODataSyncMessage> messages;
+        public List<TDataMessagePart> messages;
 
-        public TrackedDataSerializeEventArgs(List<TTS.GODataSyncMessage> msgs)
+        public TrackedDataSerializeEventArgs(List<TDataMessagePart> msgs)
         {
             messages = msgs;
         }
@@ -47,7 +47,8 @@ public class TTSID : MonoBehaviour
     [Tooltip("Minimum rotation angle delta before server will sync to clients.")]
     public float syncRotationTrig = 0.05f;
     bool isServer = false;
-    List<TTSGameObjectSyncMessage> objectSyncBuffer;
+    List<TTS.GameObjectMovementMessage> movementBuffer;
+    List<TTS.GameObjectTDataMessage> trackedDataBuffer;
     Vector3 lastSyncedPosition;
     Quaternion lastSyncedRotation;
 
@@ -63,26 +64,39 @@ public class TTSID : MonoBehaviour
         isServer = GameObject.FindGameObjectWithTag("Network").GetComponent<XmlUnityServer>() != null;
         if (isServer)
         {
-            objectSyncBuffer = GameObject.FindGameObjectWithTag("Network").GetComponent<TTS.ObjectSync>().buffer;
+            TTS.ObjectSync os = GameObject.FindGameObjectWithTag("Network").GetComponent<TTS.ObjectSync>();
+            movementBuffer = os.movementBuffer;
+            trackedDataBuffer = os.trackedDataBuffer;
             lastSyncedPosition = transform.localPosition;
             lastSyncedRotation = transform.localRotation;
         }
     }
 
-    public bool ShouldSync()
+    public bool ShouldSyncMovement()
     {
         return (Vector3.Distance(transform.localPosition, lastSyncedPosition) >= syncDistanceTrig) ||
-               (Quaternion.Angle(lastSyncedRotation, transform.localRotation) >= syncRotationTrig) ||
-               trackedDataAvailable;
+               (Quaternion.Angle(lastSyncedRotation, transform.localRotation) >= syncRotationTrig);
+    }
+
+    public bool ShouldSyncTData()
+    {
+        return trackedDataAvailable;
     }
 
     private void Update()
     {
-        if (isServer && ShouldSync())
+        if (isServer)
         {
-            objectSyncBuffer.Add(new TTSGameObjectSyncMessage(id, transform, SerializeData()));
-            lastSyncedPosition = transform.localPosition;
-            lastSyncedRotation = transform.localRotation;
+            if (ShouldSyncMovement())
+            {
+                movementBuffer.Add(new TTS.GameObjectMovementMessage(transform));
+                lastSyncedPosition = transform.localPosition;
+                lastSyncedRotation = transform.localRotation;
+            }
+            if (ShouldSyncTData())
+            {
+                trackedDataBuffer.Add(new TTS.GameObjectTDataMessage(transform, SerializeData()));
+            }
         }
     }
 
@@ -92,9 +106,9 @@ public class TTSID : MonoBehaviour
         trackedDataAvailable = false;
     }
 
-    public List<TTS.GODataSyncMessage> SerializeData()
+    public List<TTS.TDataMessagePart> SerializeData()
     {
-        List<TTS.GODataSyncMessage> buffer = new List<TTS.GODataSyncMessage>();
+        List<TTS.TDataMessagePart> buffer = new List<TTS.TDataMessagePart>();
         OnSerializeData(new TTS.TrackedDataSerializeEventArgs(buffer));
         return buffer;
     }

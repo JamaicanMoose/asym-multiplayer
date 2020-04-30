@@ -32,23 +32,35 @@ public class TTSServer : TTSGeneric
         
     }
 
-    void HandleMovementInput(ushort clientID, TTSInputMessage input)
+    void HandleMovementInput(ushort clientID, TTS.InputMovementMessage input)
     {
         ushort playerTTSID = clientPlayerMap[clientID];
         GameObject player = idMap.getTransform(playerTTSID).gameObject;
         player.GetComponent<TTSNetworkedPlayer>().SetMovementInput(input.MoveDirection, input.Dashing);
     }
 
+    void HandleInteractInput(ushort clientID, TTS.InputInteractMessage input)
+    {
+        ushort playerTTSID = clientPlayerMap[clientID];
+        GameObject player = idMap.getTransform(playerTTSID).gameObject;
+        player.GetComponent<TTSNetworkedPlayer>().fire1ButtonDown = input.fire1;
+    }
+
     public void ClientMessageReceived(object sender, MessageReceivedEventArgs e)
     {
         ushort messageTag = e.GetMessage().Tag;
-        switch(messageTag)
+        switch((TTS.MessageType)messageTag)
         {
-            case (TTSMessage.MOVEMENT_INPUT):
-                TTSInputMessage newInput;
+            case (TTS.MessageType.INPUT_MOVEMENT):
                 using (Message m = e.GetMessage() as Message)
                     using (DarkRiftReader r = m.GetReader())
-                        HandleMovementInput(e.Client.ID, r.ReadSerializable<TTSInputMessage>());
+                        HandleMovementInput(e.Client.ID, r.ReadSerializable<TTS.InputMovementMessage>());
+                break;
+
+            case TTS.MessageType.INPUT_INTERACT:
+                using (Message m = e.GetMessage() as Message)
+                    using (DarkRiftReader r = m.GetReader())
+                         HandleInteractInput(e.Client.ID, r.ReadSerializable<TTS.InputInteractMessage>());
                 break;
 
             default:

@@ -14,7 +14,8 @@ namespace TTS
      */
     public class ObjectSync : MonoBehaviour
     {
-        public List<TTSGameObjectSyncMessage> buffer = new List<TTSGameObjectSyncMessage>();
+        public List<GameObjectMovementMessage> movementBuffer = new List<GameObjectMovementMessage>();
+        public List<GameObjectTDataMessage> trackedDataBuffer = new List<GameObjectTDataMessage>();
 
         XmlUnityServer darkRiftServer;
 
@@ -27,18 +28,31 @@ namespace TTS
         // Update is called once per frame
         void Update()
         {
-            if (buffer.Count > 0)
+            if (movementBuffer.Count > 0)
             {
                 using (DarkRiftWriter objectSyncWriter = DarkRiftWriter.Create())
                 {
-                    objectSyncWriter.Write((uint)buffer.Count);
-                    foreach (TTSGameObjectSyncMessage gos in buffer)
+                    objectSyncWriter.Write((uint)movementBuffer.Count);
+                    foreach (GameObjectMovementMessage gos in movementBuffer)
                         objectSyncWriter.Write(gos);
-                    using (Message objectSyncMessage = Message.Create(TTSMessage.GAME_OBJECT_SYNC, objectSyncWriter))
+                    using (Message objectSyncMessage = Message.Create((ushort)MessageType.GAME_OBJECT_MOVE, objectSyncWriter))
                         foreach (IClient c in darkRiftServer.Server.ClientManager.GetAllClients())
                             c.SendMessage(objectSyncMessage, SendMode.Unreliable);
                 }
-                buffer.Clear();
+                movementBuffer.Clear();
+            }
+            if (trackedDataBuffer.Count > 0)
+            {
+                using (DarkRiftWriter objectSyncWriter = DarkRiftWriter.Create())
+                {
+                    objectSyncWriter.Write((uint)trackedDataBuffer.Count);
+                    foreach (GameObjectTDataMessage gos in trackedDataBuffer)
+                        objectSyncWriter.Write(gos);
+                    using (Message objectSyncMessage = Message.Create((ushort)MessageType.GAME_OBJECT_TDATA, objectSyncWriter))
+                        foreach (IClient c in darkRiftServer.Server.ClientManager.GetAllClients())
+                            c.SendMessage(objectSyncMessage, SendMode.Reliable);
+                }
+                trackedDataBuffer.Clear();
             }
         }
     }

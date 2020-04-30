@@ -88,7 +88,7 @@ public class TTSLobby : MonoBehaviour
             using (DarkRiftWriter playerAssocWriter = DarkRiftWriter.Create())
             {
                 playerAssocWriter.Write(clientPlayerMap[c.ID]);
-                using (Message playerAssocMessage = Message.Create(TTSMessage.PLAYER_ASSOC, playerAssocWriter))
+                using (Message playerAssocMessage = Message.Create((ushort)TTS.MessageType.PLAYER_ASSOC, playerAssocWriter))
                     c.SendMessage(playerAssocMessage, SendMode.Reliable);
             }
         }
@@ -103,10 +103,10 @@ public class TTSLobby : MonoBehaviour
             foreach (Transform t in InOrderChildren(world))
             {
                 if (t == world) continue;
-                initObjectsWriter.Write(new TTSGameObjectInitMessage(t.gameObject));
+                initObjectsWriter.Write(new TTS.GameObjectInitMessage(t.gameObject));
                 idTransformMap.setTransform(t);
             }
-            using (Message initObjectsMessage = Message.Create(TTSMessage.GAME_OBJECT_INIT, initObjectsWriter))
+            using (Message initObjectsMessage = Message.Create((ushort)TTS.MessageType.GAME_OBJECT_INIT, initObjectsWriter))
             {
                 foreach (IClient c in darkRiftServer.Server.ClientManager.GetAllClients())
                     c.SendMessage(initObjectsMessage, SendMode.Reliable);
@@ -124,13 +124,9 @@ public class TTSLobby : MonoBehaviour
         GameObject.FindGameObjectWithTag("Network").GetComponent<TTSGeneric>().GameStart();
 
         using (DarkRiftWriter startGameWriter = DarkRiftWriter.Create())
-        {
-            using (Message startGameMessage = Message.Create(TTSMessage.START_GAME, startGameWriter))
-            {
+            using (Message startGameMessage = Message.Create((ushort)TTS.MessageType.START_GAME, startGameWriter))
                 foreach (IClient c in darkRiftServer.Server.ClientManager.GetAllClients())
                     c.SendMessage(startGameMessage, SendMode.Reliable);
-            }
-        }
    
     }
 

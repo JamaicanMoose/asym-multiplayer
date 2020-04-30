@@ -5,13 +5,13 @@ using UnityEngine;
 using DarkRift;
 
 namespace TTS {
-    public class NetworkedPlayerSyncMessage : GODataSyncMessage
+    public class NetworkedPlayerMessage : TDataMessagePart
     {
         float foodLevel;
 
-        public NetworkedPlayerSyncMessage() { }
+        public NetworkedPlayerMessage() { }
 
-        public NetworkedPlayerSyncMessage(float foodLevel)
+        public NetworkedPlayerMessage(float foodLevel)
         {
             this.foodLevel = foodLevel;
         }
@@ -28,6 +28,7 @@ namespace TTS {
 
         public override void Load(Transform target)
         {
+            Debug.Log($"LOAD {target.name}");
             target.GetComponent<TTSNetworkedPlayer>().foodLevel = foodLevel;
         }
     }
@@ -41,6 +42,9 @@ public class TTSNetworkedPlayer : MonoBehaviour
     public float moveSpeed = 2.5f;
     public float dashSpeed = 20f;
     public float dashTime = .3f;
+
+    bool prevFire1ButtonDown = false;
+    public bool fire1ButtonDown = false;
 
     bool prevdashButtonDown = false;
     bool dashButtonDown = false;
@@ -65,6 +69,32 @@ public class TTSNetworkedPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        HandleInteractions();
+        HandleMovement();
+    }
+
+    void TrackedDataHandler(object sender, TTS.TrackedDataSerializeEventArgs e)
+    {
+        if (trackedDataAvailable)
+        {
+            TTS.NetworkedPlayerMessage m = new TTS.NetworkedPlayerMessage(foodLevel);
+            e.messages.Add(m);
+            trackedDataAvailable = false;
+        }
+    }
+
+    // INTERACTIONS
+
+    void HandleInteractions()
+    {
+        bool onFire1ButtonDown = fire1ButtonDown && !prevFire1ButtonDown;
+        bool onFire1ButtonUp = !fire1ButtonDown && prevFire1ButtonDown;
+    }
+
+    // MOVEMENT
+
+    void HandleMovement()
+    {
         bool onDashButtonDown = dashButtonDown && !prevdashButtonDown;
 
         if (!dashing && onDashButtonDown && currentMoveVector != Vector3.zero)
@@ -74,7 +104,8 @@ public class TTSNetworkedPlayer : MonoBehaviour
             {
                 dashing = true;
                 StartCoroutine(DashTimer());
-            } else
+            }
+            else
             {
                 GetComponentInChildren<MeshRenderer>().material.color = Color.red;
             }
@@ -85,7 +116,8 @@ public class TTSNetworkedPlayer : MonoBehaviour
             trackedDataAvailable = true;
             GetComponent<TTSID>().trackedDataAvailable = true;
             rb.velocity = currentMoveVector * dashSpeed;
-        } else
+        }
+        else
         {
             rb.velocity = currentMoveVector * moveSpeed;
         }
@@ -98,15 +130,6 @@ public class TTSNetworkedPlayer : MonoBehaviour
         {
             transform.forward = Vector3.RotateTowards(transform.forward, lastMoveVector, 10 * Time.deltaTime, 0.0f);
             Debug.DrawRay(transform.position, lastMoveVector, Color.red);
-        }
-    }
-
-    void TrackedDataHandler(object sender, TTS.TrackedDataSerializeEventArgs e)
-    {
-        if (trackedDataAvailable)
-        {
-            TTS.NetworkedPlayerSyncMessage m = new TTS.NetworkedPlayerSyncMessage(foodLevel);
-            e.messages.Add(m);
         }
     }
 

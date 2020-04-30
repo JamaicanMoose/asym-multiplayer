@@ -303,7 +303,8 @@ MonoBehaviour:
   moveSpeed: 2.5
   dashSpeed: 15
   dashTime: 0.3
-  dashFoodCost: 0.1
+  fire1ButtonDown: 0
+  dashFoodCost: 0.25
   foodLevel: 100
   lastSyncPostion: {x: 0, y: 0, z: 0}
 --- !u!54 &-2884879588505320950

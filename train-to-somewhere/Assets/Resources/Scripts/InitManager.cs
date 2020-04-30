@@ -7,6 +7,7 @@ public class InitManager : MonoBehaviour
 {
     public void OnPlay()
     {
+        Debug.Log("STARTING_CLIENT");
         SceneManager.LoadScene("ClientScene");
     }
 

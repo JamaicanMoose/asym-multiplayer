@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DarkRift.Client;
@@ -15,14 +16,28 @@ public class TTSClient : TTSGeneric
     [HideInInspector]
     public ushort localPlayerId;
 
+    bool gameStarted = false;
+
     TTSIDMap idMap;
 
     UnityClient client;
 
     Transform mainCameraTransform;
+    bool fire1 = false;
+    bool lastFire1 = false;
     bool dashing = false;
     bool lastDashing = false;
     Vector3 lastMoveVector = Vector3.zero;
+
+    private void Awake()
+    {
+        GetComponent<TTSGeneric>().GameStarted += OnGameStart;
+    }
+
+    void OnGameStart(object sender, EventArgs e)
+    {
+        gameStarted = true;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -36,60 +51,76 @@ public class TTSClient : TTSGeneric
     // Update is called once per frame
     void Update()
     {
-        Vector3 moveDirection = mainCameraTransform.right * Input.GetAxis("Horizontal") + mainCameraTransform.forward * Input.GetAxis("Vertical");
+        if (gameStarted)
+            HandleInput();
+    }
 
+    void HandleInput()
+    {
+        Vector3 moveDirection = mainCameraTransform.right * Input.GetAxis("Horizontal") + mainCameraTransform.forward * Input.GetAxis("Vertical");
         moveDirection.y = 0f;
         moveDirection.Normalize();
+        dashing = Input.GetButton("Jump");
 
-        dashing = Input.GetKey(KeyCode.Space);
-
-  
         if (moveDirection != lastMoveVector || dashing != lastDashing)
         {
-           using (DarkRiftWriter moveInputWriter = DarkRiftWriter.Create())
-           {
-
-                moveInputWriter.Write(new TTSInputMessage(moveDirection, dashing));
-                using (Message moveInputMessage = Message.Create(TTSMessage.MOVEMENT_INPUT, moveInputWriter))
-                {
+            using (DarkRiftWriter moveInputWriter = DarkRiftWriter.Create())
+            {
+                moveInputWriter.Write(new TTS.InputMovementMessage(moveDirection, dashing));
+                using (Message moveInputMessage = Message.Create((ushort)TTS.MessageType.INPUT_MOVEMENT, moveInputWriter))
                     client.SendMessage(moveInputMessage, SendMode.Unreliable);
-                }
-           }
-
+            }
         }
 
         lastMoveVector = moveDirection;
         lastDashing = dashing;
 
+        fire1 = Input.GetButton("Fire1");
+
+        if (fire1 != lastFire1)
+        {
+            using (DarkRiftWriter interactInputWriter = DarkRiftWriter.Create())
+            {
+                interactInputWriter.Write(new TTS.InputInteractMessage(fire1));
+                using (Message interactInputMessage = Message.Create((ushort)TTS.MessageType.INPUT_INTERACT, interactInputWriter))
+                    client.SendMessage(interactInputMessage, SendMode.Reliable);
+            }
+        }
+
+        lastFire1 = fire1;
     }
 
     void ClientMessageReceived(object sender, MessageReceivedEventArgs e)
     {
-
-        switch(e.GetMessage().Tag)
+        switch((TTS.MessageType)e.GetMessage().Tag)
         {
-            case TTSMessage.GAME_OBJECT_SYNC:
-                SyncObjects(e);
-                break;
-            default:
-                break;
-        }
-    }
-
-    void SyncObjects(MessageReceivedEventArgs e)
-    {
-        using (Message m = e.GetMessage() as Message)
-        {
-            using (DarkRiftReader r = m.GetReader())
-            {
-                uint numObjects = r.ReadUInt32();
-                for (int i = 0; i < numObjects; i++)
+            case TTS.MessageType.GAME_OBJECT_MOVE:
+                using (Message m = e.GetMessage() as Message)
+                using (DarkRiftReader r = m.GetReader())
                 {
-                    TTSGameObjectSyncMessage syncData = r.ReadSerializable<TTSGameObjectSyncMessage>();
-                    Transform toSync = idMap.getTransform(syncData.ttsid);
-                    syncData.Load(toSync);
+                    uint numObjects = r.ReadUInt32();
+                    for (int i = 0; i < numObjects; i++)
+                    {
+                        TTS.GameObjectMovementMessage syncData = r.ReadSerializable<TTS.GameObjectMovementMessage>();
+                        Transform toSync = idMap.getTransform(syncData.ttsid);
+                        syncData.Load(toSync);
+                    }
                 }
-            }
+                break;
+            case TTS.MessageType.GAME_OBJECT_TDATA:
+                using (Message m = e.GetMessage() as Message)
+                using (DarkRiftReader r = m.GetReader())
+                {
+                    uint numObjects = r.ReadUInt32();
+                    for (int i = 0; i < numObjects; i++)
+                    {
+                        TTS.GameObjectTDataMessage syncData = r.ReadSerializable<TTS.GameObjectTDataMessage>();
+                        Debug.Log($"TDATA {syncData.ttsid} {syncData.parent}");
+                        Transform toSync = idMap.getTransform(syncData.ttsid);
+                        syncData.Load(toSync);
+                    }
+                }
+                break;
         }
     }
 
