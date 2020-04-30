@@ -65,9 +65,6 @@ public class TTSNetworkedPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (foodLevel < 50)
-            GetComponentInChildren<MeshRenderer>().material.color = Color.red;
-
         bool onDashButtonDown = dashButtonDown && !prevdashButtonDown;
 
         if (!dashing && onDashButtonDown && currentMoveVector != Vector3.zero)
@@ -79,7 +76,7 @@ public class TTSNetworkedPlayer : MonoBehaviour
                 StartCoroutine(DashTimer());
             } else
             {
-                //Indicate player is exhausted
+                GetComponentInChildren<MeshRenderer>().material.color = Color.red;
             }
         }
         if (dashing)
