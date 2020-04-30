@@ -17,10 +17,6 @@ public class TTSClient : TTSGeneric
 
     TTSIDMap idMap;
 
-    [SerializeField]
-    [Tooltip("The local player prefab.")]
-    public GameObject controllablePlayerPrefab;
-
     UnityClient client;
 
     Transform mainCameraTransform;

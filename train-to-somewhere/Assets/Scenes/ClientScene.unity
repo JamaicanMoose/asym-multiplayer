@@ -338,8 +338,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   localPlayerId: 0
-  controllablePlayerPrefab: {fileID: 8933060605652008005, guid: 9b6d86df26222424986bcbfc47bc7773,
-    type: 3}
 --- !u!1 &495638632
 GameObject:
   m_ObjectHideFlags: 0
