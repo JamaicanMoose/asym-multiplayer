@@ -73,35 +73,33 @@ public class TTSClient : TTSGeneric
         switch(e.GetMessage().Tag)
         {
             case TTSMessage.GAME_OBJECT_SYNC:
-                SyncObject(e);
+                SyncObjects(e);
                 break;
             default:
                 break;
         }
     }
 
-    void SyncObject(MessageReceivedEventArgs e)
+    void SyncObjects(MessageReceivedEventArgs e)
     {
-          
-        TTSGameObjectSyncMessage syncData;
         using (Message m = e.GetMessage() as Message)
-        {
             using (DarkRiftReader r = m.GetReader())
             {
-                syncData = r.ReadSerializable<TTSGameObjectSyncMessage>();
+                uint numObjects = r.ReadUInt32();
+                for (int i = 0; i < numObjects; i++)
+                {
+                    TTSGameObjectSyncMessage syncData = r.ReadSerializable<TTSGameObjectSyncMessage>();
+                    ushort playerID = syncData.ttsid;
+                    Vector3 localPosition = syncData.position;
+                    Quaternion localRotation = syncData.rotation;
+                    if (idMap.ContainsKey(playerID))
+                    {
+                        Transform toSync = idMap[playerID];
+                        toSync.localPosition = localPosition;
+                        toSync.localRotation = localRotation;
+                    }
+                }
             }
-        }
-        ushort playerID = syncData.ttsid;
-        Vector3 localPosition = syncData.position;
-        Quaternion localRotation = syncData.rotation;
-
-        if(idMap.ContainsKey(playerID))
-        {
-            Transform toSync = idMap[playerID];
-            toSync.localPosition = localPosition;
-            toSync.localRotation = localRotation;  
-        }
-
     }
 
     public override Transform GetLocalPlayer()

@@ -1281,6 +1281,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 2
   trainEngineAcceleration: 1
+  maxTrainEngineAcceleration: 7
   trainEngineCooldownRate: 0.2
   frictionAcceleration: 0.1
 --- !u!1001 &1427171688
@@ -1373,6 +1374,7 @@ GameObject:
   - component: {fileID: 1450475699}
   - component: {fileID: 1450475700}
   - component: {fileID: 1450475701}
+  - component: {fileID: 1450475702}
   m_Layer: 0
   m_Name: Network
   m_TagString: Network
@@ -1469,6 +1471,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 386c12d5dd44b1a4082bd9be48ca73d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1450475702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1450475694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 294698fea47fe234fbd12c59a46e6204, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &1829319252

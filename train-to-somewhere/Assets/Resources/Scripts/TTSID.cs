@@ -1,8 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DarkRift;
-using DarkRift.Server;
 using DarkRift.Server.Unity;
 
 public class TTSID : MonoBehaviour
@@ -14,7 +12,8 @@ public class TTSID : MonoBehaviour
     public float syncDistanceTrig = 0.05f;
     [Tooltip("Minimum rotation angle delta before server will sync to clients.")]
     public float syncRotationTrig = 0.05f;
-    XmlUnityServer darkRiftServer;
+    bool isServer = false;
+    List<TTSGameObjectSyncMessage> objectSyncBuffer;
     Vector3 lastSyncedPosition;
     Quaternion lastSyncedRotation;
 
@@ -27,7 +26,8 @@ public class TTSID : MonoBehaviour
     private void Start()
     {
         Init();
-        darkRiftServer = GameObject.FindGameObjectWithTag("Network").GetComponent<XmlUnityServer>();
+        isServer = GameObject.FindGameObjectWithTag("Network").GetComponent<XmlUnityServer>() != null;
+        objectSyncBuffer = GameObject.FindGameObjectWithTag("Network").GetComponent<TTS.ObjectSync>().buffer;
         lastSyncedPosition = transform.localPosition;
         lastSyncedRotation = transform.localRotation;
     }
@@ -38,30 +38,13 @@ public class TTSID : MonoBehaviour
                (Quaternion.Angle(lastSyncedRotation, transform.localRotation) >= syncRotationTrig);
     }
 
-    /*
-     * Syncs position & rotation to clients if ShouldSync is true
-     */
-    public void Sync()
+    private void Update()
     {
-        if (ShouldSync())
+        if (isServer && ShouldSync())
         {
-            using (DarkRiftWriter objectSyncWriter = DarkRiftWriter.Create())
-            {
-                objectSyncWriter.Write(new TTSGameObjectSyncMessage(id, transform));
-                using (Message objectSyncMessage = Message.Create(TTSMessage.GAME_OBJECT_SYNC, objectSyncWriter))
-                {
-                    foreach (IClient c in darkRiftServer.Server.ClientManager.GetAllClients())
-                        c.SendMessage(objectSyncMessage, SendMode.Unreliable);
-                }
-            }
+            objectSyncBuffer.Add(new TTSGameObjectSyncMessage(id, transform));
             lastSyncedPosition = transform.localPosition;
             lastSyncedRotation = transform.localRotation;
         }
-    }
-
-    private void Update()
-    {
-        if (darkRiftServer != null)
-            Sync();
     }
 }
