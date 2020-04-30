@@ -18,11 +18,13 @@ public class CameraTracker : MonoBehaviour
     private void Awake()
     {
         GameObject network = GameObject.FindGameObjectWithTag("Network");
-        network.GetComponent<TTSGeneric>().GameStarted += AssignPlayer;
+        network.GetComponent<TTSGeneric>().GameStarted += GameStarted;
     }
 
-    public void AssignPlayer(object sender, EventArgs e)
+    public void GameStarted(object sender, EventArgs e)
     {
+        transform.parent = GameObject.Find("Train").transform;
+
         GameObject network = GameObject.FindGameObjectWithTag("Network");
         localPlayer = network.GetComponent<TTSGeneric>().GetLocalPlayer();
     }
