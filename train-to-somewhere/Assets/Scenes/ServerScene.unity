@@ -419,6 +419,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
+  trackedDataAvailable: 0
   syncDistanceTrig: 0.05
   syncRotationTrig: 0.05
 --- !u!1 &280383546
@@ -1188,6 +1189,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
+  trackedDataAvailable: 0
   syncDistanceTrig: 0.05
   syncRotationTrig: 0.05
 --- !u!114 &1394759562
@@ -1202,11 +1204,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a54bdc784f3a43c47a6215fde50e9642, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trainCars:
-  - {fileID: 8514174286919291631, guid: 1b47e4d55109db145b8b596376ea4a9e, type: 3}
-  - {fileID: 8514174286919291631, guid: 1b47e4d55109db145b8b596376ea4a9e, type: 3}
-  speed: 2
-  trainEngineAcceleration: 1
+  speed: 0
+  trainEngineAcceleration: 0
   maxTrainEngineAcceleration: 7
   trainEngineCooldownRate: 0.2
   frictionAcceleration: 0.1

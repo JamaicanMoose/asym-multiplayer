@@ -14,4 +14,16 @@ public class TTSIDMap : MonoBehaviour
         idMap[0] = GameObject.Find("World").transform;
     }
 
+    public void setTransform(Transform t)
+    {
+        idMap[t.gameObject.GetComponent<TTSID>().id] = t;
+    }
+
+    public Transform getTransform(ushort id)
+    {
+        if (idMap.ContainsKey(id))
+            return idMap[id];
+        else
+            return null;
+    }
 }

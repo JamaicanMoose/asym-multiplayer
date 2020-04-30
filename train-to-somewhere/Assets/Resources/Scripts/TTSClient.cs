@@ -15,7 +15,7 @@ public class TTSClient : TTSGeneric
     [HideInInspector]
     public ushort localPlayerId;
 
-    Dictionary<ushort, Transform> idMap;
+    TTSIDMap idMap;
 
     [SerializeField]
     [Tooltip("The local player prefab.")]
@@ -31,7 +31,7 @@ public class TTSClient : TTSGeneric
     // Start is called before the first frame update
     void Start()
     {
-        idMap = GetComponent<TTSIDMap>().idMap;
+        idMap = GetComponent<TTSIDMap>();
         client = GetComponent<UnityClient>();
         client.Client.MessageReceived += ClientMessageReceived;
         mainCameraTransform = GameObject.FindGameObjectWithTag("MainCamera").transform;
@@ -83,27 +83,22 @@ public class TTSClient : TTSGeneric
     void SyncObjects(MessageReceivedEventArgs e)
     {
         using (Message m = e.GetMessage() as Message)
+        {
             using (DarkRiftReader r = m.GetReader())
             {
                 uint numObjects = r.ReadUInt32();
                 for (int i = 0; i < numObjects; i++)
                 {
                     TTSGameObjectSyncMessage syncData = r.ReadSerializable<TTSGameObjectSyncMessage>();
-                    ushort playerID = syncData.ttsid;
-                    Vector3 localPosition = syncData.position;
-                    Quaternion localRotation = syncData.rotation;
-                    if (idMap.ContainsKey(playerID))
-                    {
-                        Transform toSync = idMap[playerID];
-                        toSync.localPosition = localPosition;
-                        toSync.localRotation = localRotation;
-                    }
+                    Transform toSync = idMap.getTransform(syncData.ttsid);
+                    syncData.Load(toSync);
                 }
             }
+        }
     }
 
     public override Transform GetLocalPlayer()
     {
-        return idMap[localPlayerId];
+        return idMap.getTransform(localPlayerId);
     }
 }

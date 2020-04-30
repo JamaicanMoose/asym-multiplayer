@@ -48,7 +48,7 @@ public class TTSServerPlayerController : MonoBehaviour
 
         if (moveDirection != lastMoveVector || dashing != lastDashing)
         {
-            localPlayer.SetVelocity(moveDirection, dashing);
+            localPlayer.SetMovementInput(moveDirection, dashing);
         }
 
         lastMoveVector = moveDirection;

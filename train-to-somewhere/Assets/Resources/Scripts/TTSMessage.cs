@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DarkRift;
@@ -23,7 +24,7 @@ public class TTSGameObjectInitMessage : IDarkRiftSerializable
     string name;
     string prefabID;
 
-    Dictionary<ushort,Transform> idMap = GameObject.FindGameObjectWithTag("Network").GetComponent<TTSIDMap>().idMap;
+    TTSIDMap idMap = GameObject.FindGameObjectWithTag("Network").GetComponent<TTSIDMap>();
 
     public TTSGameObjectInitMessage()
     {
@@ -52,7 +53,7 @@ public class TTSGameObjectInitMessage : IDarkRiftSerializable
 
     public void Load()
     {
-        Transform parent = idMap[parentTTSID];
+        Transform parent = idMap.getTransform(parentTTSID);
         GameObject go;
         TTSID idComp;
         if (prefabID != "")
@@ -71,7 +72,7 @@ public class TTSGameObjectInitMessage : IDarkRiftSerializable
         go.transform.localRotation = rotation;
         go.transform.parent = parent;
         idComp.id = ttsid;
-        idMap[ttsid] = go.transform;
+        idMap.setTransform(go.transform);
     }
 
     public void Deserialize(DeserializeEvent e)
@@ -148,19 +149,25 @@ public class TTSGameObjectSyncMessage : IDarkRiftSerializable
     public ushort ttsid;
     public Vector3 position;
     public Quaternion rotation;
+    public List<TTS.GODataSyncMessage> trackedData;
 
-    public TTSGameObjectSyncMessage()
-    {
+    public TTSGameObjectSyncMessage() {}
 
-    }
-
-    public TTSGameObjectSyncMessage(ushort id, Transform t)
+    public TTSGameObjectSyncMessage(ushort id, Transform t, List<TTS.GODataSyncMessage> data)
     {
         ttsid = id;
         position = t.localPosition;
         rotation = t.localRotation;
+        trackedData = data;
     }
 
+    public void Load(Transform target)
+    {
+        target.localPosition = position;
+        target.localRotation = rotation;
+        foreach (TTS.GODataSyncMessage m in trackedData)
+            m.Load(target);
+    }
 
     public void Deserialize(DeserializeEvent e)
     {
@@ -172,6 +179,15 @@ public class TTSGameObjectSyncMessage : IDarkRiftSerializable
         rotation.x = e.Reader.ReadSingle();
         rotation.y = e.Reader.ReadSingle();
         rotation.z = e.Reader.ReadSingle();
+
+        trackedData = new List<TTS.GODataSyncMessage>();
+        uint numTrackedData = e.Reader.ReadUInt32();
+        for (int i = 0; i < numTrackedData; i++)
+        {
+            Type mType = Type.GetType(e.Reader.ReadString());
+            var readMType = e.Reader.GetType().GetMethod("ReadSerializable").MakeGenericMethod(new[] { mType });
+            trackedData.Add(readMType.Invoke(e.Reader, new object[] { }) as TTS.GODataSyncMessage);
+        }
     }
 
     public void Serialize(SerializeEvent e)
@@ -184,7 +200,27 @@ public class TTSGameObjectSyncMessage : IDarkRiftSerializable
         e.Writer.Write(rotation.x);
         e.Writer.Write(rotation.y);
         e.Writer.Write(rotation.z);
+
+        e.Writer.Write((uint)trackedData.Count);
+        foreach (TTS.GODataSyncMessage m in trackedData)
+        {
+            e.Writer.Write(m.GetType().ToString());
+            e.Writer.Write(m);
+        }
     }
-     
-    
+}
+
+namespace TTS
+{
+    public abstract class GODataSyncMessage : IDarkRiftSerializable
+    {
+        public abstract void Serialize(SerializeEvent e);
+
+        public abstract void Deserialize(DeserializeEvent e);
+
+        /*
+         * Loads message data onto game object identified by ttsid.
+         */
+        public abstract void Load(Transform target);
+    }
 }

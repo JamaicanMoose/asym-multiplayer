@@ -65,7 +65,7 @@ public class TTSLobby : MonoBehaviour
         Transform world = GameObject.Find("World").transform;
         Transform train = GameObject.Find("Train").transform;
         Dictionary<ushort, ushort> clientPlayerMap = GameObject.FindGameObjectWithTag("Network").GetComponent<TTSServer>().clientPlayerMap;
-        Dictionary<ushort, Transform> idTransformMap = GameObject.FindGameObjectWithTag("Network").GetComponent<TTSIDMap>().idMap;
+        TTSIDMap idTransformMap = GameObject.FindGameObjectWithTag("Network").GetComponent<TTSIDMap>();
 
         train.gameObject.GetComponent<TTSTrainController>().BuildTrain();
 
@@ -104,7 +104,7 @@ public class TTSLobby : MonoBehaviour
             {
                 if (t == world) continue;
                 initObjectsWriter.Write(new TTSGameObjectInitMessage(t.gameObject));
-                idTransformMap.Add(t.gameObject.GetComponent<TTSID>().id, t);
+                idTransformMap.setTransform(t);
             }
             using (Message initObjectsMessage = Message.Create(TTSMessage.GAME_OBJECT_INIT, initObjectsWriter))
             {

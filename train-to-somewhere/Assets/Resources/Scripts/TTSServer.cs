@@ -35,8 +35,8 @@ public class TTSServer : TTSGeneric
     void HandleMovementInput(ushort clientID, TTSInputMessage input)
     {
         ushort playerTTSID = clientPlayerMap[clientID];
-        GameObject player = idMap.idMap[playerTTSID].gameObject;
-        player.GetComponent<TTSNetworkedPlayer>().SetVelocity(input.MoveDirection, input.Dashing);
+        GameObject player = idMap.getTransform(playerTTSID).gameObject;
+        player.GetComponent<TTSNetworkedPlayer>().SetMovementInput(input.MoveDirection, input.Dashing);
     }
 
     public void ClientMessageReceived(object sender, MessageReceivedEventArgs e)
