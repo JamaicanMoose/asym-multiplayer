@@ -3,6 +3,7 @@ using System.Net;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using DarkRift;
 using DarkRift.Client;
 using DarkRift.Client.Unity;
@@ -21,20 +22,9 @@ public class TTSClientLobby : MonoBehaviour
     {
         client = gameObject.GetComponent<UnityClient>();
         client.MessageReceived += TTSMessageHandler;
+        client.Disconnected += TTSDisconnectHandler;
 
         ttsClient = gameObject.GetComponent<TTSClient>();
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void TTSOnConnectClick()
@@ -55,7 +45,11 @@ public class TTSClientLobby : MonoBehaviour
         {
             connected = false;
         }
+    }
 
+    void TTSDisconnectHandler(object sender, DisconnectedEventArgs e)
+    {
+        SceneManager.LoadScene(0);
     }
 
     void TTSMessageHandler(object sender, MessageReceivedEventArgs e)

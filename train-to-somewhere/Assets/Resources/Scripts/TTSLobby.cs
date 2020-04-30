@@ -41,8 +41,8 @@ public class TTSLobby : MonoBehaviour
     {
         if (!acceptingConnections)
             e.Client.Disconnect();
-
-        e.Client.MessageReceived += server.ClientMessageReceived;
+        else
+            e.Client.MessageReceived += server.ClientMessageReceived;
     }
 
 
