@@ -9,6 +9,10 @@ public class TTSServerPlayerController : MonoBehaviour
 
     bool dashing = false;
     bool lastDashing = false;
+
+    bool fireD = false;
+    bool fireU = false;
+
     Vector3 lastMoveVector = Vector3.zero;
     Transform mainCameraTransform;
     TTSServer ttsserver;
@@ -34,7 +38,11 @@ public class TTSServerPlayerController : MonoBehaviour
 
     void Update()
     {
-        HandleLocalInput();
+        if(gameStarted)
+        {
+            HandleLocalInput();
+        }
+        
     }
 
     private void HandleLocalInput()
@@ -46,12 +54,30 @@ public class TTSServerPlayerController : MonoBehaviour
 
         dashing = Input.GetKey(KeyCode.Space);
 
+        fireD = Input.GetButtonDown("Fire1");
+        fireU = Input.GetButtonUp("Fire1");
+
         if (moveDirection != lastMoveVector || dashing != lastDashing)
         {
             localPlayer.SetMovementInput(moveDirection, dashing);
         }
 
+        if(fireD || fireU)
+        {     
+           if(fireD)
+           {
+                localPlayer.SetFireInput(true, false);
+            }
+           else if(fireU)
+           {
+                localPlayer.SetFireInput(false, true);
+           }
+            
+        }
+      
+
         lastMoveVector = moveDirection;
         lastDashing = dashing;
+       
     }
 }

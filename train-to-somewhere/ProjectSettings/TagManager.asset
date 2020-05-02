@@ -8,6 +8,7 @@ TagManager:
   - LocalPlayer
   - StartMenu
   - Network
+  - Pickup
   layers:
   - Default
   - TransparentFX

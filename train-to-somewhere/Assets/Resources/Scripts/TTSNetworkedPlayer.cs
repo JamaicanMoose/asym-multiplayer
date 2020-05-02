@@ -59,11 +59,15 @@ public class TTSNetworkedPlayer : MonoBehaviour
     public Vector3 lastSyncPostion;
     private Vector3 lastMoveVector;
 
+    private PickupVolume pVolume;
+    private Pickup heldPickup = null;
+
     private void Awake()
     {
         lastSyncPostion = transform.localPosition;
         lastMoveVector = Vector3.zero;
         rb = GetComponent<Rigidbody>();
+        pVolume = GetComponentInChildren<PickupVolume>();
         GetComponent<TTSID>().trackedDataSerialize += TrackedDataHandler;
     }
     // Update is called once per frame
@@ -89,6 +93,27 @@ public class TTSNetworkedPlayer : MonoBehaviour
     {
         bool onFire1ButtonDown = fire1ButtonDown && !prevFire1ButtonDown;
         bool onFire1ButtonUp = !fire1ButtonDown && prevFire1ButtonDown;
+        if(onFire1ButtonDown)
+        {
+            Debug.Log("Fire button down");
+            if(heldPickup != null)
+            {
+                heldPickup.Drop();
+                heldPickup = null;
+
+            }
+            else
+            {
+                if (pVolume.potentialPickups.Count > 0)
+                {
+                    heldPickup = pVolume.potentialPickups[0].GetComponent<Pickup>();
+                    heldPickup.Hold(transform);
+                }
+            }
+          
+        }
+
+        prevFire1ButtonDown = fire1ButtonDown;
     }
 
     // MOVEMENT
@@ -143,6 +168,12 @@ public class TTSNetworkedPlayer : MonoBehaviour
     {
         dashButtonDown = dashButton;
         currentMoveVector = direction;
+    }
+
+    public void SetFireInput(bool fireDown, bool prevFireDown)
+    {
+        fire1ButtonDown = fireDown;
+        prevFire1ButtonDown = prevFireDown;
     }
 
 

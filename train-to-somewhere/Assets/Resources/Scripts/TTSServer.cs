@@ -27,10 +27,6 @@ public class TTSServer : TTSGeneric
         darkRiftServer = GetComponent<XmlUnityServer>();
     }
 
-    private void Update()
-    {
-        
-    }
 
     void HandleMovementInput(ushort clientID, TTS.InputMovementMessage input)
     {

@@ -38,7 +38,7 @@ public class TTSClientLobby : MonoBehaviour
         if (client.ConnectionState == ConnectionState.Connected)
         {
             connectButton.GetComponent<Image>().color = Color.green;
-            connectButton.GetComponentInChildren<Text>().text = "Connected";
+            connectButton.GetComponentInChildren<Text>().text = "Waiting for Host...";
             connected = true;
         }          
         else
