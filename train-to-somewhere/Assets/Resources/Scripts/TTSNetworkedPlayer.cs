@@ -58,6 +58,7 @@ public class TTSNetworkedPlayer : MonoBehaviour
 
     public float dashFoodCost = .1f;
     public float foodLevel = 100f;
+    public Color defaultColor;
 
     public Vector3 lastSyncPostion;
     private Vector3 lastMoveVector;
@@ -72,6 +73,8 @@ public class TTSNetworkedPlayer : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         pVolume = GetComponentInChildren<PickupVolume>();
         GetComponent<TTSID>().trackedDataSerialize += TrackedDataHandler;
+
+        defaultColor = GetComponentInChildren<MeshRenderer>().material.color;
     }
     // Update is called once per frame
     void Update()
@@ -202,6 +205,11 @@ public class TTSNetworkedPlayer : MonoBehaviour
         foodLevel += foodValue;
         trackedDataAvailable = true;
         GetComponent<TTSID>().trackedDataAvailable = true;
+
+        if(foodLevel > dashFoodCost)
+        {
+            GetComponentInChildren<MeshRenderer>().material.color = defaultColor;
+        }
     }
 
 
