@@ -10,8 +10,11 @@ public class TTSServerPlayerController : MonoBehaviour
     bool dashing = false;
     bool lastDashing = false;
 
-    bool fireD = false;
-    bool fireU = false;
+    bool fire1D = false;
+    bool fire1Prev = false;
+
+    bool fire2D = false;
+    bool fire2Prev = false;
 
     Vector3 lastMoveVector = Vector3.zero;
     Transform mainCameraTransform;
@@ -54,25 +57,42 @@ public class TTSServerPlayerController : MonoBehaviour
 
         dashing = Input.GetKey(KeyCode.Space);
 
-        fireD = Input.GetButtonDown("Fire1");
-        fireU = Input.GetButtonUp("Fire1");
+        bool newInput = false;
+
+        if(Input.GetButtonDown("Fire1"))
+        {
+            fire1D = true;
+            fire1Prev = false;
+            newInput = true;
+        }
+        else if(Input.GetButtonUp("Fire1"))
+        {
+            fire1D = false;
+            fire1Prev = true;
+            newInput = true;
+        }
+
+        if (Input.GetButtonDown("Fire2"))
+        {
+            fire2D = true;
+            fire2Prev = false;
+            newInput = true;
+        }
+        else if (Input.GetButtonUp("Fire2"))
+        {
+            fire2D = false;
+            fire2Prev = true;
+            newInput = true;
+        }  
 
         if (moveDirection != lastMoveVector || dashing != lastDashing)
         {
             localPlayer.SetMovementInput(moveDirection, dashing);
         }
 
-        if(fireD || fireU)
-        {     
-           if(fireD)
-           {
-                localPlayer.SetFireInput(true, false);
-            }
-           else if(fireU)
-           {
-                localPlayer.SetFireInput(false, true);
-           }
-            
+        if(newInput)
+        {
+            localPlayer.SetFireInput(fire1D, fire1Prev, fire2D, fire2Prev);            
         }
       
 

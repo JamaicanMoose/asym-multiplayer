@@ -24,7 +24,11 @@ public class TTSClient : TTSGeneric
 
     Transform mainCameraTransform;
     bool fire1 = false;
+    bool fire2 = false;
+
     bool lastFire1 = false;
+    bool lastFire2 = false;
+
     bool dashing = false;
     bool lastDashing = false;
     Vector3 lastMoveVector = Vector3.zero;
@@ -76,18 +80,20 @@ public class TTSClient : TTSGeneric
         lastDashing = dashing;
 
         fire1 = Input.GetButton("Fire1");
+        fire2 = Input.GetButton("Fire2");
 
-        if (fire1 != lastFire1)
+        if (fire1 != lastFire1 || fire2 != lastFire2)
         {
             using (DarkRiftWriter interactInputWriter = DarkRiftWriter.Create())
             {
-                interactInputWriter.Write(new TTS.InputInteractMessage(fire1));
+                interactInputWriter.Write(new TTS.InputInteractMessage(fire1, fire2));
                 using (Message interactInputMessage = Message.Create((ushort)TTS.MessageType.INPUT_INTERACT, interactInputWriter))
                     client.SendMessage(interactInputMessage, SendMode.Reliable);
             }
         }
 
         lastFire1 = fire1;
+        lastFire2 = fire2;
     }
 
     void ClientMessageReceived(object sender, MessageReceivedEventArgs e)

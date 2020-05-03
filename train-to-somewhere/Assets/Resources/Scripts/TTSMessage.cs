@@ -215,22 +215,26 @@ namespace TTS
     public class InputInteractMessage : IDarkRiftSerializable
     {
         public bool fire1;
+        public bool fire2;
 
         public InputInteractMessage() { }
 
-        public InputInteractMessage(bool fire1)
+        public InputInteractMessage(bool fire1, bool fire2)
         {
             this.fire1 = fire1;
+            this.fire2 = fire2;
         }
 
         public void Serialize(SerializeEvent e)
         {
             e.Writer.Write(fire1);
+            e.Writer.Write(fire2);
         }
 
         public void Deserialize(DeserializeEvent e)
         {
             fire1 = e.Reader.ReadBoolean();
+            fire2 = e.Reader.ReadBoolean();
         }
     }
 

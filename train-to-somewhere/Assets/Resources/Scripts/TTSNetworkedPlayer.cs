@@ -46,6 +46,9 @@ public class TTSNetworkedPlayer : MonoBehaviour
     bool prevFire1ButtonDown = false;
     public bool fire1ButtonDown = false;
 
+    bool prevFire2ButtonDown = false;
+    public bool fire2ButtonDown = false;
+
     bool prevdashButtonDown = false;
     bool dashButtonDown = false;
 
@@ -93,9 +96,14 @@ public class TTSNetworkedPlayer : MonoBehaviour
     {
         bool onFire1ButtonDown = fire1ButtonDown && !prevFire1ButtonDown;
         bool onFire1ButtonUp = !fire1ButtonDown && prevFire1ButtonDown;
-        if(onFire1ButtonDown)
+
+        bool onFire2ButtonDown = fire2ButtonDown && !prevFire2ButtonDown;
+        bool onFire2ButtonUp = !fire2ButtonDown && prevFire2ButtonDown;
+
+
+        if (onFire2ButtonDown)
         {
-            Debug.Log("Fire button down");
+      
             if(heldPickup != null)
             {
                 heldPickup.Drop();
@@ -114,6 +122,7 @@ public class TTSNetworkedPlayer : MonoBehaviour
         }
 
         prevFire1ButtonDown = fire1ButtonDown;
+        prevFire2ButtonDown = fire2ButtonDown;
     }
 
     // MOVEMENT
@@ -170,10 +179,13 @@ public class TTSNetworkedPlayer : MonoBehaviour
         currentMoveVector = direction;
     }
 
-    public void SetFireInput(bool fireDown, bool prevFireDown)
+    public void SetFireInput(bool fire1Down, bool prevFire1Down, bool fire2Down, bool prevFire2Down)
     {
-        fire1ButtonDown = fireDown;
-        prevFire1ButtonDown = prevFireDown;
+        fire1ButtonDown = fire1Down;
+        prevFire1ButtonDown = prevFire1Down;
+
+        fire2ButtonDown = fire2Down;
+        prevFire2ButtonDown = prevFire2Down;
     }
 
 

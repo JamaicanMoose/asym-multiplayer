@@ -40,6 +40,7 @@ public class TTSServer : TTSGeneric
         ushort playerTTSID = clientPlayerMap[clientID];
         GameObject player = idMap.getTransform(playerTTSID).gameObject;
         player.GetComponent<TTSNetworkedPlayer>().fire1ButtonDown = input.fire1;
+        player.GetComponent<TTSNetworkedPlayer>().fire2ButtonDown = input.fire2;
     }
 
     public void ClientMessageReceived(object sender, MessageReceivedEventArgs e)
