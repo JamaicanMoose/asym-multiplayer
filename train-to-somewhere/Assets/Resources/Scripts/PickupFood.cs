@@ -33,6 +33,7 @@ public class PickupFood : PickupGeneric
     public override void Interact()
     {
         holdingTransform.GetComponent<TTSNetworkedPlayer>().EatFood(foodValue);
+        GameObject.FindGameObjectWithTag("Network").GetComponent<TTS.ObjectSync>().RemoveObject(GetComponent<TTSID>().id);
         Destroy(gameObject);
     }
 }

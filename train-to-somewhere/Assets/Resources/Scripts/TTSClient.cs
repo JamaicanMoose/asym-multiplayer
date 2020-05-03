@@ -127,6 +127,14 @@ public class TTSClient : TTSGeneric
                     }
                 }
                 break;
+            case TTS.MessageType.GAME_OBJECT_REMOVE:
+                using (Message m = e.GetMessage() as Message)
+                using (DarkRiftReader r = m.GetReader())
+                {
+                    ushort objID = r.ReadUInt16();
+                    Destroy(idMap.idMap[objID].gameObject);
+                }
+                break;
         }
     }
 

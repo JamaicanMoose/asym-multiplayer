@@ -14,7 +14,8 @@ namespace TTS
         GAME_OBJECT_TDATA,
         PLAYER_ASSOC,
         INPUT_MOVEMENT,
-        INPUT_INTERACT
+        INPUT_INTERACT,
+        GAME_OBJECT_REMOVE
     }
 
     public class GameObjectInitMessage : IDarkRiftSerializable
@@ -269,6 +270,32 @@ namespace TTS
             e.Writer.Write(MoveDirection.y);
             e.Writer.Write(MoveDirection.z);
             e.Writer.Write(Dashing);
+        }
+    }
+
+    public class DestroyObjectMessage : IDarkRiftSerializable
+    {
+        ushort objID;
+
+        public DestroyObjectMessage()
+        {
+
+        }
+
+        public DestroyObjectMessage(ushort objTTSID)
+        {
+            objID = objTTSID;
+        }
+
+
+        public void Deserialize(DeserializeEvent e)
+        {
+            objID = e.Reader.ReadUInt16();
+        }
+
+        public void Serialize(SerializeEvent e)
+        {
+            e.Writer.Write(objID);
         }
     }
 

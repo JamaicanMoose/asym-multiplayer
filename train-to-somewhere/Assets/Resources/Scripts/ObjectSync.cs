@@ -55,5 +55,17 @@ namespace TTS
                 trackedDataBuffer.Clear();
             }
         }
+
+        public void RemoveObject(ushort objID)
+        {
+            using (DarkRiftWriter objectRemoveWriter = DarkRiftWriter.Create())
+            {
+                objectRemoveWriter.Write(objID);
+               
+                using (Message objectRemoveMessage = Message.Create((ushort)MessageType.GAME_OBJECT_REMOVE, objectRemoveWriter))
+                    foreach (IClient c in darkRiftServer.Server.ClientManager.GetAllClients())
+                        c.SendMessage(objectRemoveMessage, SendMode.Reliable);
+            }
+        }
     }
 }
