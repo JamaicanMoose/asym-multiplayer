@@ -197,5 +197,12 @@ public class TTSNetworkedPlayer : MonoBehaviour
         prevFire2ButtonDown = prevFire2Down;
     }
 
+    public void EatFood(float foodValue)
+    {
+        foodLevel += foodValue;
+        trackedDataAvailable = true;
+        GetComponent<TTSID>().trackedDataAvailable = true;
+    }
+
 
 }

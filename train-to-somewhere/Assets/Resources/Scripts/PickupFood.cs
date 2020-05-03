@@ -2,30 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
-
-public class PickupThrowable : PickupGeneric
+public class PickupFood : PickupGeneric
 {
- 
-    Rigidbody rb;
-
-    public float throwScale = 3;
+    public float foodValue;
 
 
-
-    private void Awake()
-    {
-        rb = GetComponent<Rigidbody>();
-    }
     // Update is called once per frame
     void Update()
     {
-        if(isHeld)
+        if (isHeld)
         {
             transform.localPosition = holdingTransform.localPosition + holdingTransform.transform.forward;
             transform.rotation = holdingTransform.rotation;
         }
-         
+
     }
 
     public override void Hold(Transform holding)
@@ -42,13 +32,7 @@ public class PickupThrowable : PickupGeneric
 
     public override void Interact()
     {
-        isHeld = false;
-        Vector3 throwDirection = holdingTransform.forward + Vector3.up * 2;
-        rb.velocity = Vector3.zero;
-        rb.AddForce(throwDirection * throwScale, ForceMode.Impulse);
-        holdingTransform = null;
-        
+        holdingTransform.GetComponent<TTSNetworkedPlayer>().EatFood(foodValue);
+        Destroy(gameObject);
     }
-
-
 }
