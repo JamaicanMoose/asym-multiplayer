@@ -100,6 +100,14 @@ public class TTSNetworkedPlayer : MonoBehaviour
         bool onFire2ButtonDown = fire2ButtonDown && !prevFire2ButtonDown;
         bool onFire2ButtonUp = !fire2ButtonDown && prevFire2ButtonDown;
 
+        if(onFire1ButtonDown)
+        {
+            if(heldPickup != null)
+            {
+                heldPickup.Throw();
+                heldPickup = null;
+            }
+        }
 
         if (onFire2ButtonDown)
         {
@@ -107,8 +115,8 @@ public class TTSNetworkedPlayer : MonoBehaviour
             if(heldPickup != null)
             {
                 heldPickup.Drop();
-                heldPickup = null;
-
+                heldPickup = null;          
+             
             }
             else
             {
@@ -120,6 +128,7 @@ public class TTSNetworkedPlayer : MonoBehaviour
             }
           
         }
+        
 
         prevFire1ButtonDown = fire1ButtonDown;
         prevFire2ButtonDown = fire2ButtonDown;

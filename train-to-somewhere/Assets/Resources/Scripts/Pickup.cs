@@ -8,7 +8,14 @@ public class Pickup : MonoBehaviour
     public bool isHeld = false;
     public Transform holdingTransform = null;
 
+    Rigidbody rb;
 
+    public float throwScale = 3;
+
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
     // Update is called once per frame
     void Update()
     {
@@ -30,6 +37,16 @@ public class Pickup : MonoBehaviour
     {
         isHeld = false;
         holdingTransform = null;
+    }
+
+    public void Throw()
+    {
+        isHeld = false;
+        Vector3 throwDirection = holdingTransform.forward + Vector3.up * 2;
+        rb.velocity = Vector3.zero;
+        rb.AddForce(throwDirection * throwScale, ForceMode.Impulse);
+        holdingTransform = null;
+        
     }
 
 

@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 255575690221386298}
   - component: {fileID: 4626834719630687255}
   - component: {fileID: 658980136143369793}
-  - component: {fileID: 2385676815729242008}
   m_Layer: 0
   m_Name: ClientPickup
   m_TagString: Pickup
@@ -124,18 +123,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bf0e24c663491c4ca4c6447977b7b41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabID: TestPickup
---- !u!114 &2385676815729242008
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1224830285622802220}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ccc63083951403438d94d59340c93f9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isHeld: 1
-  holdingTransform: {fileID: 0}
+  prefabID: ClientPickup
