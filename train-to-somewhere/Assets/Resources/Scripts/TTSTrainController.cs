@@ -66,4 +66,9 @@ public class TTSTrainController : MonoBehaviour
             transform.Translate(forward * speed * Time.fixedDeltaTime);
         }
     }
+
+    public void ChangeAcceleration(float change)
+    {
+        trainEngineAcceleration += change;
+    }
 }

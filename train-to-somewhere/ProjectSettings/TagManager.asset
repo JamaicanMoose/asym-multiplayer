@@ -9,6 +9,7 @@ TagManager:
   - StartMenu
   - Network
   - Pickup
+  - Train
   layers:
   - Default
   - TransparentFX

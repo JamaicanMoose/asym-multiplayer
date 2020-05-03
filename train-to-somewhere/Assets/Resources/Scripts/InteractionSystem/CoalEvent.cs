@@ -6,16 +6,15 @@ public class CoalEvent : MonoBehaviour
 {
     public float accelerationChange = 0.5f;
 
-    //private TrainController tc;
+    private TTSTrainController tc;
 
     private void Start()
     {
-        //tc = GameObject.FindGameObjectWithTag("Train").GetComponent<TrainController>();
+        tc = GameObject.FindGameObjectWithTag("Train").GetComponent<TTSTrainController>();
     }
 
     public void SpeedUp()
     {
-        Debug.Log("Furnace received coal");
-        //tc.ChangeAcceleration(accelerationChange);
+        tc.ChangeAcceleration(accelerationChange);
     }
 }
