@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 using DarkRift.Server.Unity;
 using DarkRift.Server;
@@ -27,6 +28,13 @@ public class TTSServer : TTSGeneric
         darkRiftServer = GetComponent<XmlUnityServer>();
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            SceneManager.LoadScene(0);
+        }
+    }
 
     void HandleMovementInput(ushort clientID, TTS.InputMovementMessage input)
     {
