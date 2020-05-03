@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Pickup : MonoBehaviour
 {
-
+    public string pickupTag = "";
     public bool isHeld = false;
     public Transform holdingTransform = null;
 
