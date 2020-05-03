@@ -19,7 +19,7 @@ public class ThrowReceiver : MonoBehaviour
     {
         foreach (ThrowEvent te in events)
         {
-            Pickup p = other.GetComponent<Pickup>();
+            PickupGeneric p = other.GetComponent<PickupGeneric>();
             if (p && p.pickupTag == te.thrownObjectPickupTag)
             {
                 te.onThrowReceive.Invoke();
@@ -29,15 +29,4 @@ public class ThrowReceiver : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 }

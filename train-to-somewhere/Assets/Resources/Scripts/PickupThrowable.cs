@@ -2,19 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pickup : MonoBehaviour
+public class PickupThrowable : PickupGeneric
 {
-    public string pickupTag = "";
-    public bool isHeld = false;
     public Transform holdingTransform = null;
 
     Rigidbody rb;
 
     public float throwScale = 3;
 
+    public string PickupObjectTag;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        pickupTag = PickupObjectTag;
     }
     // Update is called once per frame
     void Update()
@@ -27,19 +28,19 @@ public class Pickup : MonoBehaviour
          
     }
 
-    public void Hold(Transform holding)
+    public override void Hold(Transform holding)
     {
         isHeld = true;
         holdingTransform = holding;
     }
 
-    public void Drop()
+    public override void Drop()
     {
         isHeld = false;
         holdingTransform = null;
     }
 
-    public void Throw()
+    public override void Interact()
     {
         isHeld = false;
         Vector3 throwDirection = holdingTransform.forward + Vector3.up * 2;

@@ -10,7 +10,7 @@ public class PickupVolume : MonoBehaviour
     {
         if (other.CompareTag("Pickup"))
         {
-            Pickup pUp = other.GetComponent<Pickup>();
+            PickupGeneric pUp = other.GetComponent<PickupGeneric>();
             if(pUp.isHeld == false)
             {
                 potentialPickups.Add(other.transform);
@@ -22,7 +22,7 @@ public class PickupVolume : MonoBehaviour
     {
         if (other.CompareTag("Pickup"))
         {
-            Pickup pUp = other.GetComponent<Pickup>();
+            PickupGeneric pUp = other.GetComponent<PickupGeneric>();
             if (pUp.isHeld == true)
             {
                 if (potentialPickups.Contains(other.transform))

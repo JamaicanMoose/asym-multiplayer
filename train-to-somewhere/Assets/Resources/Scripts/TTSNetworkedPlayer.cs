@@ -63,7 +63,7 @@ public class TTSNetworkedPlayer : MonoBehaviour
     private Vector3 lastMoveVector;
 
     private PickupVolume pVolume;
-    private Pickup heldPickup = null;
+    private PickupGeneric heldPickup = null;
 
     private void Awake()
     {
@@ -104,7 +104,7 @@ public class TTSNetworkedPlayer : MonoBehaviour
         {
             if(heldPickup != null)
             {
-                heldPickup.Throw();
+                heldPickup.Interact();
                 heldPickup = null;
             }
         }
@@ -122,7 +122,7 @@ public class TTSNetworkedPlayer : MonoBehaviour
             {
                 if (pVolume.potentialPickups.Count > 0)
                 {
-                    heldPickup = pVolume.potentialPickups[0].GetComponent<Pickup>();
+                    heldPickup = pVolume.potentialPickups[0].GetComponent<PickupGeneric>();
                     heldPickup.Hold(transform);
                 }
             }
