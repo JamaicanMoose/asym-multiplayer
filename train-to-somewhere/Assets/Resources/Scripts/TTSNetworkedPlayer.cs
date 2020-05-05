@@ -28,7 +28,6 @@ namespace TTS {
 
         public override void Load(Transform target)
         {
-            Debug.Log($"LOAD {target.name}");
             target.GetComponent<TTSNetworkedPlayer>().foodLevel = foodLevel;
         }
     }
@@ -66,21 +65,47 @@ public class TTSNetworkedPlayer : MonoBehaviour
     private PickupVolume pVolume;
     private PickupGeneric heldPickup = null;
 
+    public Transform currentTrainCar;
+
+    bool isServer;
+
     private void Awake()
     {
-        lastSyncPostion = transform.localPosition;
-        lastMoveVector = Vector3.zero;
-        rb = GetComponent<Rigidbody>();
-        pVolume = GetComponentInChildren<PickupVolume>();
-        GetComponent<TTSID>().trackedDataSerialize += TrackedDataHandler;
-
-        defaultColor = GetComponentInChildren<MeshRenderer>().material.color;
+        isServer = GameObject.FindGameObjectWithTag("Network")
+            .GetComponent<DarkRift.Server.Unity.XmlUnityServer>() != null;
+        if (isServer)
+        {
+            lastSyncPostion = transform.localPosition;
+            lastMoveVector = Vector3.zero;
+            rb = GetComponent<Rigidbody>();
+            pVolume = GetComponentInChildren<PickupVolume>();
+            GetComponent<TTSID>().trackedDataSerialize += TrackedDataHandler;
+            defaultColor = GetComponentInChildren<MeshRenderer>().material.color;
+        }
+        UpdateCurrentCar();
     }
+
     // Update is called once per frame
     void Update()
     {
-        HandleInteractions();
-        HandleMovement();
+        if (isServer)
+        {
+            HandleInteractions();
+            HandleMovement();
+        }
+        UpdateCurrentCar();
+    }
+
+    void UpdateCurrentCar()
+    {
+        Ray down = new Ray(transform.position, Vector3.down);
+        RaycastHit hit;
+        if (Physics.Raycast(down, out hit))
+            if (hit.collider.name == "Floor")
+            {
+                currentTrainCar = hit.collider.transform.parent.parent;
+                transform.parent = currentTrainCar;
+            }
     }
 
     void TrackedDataHandler(object sender, TTS.TrackedDataSerializeEventArgs e)

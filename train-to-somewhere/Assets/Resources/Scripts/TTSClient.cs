@@ -14,13 +14,12 @@ using DarkRift;
 public class TTSClient : TTSGeneric
 {
     [HideInInspector]
-    public ushort localPlayerId;
+    public ushort localPlayerId = 0;
 
-    bool gameStarted = false;
+    [HideInInspector]
+    public bool initSyncFinished = false;
 
     TTSIDMap idMap;
-
-    UnityClient client;
 
     Transform mainCameraTransform;
     bool fire1 = false;
@@ -36,10 +35,12 @@ public class TTSClient : TTSGeneric
     private void Awake()
     {
         GetComponent<TTSGeneric>().GameStarted += OnGameStart;
+        GameObject.FindGameObjectWithTag("Network").GetComponent<UnityClient>().MessageReceived += TTSMessageHandler;
     }
 
     void OnGameStart(object sender, EventArgs e)
     {
+        Debug.Log("OnGameStart");
         gameStarted = true;
     }
 
@@ -47,8 +48,6 @@ public class TTSClient : TTSGeneric
     void Start()
     {
         idMap = GetComponent<TTSIDMap>();
-        client = GetComponent<UnityClient>();
-        client.Client.MessageReceived += ClientMessageReceived;
         mainCameraTransform = GameObject.FindGameObjectWithTag("MainCamera").transform;
     }
 
@@ -61,6 +60,8 @@ public class TTSClient : TTSGeneric
 
     void HandleInput()
     {
+        UnityClient client = gameObject.GetComponent<UnityClient>();
+
         Vector3 moveDirection = mainCameraTransform.right * Input.GetAxis("Horizontal") + mainCameraTransform.forward * Input.GetAxis("Vertical");
         moveDirection.y = 0f;
         moveDirection.Normalize();
@@ -96,44 +97,33 @@ public class TTSClient : TTSGeneric
         lastFire2 = fire2;
     }
 
-    void ClientMessageReceived(object sender, MessageReceivedEventArgs e)
+    private void HandleGameObjectMessage<T>(MessageReceivedEventArgs e) where T : TTS.GameObjectGenericMessage, new()
+    {
+        using (Message m = e.GetMessage() as Message)
+        using (DarkRiftReader r = m.GetReader())
+        {
+            uint numObjects = r.ReadUInt32();
+            for (uint i = 0; i < numObjects; i++)
+                r.ReadSerializable<T>().Load();
+        }
+    }
+
+    void TTSMessageHandler(object sender, MessageReceivedEventArgs e)
     {
         switch((TTS.MessageType)e.GetMessage().Tag)
         {
-            case TTS.MessageType.GAME_OBJECT_MOVE:
-                using (Message m = e.GetMessage() as Message)
-                using (DarkRiftReader r = m.GetReader())
-                {
-                    uint numObjects = r.ReadUInt32();
-                    for (int i = 0; i < numObjects; i++)
-                    {
-                        TTS.GameObjectMovementMessage syncData = r.ReadSerializable<TTS.GameObjectMovementMessage>();
-                        Transform toSync = idMap.getTransform(syncData.ttsid);
-                        syncData.Load(toSync);
-                    }
-                }
-                break;
-            case TTS.MessageType.GAME_OBJECT_TDATA:
-                using (Message m = e.GetMessage() as Message)
-                using (DarkRiftReader r = m.GetReader())
-                {
-                    uint numObjects = r.ReadUInt32();
-                    for (int i = 0; i < numObjects; i++)
-                    {
-                        TTS.GameObjectTDataMessage syncData = r.ReadSerializable<TTS.GameObjectTDataMessage>();
-                        Debug.Log($"TDATA {syncData.ttsid} {syncData.parent}");
-                        Transform toSync = idMap.getTransform(syncData.ttsid);
-                        syncData.Load(toSync);
-                    }
-                }
+            case TTS.MessageType.GAME_OBJECT_INIT:
+                HandleGameObjectMessage<TTS.GameObjectInitMessage>(e);
+                if (!initSyncFinished) initSyncFinished = true;
                 break;
             case TTS.MessageType.GAME_OBJECT_REMOVE:
-                using (Message m = e.GetMessage() as Message)
-                using (DarkRiftReader r = m.GetReader())
-                {
-                    ushort objID = r.ReadUInt16();
-                    Destroy(idMap.idMap[objID].gameObject);
-                }
+                HandleGameObjectMessage<TTS.GameObjectRemoveMessage>(e);
+                break;
+            case TTS.MessageType.GAME_OBJECT_MOVE:
+                HandleGameObjectMessage<TTS.GameObjectMovementMessage>(e);
+                break;
+            case TTS.MessageType.GAME_OBJECT_TDATA:
+                HandleGameObjectMessage<TTS.GameObjectTDataMessage>(e);
                 break;
         }
     }

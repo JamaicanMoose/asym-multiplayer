@@ -60,59 +60,48 @@ public class TTSLobby : MonoBehaviour
                     yield return t;
     }
 
+    void SpawnPlayer(ushort clientID)
+    {
+        GameObject player = GameObject.Instantiate(Resources.Load($"Prefabs/NetworkPlayer", typeof(GameObject))) as GameObject;
+        player.transform.parent = GameObject.Find("Train").transform;
+        player.transform.localPosition = UniqueSpawnPosition();
+        player.GetComponent<TTSID>().Init();
+        GameObject.FindGameObjectWithTag("Network")
+            .GetComponent<TTSIDMap>().addTransform(player.GetComponent<TTSID>().id, player.transform);
+        GameObject.FindGameObjectWithTag("Network")
+            .GetComponent<TTSServer>().clientPlayerMap[clientID] = player.GetComponent<TTSID>().id;
+    }
+
     void TSSInitGame()
     {
         Transform world = GameObject.Find("World").transform;
-        Transform train = GameObject.Find("Train").transform;
-        Dictionary<ushort, ushort> clientPlayerMap = GameObject.FindGameObjectWithTag("Network").GetComponent<TTSServer>().clientPlayerMap;
-        TTSIDMap idTransformMap = GameObject.FindGameObjectWithTag("Network").GetComponent<TTSIDMap>();
 
-        train.gameObject.GetComponent<TTSTrainController>().BuildTrain();
+        GameObject.Find("Train").GetComponent<TTSTrainController>().BuildTrain();
 
-        //spawn server player, client ID for serverPlayer is defined as 65000       
-        GameObject serverPlayer = GameObject.Instantiate(Resources.Load($"Prefabs/NetworkPlayer", typeof(GameObject))) as GameObject;
-        serverPlayer.transform.parent = train;
-        serverPlayer.transform.localPosition = UniqueSpawnPosition();
-        serverPlayer.GetComponent<TTSID>().Init();
-        clientPlayerMap[65000] = serverPlayer.GetComponent<TTSID>().id;
-  
-
+        // Instantiate players
+        SpawnPlayer(65000);
         foreach (IClient c in darkRiftServer.Server.ClientManager.GetAllClients())
-        {
-      
-            GameObject player = GameObject.Instantiate(Resources.Load($"Prefabs/NetworkPlayer", typeof(GameObject))) as GameObject;
-            player.transform.parent = train;
-            player.transform.localPosition = UniqueSpawnPosition();
-            player.GetComponent<TTSID>().Init();
-            clientPlayerMap[c.ID] = player.GetComponent<TTSID>().id;
-            using (DarkRiftWriter playerAssocWriter = DarkRiftWriter.Create())
-            {
-                playerAssocWriter.Write(clientPlayerMap[c.ID]);
-                using (Message playerAssocMessage = Message.Create((ushort)TTS.MessageType.PLAYER_ASSOC, playerAssocWriter))
-                    c.SendMessage(playerAssocMessage, SendMode.Reliable);
-            }
-        }
-        //foreach connected client
-        //  create networked player instance
-        //  add client id -> ttsid for networked player to map in TTSServer
-        //  send player association message to client
-        using (DarkRiftWriter initObjectsWriter = DarkRiftWriter.Create())
-        {
-            //IN WORLD ALL OBJECTS ARE CONTAINERS UNLESS THEYRE A PREFAB
-            initObjectsWriter.Write(InOrderChildren(world).Count() - 1);
-            foreach (Transform t in InOrderChildren(world))
-            {
-                if (t == world) continue;
-                initObjectsWriter.Write(new TTS.GameObjectInitMessage(t.gameObject));
-                idTransformMap.setTransform(t);
-            }
-            using (Message initObjectsMessage = Message.Create((ushort)TTS.MessageType.GAME_OBJECT_INIT, initObjectsWriter))
-            {
-                foreach (IClient c in darkRiftServer.Server.ClientManager.GetAllClients())
-                    c.SendMessage(initObjectsMessage, SendMode.Reliable);
-            }
-        }
+            SpawnPlayer(c.ID);
 
+        // Sync all gameObjects
+        IEnumerable<TTS.GameObjectInitMessage> oInitIter = from c in InOrderChildren(world)
+                                                           where c != world
+                                                           select new TTS.GameObjectInitMessage(c.gameObject);
+        TTS.ObjectSync os = GetComponent<TTS.ObjectSync>();
+        foreach (TTS.GameObjectInitMessage m in oInitIter)
+            os.initBuffer.Add(m);
+        os.TriggerBufferSync();
+
+        // Tell clients to associate w) their respective NetworkPlayers
+        Dictionary<ushort, ushort> clientPlayerMap = GameObject.FindGameObjectWithTag("Network")
+            .GetComponent<TTSServer>().clientPlayerMap;
+        foreach (IClient c in darkRiftServer.Server.ClientManager.GetAllClients())
+            using (DarkRiftWriter w = DarkRiftWriter.Create())
+            {
+                w.Write(clientPlayerMap[c.ID]);
+                using (Message m = Message.Create((ushort)TTS.MessageType.PLAYER_ASSOC, w))
+                    c.SendMessage(m, SendMode.Reliable);
+            }        
     }
 
     public void TTSStartGame()
@@ -127,12 +116,11 @@ public class TTSLobby : MonoBehaviour
             using (Message startGameMessage = Message.Create((ushort)TTS.MessageType.START_GAME, startGameWriter))
                 foreach (IClient c in darkRiftServer.Server.ClientManager.GetAllClients())
                     c.SendMessage(startGameMessage, SendMode.Reliable);
-   
     }
 
     private Vector3 UniqueSpawnPosition()
     {
-        Vector3 startPosition = new Vector3(0, 3.5f, -1);
+        Vector3 startPosition = new Vector3(0, .5f, -1);
         Vector3 offSet = new Vector3(0, 0, 2);
         spawnCount++;
 

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DarkRift;
@@ -16,6 +17,8 @@ namespace TTS
     {
         public List<GameObjectMovementMessage> movementBuffer = new List<GameObjectMovementMessage>();
         public List<GameObjectTDataMessage> trackedDataBuffer = new List<GameObjectTDataMessage>();
+        public List<GameObjectInitMessage> initBuffer = new List<GameObjectInitMessage>();
+        public List<GameObjectRemoveMessage> removeBuffer = new List<GameObjectRemoveMessage>();
 
         XmlUnityServer darkRiftServer;
 
@@ -25,47 +28,33 @@ namespace TTS
             darkRiftServer = GameObject.FindGameObjectWithTag("Network").GetComponent<XmlUnityServer>();
         }
 
+        public void TriggerBufferSync() { Update(); }
+
+        private void SyncBuffer<T>(List<T> buf, SendMode mode, MessageType mt) where T : IDarkRiftSerializable
+        {
+            using (DarkRiftWriter w = DarkRiftWriter.Create())
+            {
+                w.Write((uint)buf.Count);
+                foreach (T s in buf)
+                    w.Write(s);
+                using (Message m = Message.Create((ushort)mt, w))
+                    foreach (IClient c in darkRiftServer.Server.ClientManager.GetAllClients())
+                        c.SendMessage(m, mode);
+            }
+            buf.Clear();
+        }
+
         // Update is called once per frame
         void Update()
         {
             if (movementBuffer.Count > 0)
-            {
-                using (DarkRiftWriter objectSyncWriter = DarkRiftWriter.Create())
-                {
-                    objectSyncWriter.Write((uint)movementBuffer.Count);
-                    foreach (GameObjectMovementMessage gos in movementBuffer)
-                        objectSyncWriter.Write(gos);
-                    using (Message objectSyncMessage = Message.Create((ushort)MessageType.GAME_OBJECT_MOVE, objectSyncWriter))
-                        foreach (IClient c in darkRiftServer.Server.ClientManager.GetAllClients())
-                            c.SendMessage(objectSyncMessage, SendMode.Unreliable);
-                }
-                movementBuffer.Clear();
-            }
+                SyncBuffer<GameObjectMovementMessage>(movementBuffer, SendMode.Unreliable, MessageType.GAME_OBJECT_MOVE);
             if (trackedDataBuffer.Count > 0)
-            {
-                using (DarkRiftWriter objectSyncWriter = DarkRiftWriter.Create())
-                {
-                    objectSyncWriter.Write((uint)trackedDataBuffer.Count);
-                    foreach (GameObjectTDataMessage gos in trackedDataBuffer)
-                        objectSyncWriter.Write(gos);
-                    using (Message objectSyncMessage = Message.Create((ushort)MessageType.GAME_OBJECT_TDATA, objectSyncWriter))
-                        foreach (IClient c in darkRiftServer.Server.ClientManager.GetAllClients())
-                            c.SendMessage(objectSyncMessage, SendMode.Reliable);
-                }
-                trackedDataBuffer.Clear();
-            }
-        }
-
-        public void RemoveObject(ushort objID)
-        {
-            using (DarkRiftWriter objectRemoveWriter = DarkRiftWriter.Create())
-            {
-                objectRemoveWriter.Write(objID);
-               
-                using (Message objectRemoveMessage = Message.Create((ushort)MessageType.GAME_OBJECT_REMOVE, objectRemoveWriter))
-                    foreach (IClient c in darkRiftServer.Server.ClientManager.GetAllClients())
-                        c.SendMessage(objectRemoveMessage, SendMode.Reliable);
-            }
+                SyncBuffer<GameObjectTDataMessage>(trackedDataBuffer, SendMode.Reliable, MessageType.GAME_OBJECT_TDATA);
+            if (removeBuffer.Count > 0)
+                SyncBuffer<GameObjectRemoveMessage>(removeBuffer, SendMode.Reliable, MessageType.GAME_OBJECT_REMOVE);
+            if (initBuffer.Count > 0)
+                SyncBuffer<GameObjectInitMessage>(initBuffer, SendMode.Reliable, MessageType.GAME_OBJECT_INIT);
         }
     }
 }

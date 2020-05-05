@@ -17,37 +17,25 @@ public class CameraTracker : MonoBehaviour
 
     private void Awake()
     {
-        GameObject network = GameObject.FindGameObjectWithTag("Network");
-        network.GetComponent<TTSGeneric>().GameStarted += GameStarted;
+        GameObject.FindGameObjectWithTag("Network")
+            .GetComponent<TTSGeneric>().GameStarted += GameStarted;
     }
 
     public void GameStarted(object sender, EventArgs e)
     {
-        transform.parent = GameObject.Find("Train").transform;
-
-        GameObject network = GameObject.FindGameObjectWithTag("Network");
-        localPlayer = network.GetComponent<TTSGeneric>().GetLocalPlayer();
+        localPlayer = GameObject.FindGameObjectWithTag("Network")
+            .GetComponent<TTSGeneric>().GetLocalPlayer();
     }
 
     void Update()
     {
         if(localPlayer != null)
         {
-            Ray down = new Ray(localPlayer.position, Vector3.down);
-            RaycastHit hit;
-            if (Physics.Raycast(down, out hit))
-            {
-                if (hit.collider.name == "Floor")
-                {
-                    Transform trainCarTransform = hit.collider.transform.parent.parent;
-
-                    Transform cameraAnchorTransform = trainCarTransform.Find("CameraAnchor");
-
-                    // Calculate camera position & rotation
-                    targetPos = cameraAnchorTransform.position;
-                    targetRotation = cameraAnchorTransform.rotation;
-                }
-            }
+            Transform currentTrainCar = localPlayer.GetComponent<TTSNetworkedPlayer>().currentTrainCar;
+            transform.parent = currentTrainCar;
+            Transform cameraAnchor = currentTrainCar.Find("CameraAnchor");
+            targetPos = cameraAnchor.position;
+            targetRotation = cameraAnchor.rotation;
 
             if (transform.position != targetPos)
             {

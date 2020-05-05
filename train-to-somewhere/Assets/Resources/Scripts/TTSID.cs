@@ -23,6 +23,9 @@ public class TTSID : MonoBehaviour
 {
     [HideInInspector]
     public ushort id = 0;
+    bool isServer = false;
+
+    //SERVER ONLY
 
     /*
      * Components that have data that need to be serialized should add event
@@ -37,20 +40,24 @@ public class TTSID : MonoBehaviour
      */
     [HideInInspector]
     public event TTS.TrackedDataHandler trackedDataSerialize;
-
     [HideInInspector]
     public bool trackedDataAvailable = false;
-
-
     [Tooltip("Minimum distance delta before server will sync to clients.")]
     public float syncDistanceTrig = 0.05f;
     [Tooltip("Minimum rotation angle delta before server will sync to clients.")]
     public float syncRotationTrig = 0.05f;
-    bool isServer = false;
     List<TTS.GameObjectMovementMessage> movementBuffer;
     List<TTS.GameObjectTDataMessage> trackedDataBuffer;
     Vector3 lastSyncedPosition;
     Quaternion lastSyncedRotation;
+
+    public static ushort Get(GameObject go)
+    {
+        TTSID c = go.GetComponent<TTSID>();
+        return (c == null ? (ushort)0 : c.id);
+    }
+
+    public static ushort Get(Transform t) { return Get(t.gameObject); }
 
     public void Init()
     {
@@ -61,15 +68,29 @@ public class TTSID : MonoBehaviour
     private void Start()
     {
         Init();
-        isServer = GameObject.FindGameObjectWithTag("Network").GetComponent<XmlUnityServer>() != null;
+        isServer = GameObject.FindGameObjectWithTag("Network")
+            .GetComponent<XmlUnityServer>() != null;
         if (isServer)
         {
-            TTS.ObjectSync os = GameObject.FindGameObjectWithTag("Network").GetComponent<TTS.ObjectSync>();
+            TTS.ObjectSync os = GameObject.FindGameObjectWithTag("Network")
+                .GetComponent<TTS.ObjectSync>();
             movementBuffer = os.movementBuffer;
             trackedDataBuffer = os.trackedDataBuffer;
             lastSyncedPosition = transform.localPosition;
             lastSyncedRotation = transform.localRotation;
         }
+    }
+
+    public void Remove()
+    {
+        GameObject net = GameObject.FindGameObjectWithTag("Network");
+        net.GetComponent<TTSIDMap>().removeTransform(id);
+        if (net.GetComponent<XmlUnityServer>() != null)
+        {
+            net.GetComponent<TTSIDCounter>().ReleaseID(id);
+            net.GetComponent<TTS.ObjectSync>().removeBuffer.Add(new TTS.GameObjectRemoveMessage(id));
+        }
+        Destroy(gameObject);
     }
 
     public bool ShouldSyncMovement()

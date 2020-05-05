@@ -18,7 +18,40 @@ namespace TTS
         GAME_OBJECT_REMOVE
     }
 
-    public class GameObjectInitMessage : IDarkRiftSerializable
+    public class GameObjectGenericMessage : IDarkRiftSerializable
+    {
+        public GameObjectGenericMessage() { }
+
+        public virtual void Serialize(SerializeEvent e) { }
+
+        public virtual void Deserialize(DeserializeEvent e) { }
+
+        public virtual void Load() { }
+
+        public static void SerializePosition(Vector3 position, SerializeEvent e)
+        {
+            e.Writer.Write(new float[] { position.x, position.y, position.z });
+        }
+
+        public static Vector3 DeserializePosition(DeserializeEvent e)
+        {
+            float[] p = e.Reader.ReadSingles();
+            return new Vector3(p[0], p[1], p[2]);
+        }
+
+        public static void SerializeRotation(Quaternion rotation, SerializeEvent e)
+        {
+            e.Writer.Write(new float[] { rotation.x, rotation.y, rotation.z, rotation.w });
+        }
+
+        public static Quaternion DeserializeRotation(DeserializeEvent e)
+        {
+            float[] r = e.Reader.ReadSingles();
+            return new Quaternion(r[0], r[1], r[2], r[3]);
+        }
+    }
+
+    public class GameObjectInitMessage : GameObjectGenericMessage
     {
         ushort ttsid;
         Vector3 position;
@@ -28,83 +61,64 @@ namespace TTS
         string name;
         string prefabID;
 
-        TTSIDMap idMap = GameObject.FindGameObjectWithTag("Network").GetComponent<TTSIDMap>();
-
-        public GameObjectInitMessage()
-        {
-
+        public GameObjectInitMessage() {
+            position = new Vector3();
+            rotation = new Quaternion();
         }
 
         public GameObjectInitMessage(GameObject go)
         {
             ttsid = go.GetComponent<TTSID>().id;
-            Transform t = go.GetComponent<Transform>();
-            position = t.localPosition;
-            rotation = t.localRotation;
-            TTSID ttsParentComp = go.transform.parent.GetComponent<TTSID>();
-            if (ttsParentComp == null)
-                parentTTSID = 0;
-            else
-                parentTTSID = ttsParentComp.id;
+            position = go.transform.localPosition;
+            rotation = go.transform.localRotation;
+            parentTTSID = TTSID.Get(go.transform.parent);
             tag = go.tag;
             name = go.name;
-            TTSPrefabID pfid = go.GetComponent<TTSPrefabID>();
-            if (pfid)
-                prefabID = pfid.prefabID;
-            else
-                prefabID = "";
+            prefabID = TTSPrefabID.Get(go);
         }
 
-        public void Load()
+        public override void Load()
         {
-            Transform parent = idMap.getTransform(parentTTSID);
+            // Setup GameObject
             GameObject go;
-            TTSID idComp;
             if (prefabID != "")
             {
                 go = GameObject.Instantiate(Resources.Load($"Prefabs/{prefabID}", typeof(GameObject))) as GameObject;
                 go.name = name;
-                idComp = go.GetComponent<TTSID>();
             }
             else
             {
                 go = new GameObject(name);
+                go.AddComponent<TTSID>();
                 go.tag = tag;
-                idComp = go.AddComponent<TTSID>();
             }
+            // Setup Transform
+            go.transform.parent = GameObject.FindGameObjectWithTag("Network")
+                .GetComponent<TTSIDMap>().getTransform(parentTTSID);
             go.transform.localPosition = position;
             go.transform.localRotation = rotation;
-            go.transform.parent = parent;
-            idComp.id = ttsid;
-            idMap.setTransform(go.transform);
+            // Setup TTSID
+            go.GetComponent<TTSID>().id = ttsid;
+            GameObject.FindGameObjectWithTag("Network")
+                .GetComponent<TTSIDMap>().addTransform(ttsid, go.transform);
         }
 
-        public void Deserialize(DeserializeEvent e)
+        public override void Deserialize(DeserializeEvent e)
         {
             ttsid = e.Reader.ReadUInt16();
-            position.x = e.Reader.ReadSingle();
-            position.y = e.Reader.ReadSingle();
-            position.z = e.Reader.ReadSingle();
-            rotation.w = e.Reader.ReadSingle();
-            rotation.x = e.Reader.ReadSingle();
-            rotation.y = e.Reader.ReadSingle();
-            rotation.z = e.Reader.ReadSingle();
+            position = GameObjectGenericMessage.DeserializePosition(e);
+            rotation = GameObjectGenericMessage.DeserializeRotation(e);
             parentTTSID = e.Reader.ReadUInt16();
             tag = e.Reader.ReadString();
             name = e.Reader.ReadString();
             prefabID = e.Reader.ReadString();
         }
 
-        public void Serialize(SerializeEvent e)
+        public override void Serialize(SerializeEvent e)
         {
             e.Writer.Write(ttsid);
-            e.Writer.Write(position.x);
-            e.Writer.Write(position.y);
-            e.Writer.Write(position.z);
-            e.Writer.Write(rotation.w);
-            e.Writer.Write(rotation.x);
-            e.Writer.Write(rotation.y);
-            e.Writer.Write(rotation.z);
+            GameObjectGenericMessage.SerializePosition(position, e);
+            GameObjectGenericMessage.SerializeRotation(rotation, e);
             e.Writer.Write(parentTTSID);
             e.Writer.Write(tag);
             e.Writer.Write(name);
@@ -112,7 +126,36 @@ namespace TTS
         }
     }
 
-    public class GameObjectMovementMessage : IDarkRiftSerializable {
+    public class GameObjectRemoveMessage : GameObjectGenericMessage
+    {
+        ushort ttsid;
+
+        public GameObjectRemoveMessage() { }
+
+        public GameObjectRemoveMessage(ushort id)
+        {
+            ttsid = id;
+        }
+
+        public override void Load()
+        {
+            GameObject.FindGameObjectWithTag("Network")
+                .GetComponent<TTSIDMap>().getTransform(ttsid)
+                .GetComponent<TTSID>().Remove();
+        }
+
+        public override void Deserialize(DeserializeEvent e)
+        {
+            ttsid = e.Reader.ReadUInt16();
+        }
+
+        public override void Serialize(SerializeEvent e)
+        {
+            e.Writer.Write(ttsid);
+        }
+    }
+
+    public class GameObjectMovementMessage : GameObjectGenericMessage {
         public ushort ttsid;
         public Vector3 position;
         public Quaternion rotation;
@@ -126,38 +169,30 @@ namespace TTS
             rotation = target.localRotation;
         }
 
-        public void Load(Transform target)
+        public override void Load()
         {
+            Transform target = GameObject.FindGameObjectWithTag("Network")
+                .GetComponent<TTSIDMap>().getTransform(ttsid);
             target.localPosition = position;
             target.localRotation = rotation;
         }
 
-        public void Deserialize(DeserializeEvent e)
+        public override void Deserialize(DeserializeEvent e)
         {
             ttsid = e.Reader.ReadUInt16();
-            position.x = e.Reader.ReadSingle();
-            position.y = e.Reader.ReadSingle();
-            position.z = e.Reader.ReadSingle();
-            rotation.w = e.Reader.ReadSingle();
-            rotation.x = e.Reader.ReadSingle();
-            rotation.y = e.Reader.ReadSingle();
-            rotation.z = e.Reader.ReadSingle();
+            position = GameObjectGenericMessage.DeserializePosition(e);
+            rotation = GameObjectGenericMessage.DeserializeRotation(e);
         }
 
-        public void Serialize(SerializeEvent e)
+        public override void Serialize(SerializeEvent e)
         {
             e.Writer.Write(ttsid);
-            e.Writer.Write(position.x);
-            e.Writer.Write(position.y);
-            e.Writer.Write(position.z);
-            e.Writer.Write(rotation.w);
-            e.Writer.Write(rotation.x);
-            e.Writer.Write(rotation.y);
-            e.Writer.Write(rotation.z);
+            GameObjectGenericMessage.SerializePosition(position, e);
+            GameObjectGenericMessage.SerializeRotation(rotation, e);
         }
     }
 
-    public class GameObjectTDataMessage : IDarkRiftSerializable
+    public class GameObjectTDataMessage : GameObjectGenericMessage
     {
         public ushort ttsid;
         public ushort parent;
@@ -168,22 +203,21 @@ namespace TTS
         public GameObjectTDataMessage(Transform target, List<TTS.TDataMessagePart> trackedData)
         {
             this.ttsid = target.GetComponent<TTSID>().id;
-            if (target.parent.GetComponent<TTSID>() != null)
-                this.parent = target.parent.GetComponent<TTSID>().id;
-            else
-                this.parent = 0;
+            this.parent = TTSID.Get(target.parent);
             this.trackedData = trackedData;
         }
 
-        public void Load(Transform target)
+        public override void Load()
         {
-            target.parent = GameObject.FindGameObjectWithTag("Network").GetComponent<TTSIDMap>().getTransform(parent);
-
+            Transform target = GameObject.FindGameObjectWithTag("Network")
+                .GetComponent<TTSIDMap>().getTransform(ttsid);
+            target.parent = GameObject.FindGameObjectWithTag("Network")
+                .GetComponent<TTSIDMap>().getTransform(parent);
             foreach (TDataMessagePart m in trackedData)
                 m.Load(target);
         }
 
-        public void Serialize(SerializeEvent e)
+        public override void Serialize(SerializeEvent e)
         {
             e.Writer.Write(ttsid);
             e.Writer.Write(parent);
@@ -196,12 +230,12 @@ namespace TTS
             }
         }
         
-        public void Deserialize(DeserializeEvent e)
+        public override void Deserialize(DeserializeEvent e)
         {
             ttsid = e.Reader.ReadUInt16();
             parent = e.Reader.ReadUInt16();
-            Debug.Log($"{ttsid} {parent}");
-
+            //Debug.Log($"{ttsid} {parent}");
+            //Works here
             trackedData = new List<TDataMessagePart>();
             uint numTrackedData = e.Reader.ReadUInt32();
             for (int i = 0; i < numTrackedData; i++)
@@ -270,32 +304,6 @@ namespace TTS
             e.Writer.Write(MoveDirection.y);
             e.Writer.Write(MoveDirection.z);
             e.Writer.Write(Dashing);
-        }
-    }
-
-    public class DestroyObjectMessage : IDarkRiftSerializable
-    {
-        ushort objID;
-
-        public DestroyObjectMessage()
-        {
-
-        }
-
-        public DestroyObjectMessage(ushort objTTSID)
-        {
-            objID = objTTSID;
-        }
-
-
-        public void Deserialize(DeserializeEvent e)
-        {
-            objID = e.Reader.ReadUInt16();
-        }
-
-        public void Serialize(SerializeEvent e)
-        {
-            e.Writer.Write(objID);
         }
     }
 

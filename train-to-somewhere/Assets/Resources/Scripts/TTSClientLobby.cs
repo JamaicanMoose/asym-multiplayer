@@ -58,28 +58,21 @@ public class TTSClientLobby : MonoBehaviour
         {
             case TTS.MessageType.PLAYER_ASSOC:
                 using (Message m = e.GetMessage() as Message)
-                {
                     using (DarkRiftReader r = m.GetReader())
-                    {
-                        GameObject.FindGameObjectWithTag("Network").GetComponent<TTSClient>().localPlayerId = r.ReadUInt16();
-                    }
-                }
-                break;
-            case TTS.MessageType.GAME_OBJECT_INIT:
-                using (Message m = e.GetMessage() as Message)
-                {
-                    using (DarkRiftReader r = m.GetReader())
-                    {
-                        int count = r.ReadInt32();
-                        for (int i = 0; i < count; i++)
-                            r.ReadSerializable<TTS.GameObjectInitMessage>().Load();
-                    }
-                }
+                        GameObject.FindGameObjectWithTag("Network")
+                            .GetComponent<TTSClient>().localPlayerId = r.ReadUInt16();
                 break;
             case TTS.MessageType.START_GAME:
-                GameObject.FindGameObjectWithTag("Network").GetComponent<TTSGeneric>().GameStart();
-                GameObject.FindGameObjectWithTag("StartMenu").SetActive(false);
+                StartCoroutine(StartGameHandler());
                 break;
         }
+    }
+
+    IEnumerator StartGameHandler()
+    {
+        TTSClient client = GameObject.FindGameObjectWithTag("Network").GetComponent<TTSClient>();
+        while (!client.initSyncFinished || client.localPlayerId == 0) yield return new WaitForSeconds(.1f);
+        client.GameStart();
+        GameObject.FindGameObjectWithTag("StartMenu").SetActive(false);
     }
 }

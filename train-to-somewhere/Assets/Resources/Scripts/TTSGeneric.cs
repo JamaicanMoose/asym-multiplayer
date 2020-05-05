@@ -8,7 +8,10 @@ public abstract class TTSGeneric : MonoBehaviour
     public abstract Transform GetLocalPlayer();
 
     public event EventHandler GameStarted;
-    
+
+    [HideInInspector]
+    public bool gameStarted = false;
+
     protected virtual void OnGameStarted(EventArgs e)
     {
         EventHandler handler = GameStarted;
@@ -18,6 +21,7 @@ public abstract class TTSGeneric : MonoBehaviour
     public void GameStart()
     {
         EventArgs e = new EventArgs();
+        gameStarted = true;
         OnGameStarted(e);
     }
 }
