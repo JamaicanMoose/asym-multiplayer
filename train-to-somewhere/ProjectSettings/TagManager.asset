@@ -10,6 +10,7 @@ TagManager:
   - Network
   - Pickup
   - Train
+  - WheelAnimator
   layers:
   - Default
   - TransparentFX

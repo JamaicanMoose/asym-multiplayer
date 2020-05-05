@@ -2,6 +2,38 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using DarkRift;
+
+namespace TTS
+{
+    public class WheelSpeedMessage : TDataMessagePart
+    {
+        float wheelSpeed;
+
+        public WheelSpeedMessage() { }
+
+        public WheelSpeedMessage(float wSpeed)
+        {
+            this.wheelSpeed = wSpeed;
+        }
+
+        public override void Serialize(SerializeEvent e)
+        {
+            e.Writer.Write(wheelSpeed);
+        }
+
+        public override void Deserialize(DeserializeEvent e)
+        {
+            wheelSpeed = e.Reader.ReadSingle();
+        }
+
+        public override void Load(Transform target)
+        {
+            GameObject.FindGameObjectWithTag("Network").GetComponent<TTSClientWheelController>().SetWheelSpeed(wheelSpeed);
+        }
+
+    }
+}
 
 public class TTSTrainController : MonoBehaviour
 {
@@ -20,9 +52,22 @@ public class TTSTrainController : MonoBehaviour
     public float trainEngineCooldownRate = 0.2f;
     public float frictionAcceleration = 0.1f;
 
+    GameObject[] WheelAnimators;
+    private float prevWheelSpeed;
+    private float wheelSpeed;
+
     private void Awake()
     {
         GameObject.FindGameObjectWithTag("Network").GetComponent<TTSGeneric>().GameStarted += StartTrain;
+        GetComponent<TTSID>().trackedDataSerialize += TrackedDataHandler;
+    }
+
+    void TrackedDataHandler(object sender, TTS.TrackedDataSerializeEventArgs e)
+    {
+    
+        TTS.WheelSpeedMessage m = new TTS.WheelSpeedMessage(wheelSpeed);
+        e.messages.Add(m);
+  
     }
 
     public void BuildTrain()
@@ -45,6 +90,16 @@ public class TTSTrainController : MonoBehaviour
     private void StartTrain(object sender, EventArgs e)
     {
         gameStarted = true;
+
+        WheelAnimators = GameObject.FindGameObjectsWithTag("WheelAnimator");
+
+        wheelSpeed = speed / 5.45f;
+        prevWheelSpeed = speed;
+        foreach (GameObject wAnim in WheelAnimators)
+        {
+            wAnim.GetComponent<Animator>().SetFloat("WheelSpeed", wheelSpeed);
+        }
+        
     }
 
     private void FixedUpdate()
@@ -64,6 +119,18 @@ public class TTSTrainController : MonoBehaviour
             speed += accel * Time.fixedDeltaTime;
             Vector3 forward = -transform.forward;
             transform.Translate(forward * speed * Time.fixedDeltaTime);
+
+             wheelSpeed = speed / 5.45f;
+
+            foreach (GameObject wAnim in WheelAnimators)
+            {
+                wAnim.GetComponent<Animator>().SetFloat("WheelSpeed", wheelSpeed);
+            }
+
+            if(Mathf.Abs(prevWheelSpeed - wheelSpeed) > .05f)
+            {
+                GetComponent<TTSID>().trackedDataAvailable = true;
+            }
         }
     }
 
