@@ -118,6 +118,7 @@ MonoBehaviour:
   foodLevel: 100
   defaultColor: {r: 0, g: 0, b: 0, a: 0}
   lastSyncPostion: {x: 0, y: 0, z: 0}
+  currentTrainCar: {fileID: 0}
 --- !u!54 &-2884879588505320950
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -159,6 +160,7 @@ GameObject:
   - component: {fileID: 7684410372800878977}
   - component: {fileID: 2090504619183941403}
   - component: {fileID: 8931010085249914111}
+  - component: {fileID: 2527653028069316279}
   m_Layer: 0
   m_Name: InteractionVolume
   m_TagString: Untagged
@@ -205,7 +207,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a318f6bb06043d946b3884de4ef0052c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isServer: 0
   potentialPickups: []
+--- !u!114 &2527653028069316279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7170009624961181869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dac8a159ca5aa2848bc1b8d7e0ee6e11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isServer: 0
+  potentialInteracts: []
 --- !u!1001 &874207287950726962
 PrefabInstance:
   m_ObjectHideFlags: 0

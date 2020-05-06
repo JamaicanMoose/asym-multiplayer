@@ -63,7 +63,10 @@ public class TTSNetworkedPlayer : MonoBehaviour
     private Vector3 lastMoveVector;
 
     private PickupVolume pVolume;
+    private InteractVolume iVolume;
+
     private PickupGeneric heldPickup = null;
+    private InteractGeneric interactObj = null;
 
     public Transform currentTrainCar;
 
@@ -79,6 +82,7 @@ public class TTSNetworkedPlayer : MonoBehaviour
             lastMoveVector = Vector3.zero;
             rb = GetComponent<Rigidbody>();
             pVolume = GetComponentInChildren<PickupVolume>();
+            iVolume = GetComponentInChildren<InteractVolume>();
             GetComponent<TTSID>().trackedDataSerialize += TrackedDataHandler;
             defaultColor = GetComponentInChildren<MeshRenderer>().material.color;
         }
@@ -134,6 +138,14 @@ public class TTSNetworkedPlayer : MonoBehaviour
             {
                 heldPickup.Interact();
                 heldPickup = null;
+            }
+            else
+            {
+                if(iVolume.potentialInteracts.Count > 0)
+                {
+                    interactObj = iVolume.potentialInteracts[0].GetComponent<InteractGeneric>();
+                    interactObj.StartUse(transform);
+                }
             }
         }
 

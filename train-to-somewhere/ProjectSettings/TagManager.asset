@@ -11,6 +11,8 @@ TagManager:
   - Pickup
   - Train
   - WheelAnimator
+  - Ice
+  - Interact
   layers:
   - Default
   - TransparentFX

@@ -42,6 +42,7 @@ public class TTSTrainController : MonoBehaviour
     List<string> trainCars = new List<string>()
         {
             "TrainCar",
+            "KitchenCar",
             "TrainCar"
         };
 
