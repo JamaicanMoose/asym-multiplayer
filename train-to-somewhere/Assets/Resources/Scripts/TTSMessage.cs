@@ -175,6 +175,7 @@ namespace TTS
                 .GetComponent<TTSIDMap>().getTransform(ttsid);
             target.localPosition = position;
             target.localRotation = rotation;
+          
         }
 
         public override void Deserialize(DeserializeEvent e)

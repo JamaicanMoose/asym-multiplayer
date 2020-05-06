@@ -67,11 +67,12 @@ public class TTSID : MonoBehaviour
 
     private void Start()
     {
-        Init();
+       
         isServer = GameObject.FindGameObjectWithTag("Network")
             .GetComponent<XmlUnityServer>() != null;
         if (isServer)
         {
+            Init();
             TTS.ObjectSync os = GameObject.FindGameObjectWithTag("Network")
                 .GetComponent<TTS.ObjectSync>();
             movementBuffer = os.movementBuffer;

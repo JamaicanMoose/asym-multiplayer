@@ -68,7 +68,6 @@ public class TTSNetworkedPlayer : MonoBehaviour
     private PickupGeneric heldPickup = null;
     private InteractGeneric interactObj = null;
 
-    public Transform currentTrainCar;
 
     bool isServer;
 
@@ -86,7 +85,11 @@ public class TTSNetworkedPlayer : MonoBehaviour
             GetComponent<TTSID>().trackedDataSerialize += TrackedDataHandler;
             defaultColor = GetComponentInChildren<MeshRenderer>().material.color;
         }
-        UpdateCurrentCar();
+        else
+        {
+            Destroy(GetComponent<Rigidbody>());
+        }
+
     }
 
     // Update is called once per frame
@@ -97,19 +100,21 @@ public class TTSNetworkedPlayer : MonoBehaviour
             HandleInteractions();
             HandleMovement();
         }
-        UpdateCurrentCar();
+      
     }
 
-    void UpdateCurrentCar()
+    public Transform GetCurrentCar()
     {
         Ray down = new Ray(transform.position, Vector3.down);
         RaycastHit hit;
         if (Physics.Raycast(down, out hit))
             if (hit.collider.name == "Floor")
             {
-                currentTrainCar = hit.collider.transform.parent.parent;
-                //transform.parent = currentTrainCar;
+                Transform currentTrainCar = hit.collider.transform.parent.parent;
+                return currentTrainCar;
             }
+
+        return null;
     }
 
     void TrackedDataHandler(object sender, TTS.TrackedDataSerializeEventArgs e)
@@ -146,7 +151,7 @@ public class TTSNetworkedPlayer : MonoBehaviour
                     interactObj = iVolume.potentialInteracts[0].GetComponent<InteractGeneric>();
                     interactObj.StartUse(transform);
                     iVolume.interactingObj = interactObj;
-                }
+                 }
             }
         }
 
