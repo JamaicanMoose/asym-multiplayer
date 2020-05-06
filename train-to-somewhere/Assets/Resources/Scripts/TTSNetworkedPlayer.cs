@@ -167,8 +167,7 @@ public class TTSNetworkedPlayer : MonoBehaviour
             else
             {
                 if (pVolume.potentialPickups.Count > 0)
-                {
-                    Debug.Log("Found pickup");
+                {                 
                     heldPickup = pVolume.potentialPickups[0].GetComponent<PickupGeneric>();
                     heldPickup.Hold(transform);
                 }

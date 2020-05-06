@@ -32,10 +32,11 @@ public class CounterInteract : InteractGeneric
         
         GameObject food = Instantiate(foods[Random.Range(0, foods.Length)], gameObject.transform.position + new Vector3(0, 1.55f, 0), Quaternion.identity);
         food.transform.parent = GameObject.FindGameObjectWithTag("Train").transform;
-
+        food.GetComponent<TTSID>().Init();
         TTS.GameObjectInitMessage initMessage = new TTS.GameObjectInitMessage(food);
         TTS.ObjectSync os = GameObject.FindGameObjectWithTag("Network").GetComponent<TTS.ObjectSync>();
         os.initBuffer.Add(initMessage);
+        inUse = false;
     }
 
     IEnumerator useTimer()
