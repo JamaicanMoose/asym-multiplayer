@@ -52,7 +52,10 @@ public class InteractVolume : MonoBehaviour
         {
             if (other.GetComponent<InteractGeneric>() == interactingObj)
             {
-                interactingObj.AbortUse();
+                if (interactingObj.inUse)
+                {
+                    interactingObj.AbortUse();
+                }
             }
             else if (potentialInteracts.Contains(other.transform))
             {

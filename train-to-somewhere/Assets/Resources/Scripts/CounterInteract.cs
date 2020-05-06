@@ -47,6 +47,7 @@ public class CounterInteract : InteractGeneric
             AfterUse();
             inUse = false;
         }
+        abortedUse = false;
     }
 
     

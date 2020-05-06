@@ -700,6 +700,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1836245421930768685, guid: fcfa609dd42be094ea7010dd3003a5e3,
         type: 3}
+    - target: {fileID: 6140572907259041794, guid: 04ce1c753a622d24c8faede89733ada2,
+        type: 3}
+      propertyPath: useTime
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6608272101856372296, guid: 04ce1c753a622d24c8faede89733ada2,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -873,6 +878,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1836245421930768685, guid: fcfa609dd42be094ea7010dd3003a5e3,
         type: 3}
+    - target: {fileID: 6140572907259041794, guid: 04ce1c753a622d24c8faede89733ada2,
+        type: 3}
+      propertyPath: useTime
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6608272101856372296, guid: 04ce1c753a622d24c8faede89733ada2,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1046,6 +1056,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1836245421930768685, guid: fcfa609dd42be094ea7010dd3003a5e3,
         type: 3}
+    - target: {fileID: 6140572907259041794, guid: 04ce1c753a622d24c8faede89733ada2,
+        type: 3}
+      propertyPath: useTime
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6608272101856372296, guid: 04ce1c753a622d24c8faede89733ada2,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1144,6 +1159,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1836245421930768685, guid: fcfa609dd42be094ea7010dd3003a5e3,
         type: 3}
+    - target: {fileID: 6140572907259041794, guid: 04ce1c753a622d24c8faede89733ada2,
+        type: 3}
+      propertyPath: useTime
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6608272101856372296, guid: 04ce1c753a622d24c8faede89733ada2,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1354,6 +1374,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: FrontWheels
       objectReference: {fileID: 0}
+    - target: {fileID: 3136014191085187255, guid: fb6da261c1f8fc04abbbaf8c7db66d41,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fb6da261c1f8fc04abbbaf8c7db66d41, type: 3}
 --- !u!4 &4989291394722227338 stripped
@@ -1392,6 +1417,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1836245421930768685, guid: fcfa609dd42be094ea7010dd3003a5e3,
         type: 3}
+    - target: {fileID: 6140572907259041794, guid: 04ce1c753a622d24c8faede89733ada2,
+        type: 3}
+      propertyPath: useTime
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6608272101856372296, guid: 04ce1c753a622d24c8faede89733ada2,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1565,6 +1595,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1836245421930768685, guid: fcfa609dd42be094ea7010dd3003a5e3,
         type: 3}
+    - target: {fileID: 6140572907259041794, guid: 04ce1c753a622d24c8faede89733ada2,
+        type: 3}
+      propertyPath: useTime
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6608272101856372296, guid: 04ce1c753a622d24c8faede89733ada2,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1738,6 +1773,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1836245421930768685, guid: fcfa609dd42be094ea7010dd3003a5e3,
         type: 3}
+    - target: {fileID: 6140572907259041794, guid: 04ce1c753a622d24c8faede89733ada2,
+        type: 3}
+      propertyPath: useTime
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6608272101856372296, guid: 04ce1c753a622d24c8faede89733ada2,
         type: 3}
       propertyPath: m_LocalPosition.x
