@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CounterInteract : InteractGeneric
 {
+    public GameObject[] foods;
+
     public override void StartUse(Transform interactingTransform)
     {
         if(inUse)
@@ -27,6 +29,13 @@ public class CounterInteract : InteractGeneric
     {
         //spawn food object here
         Debug.Log("Spawn food object");
+        
+        GameObject food = Instantiate(foods[Random.Range(0, foods.Length)], gameObject.transform.position + new Vector3(0, 1.55f, 0), Quaternion.identity);
+        food.transform.parent = GameObject.FindGameObjectWithTag("Train").transform;
+
+        TTS.GameObjectInitMessage initMessage = new TTS.GameObjectInitMessage(food);
+        TTS.ObjectSync os = GameObject.FindGameObjectWithTag("Network").GetComponent<TTS.ObjectSync>();
+        os.initBuffer.Add(initMessage);
     }
 
     IEnumerator useTimer()

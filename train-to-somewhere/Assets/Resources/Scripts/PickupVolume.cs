@@ -19,6 +19,7 @@ public class PickupVolume : MonoBehaviour
         if (!isServer) return;
         if (other.CompareTag("Pickup"))
         {
+            Debug.Log(other.name);
             PickupGeneric pUp = other.GetComponent<PickupGeneric>();
             if(pUp.isHeld == false)
             {

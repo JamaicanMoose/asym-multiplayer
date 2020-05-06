@@ -108,7 +108,7 @@ public class TTSNetworkedPlayer : MonoBehaviour
             if (hit.collider.name == "Floor")
             {
                 currentTrainCar = hit.collider.transform.parent.parent;
-                transform.parent = currentTrainCar;
+                //transform.parent = currentTrainCar;
             }
     }
 
@@ -145,6 +145,7 @@ public class TTSNetworkedPlayer : MonoBehaviour
                 {
                     interactObj = iVolume.potentialInteracts[0].GetComponent<InteractGeneric>();
                     interactObj.StartUse(transform);
+                    iVolume.interactingObj = interactObj;
                 }
             }
         }
@@ -162,6 +163,7 @@ public class TTSNetworkedPlayer : MonoBehaviour
             {
                 if (pVolume.potentialPickups.Count > 0)
                 {
+                    Debug.Log("Found pickup");
                     heldPickup = pVolume.potentialPickups[0].GetComponent<PickupGeneric>();
                     heldPickup.Hold(transform);
                 }

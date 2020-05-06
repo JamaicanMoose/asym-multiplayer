@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7917632084773465438}
   - component: {fileID: 6947849662196216682}
   - component: {fileID: 1557764308480286593}
+  - component: {fileID: 3572106303048414972}
   m_Layer: 0
   m_Name: SteakPrefab
   m_TagString: Pickup
@@ -114,6 +115,32 @@ MonoBehaviour:
   holdingTransform: {fileID: 0}
   pickupTag: 
   foodValue: 0
+--- !u!65 &3572106303048414972
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1836245421930768685}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!65 &8652534856042111149
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4425600380207450403}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 91.956635, y: 100.2411, z: 21.313501}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &5641612920289103914
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -188,6 +215,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 73b94e88b44a0f74682701a85f656ed4, type: 3}
+--- !u!1 &4425600380207450403 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: 73b94e88b44a0f74682701a85f656ed4,
+    type: 3}
+  m_PrefabInstance: {fileID: 5641612920289103914}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &806634449122868016 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 73b94e88b44a0f74682701a85f656ed4,

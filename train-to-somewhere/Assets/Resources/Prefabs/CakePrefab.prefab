@@ -13,19 +13,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 89.39747, y: 51.003822, z: 89.397484}
   m_Center: {x: 0, y: -3.3270712, z: 0}
---- !u!65 &8946700986309553775
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5937195591177495503}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 100.163086, y: 100.163086, z: 94.76289}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &9053999040076754512
 GameObject:
   m_ObjectHideFlags: 0
@@ -40,6 +27,7 @@ GameObject:
   - component: {fileID: 2874657531161980259}
   - component: {fileID: 5513208029478888204}
   - component: {fileID: 1738503219761014181}
+  - component: {fileID: 1421023949021858823}
   m_Layer: 0
   m_Name: CakePrefab
   m_TagString: Pickup
@@ -140,6 +128,19 @@ MonoBehaviour:
   holdingTransform: {fileID: 0}
   pickupTag: 
   foodValue: 0
+--- !u!65 &1421023949021858823
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9053999040076754512}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &2397264070587267782
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -225,12 +226,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6689ae27ed2ef774ea8e832f279c6ae6, type: 3}
---- !u!1 &5937195591177495503 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: 6689ae27ed2ef774ea8e832f279c6ae6,
-    type: 3}
-  m_PrefabInstance: {fileID: 2397264070587267782}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7223349623038972380 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 6689ae27ed2ef774ea8e832f279c6ae6,
