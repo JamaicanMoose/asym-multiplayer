@@ -80,20 +80,24 @@ public class WheelBreak : MonoBehaviour
 
     public void Break(bool front)
     {
-        Transform target;
         if (front)
         {
             frontBroken = true;
-            target = transform.Find("FrontWheels");
         } else
         {
             backBroken = true;
-            target = transform.Find("BackWheels");
         }
 
         // Spawn interactable w/ particles
         GameObject sparks = Instantiate(sparkPrefab, GameObject.FindGameObjectWithTag("Train").transform);
         sparks.transform.position = transform.position + sparks.transform.localPosition;
+        if (!front)
+        {
+            sparks.transform.position += new Vector3(0, 0, 7.3f);
+        }
+        WheelInteract wi = sparks.GetComponent<WheelInteract>();
+        wi.car = gameObject.GetComponent<WheelBreak>();
+        wi.isFront = front;
 
         sparks.GetComponent<TTSID>().Init();
         TTS.GameObjectInitMessage initMessage = new TTS.GameObjectInitMessage(sparks);
@@ -102,26 +106,7 @@ public class WheelBreak : MonoBehaviour
 
         SyncState();
     }
-
-    public void Fix(bool front)
-    {
-        Transform target;
-        if (front)
-        {
-            frontBroken = false;
-            target = transform.Find("FrontWheels");
-        }
-        else
-        {
-            backBroken = false;
-            target = transform.Find("BackWheels");
-        }
-
-        // Send destroy message and then destroy the object
-        target.Find("Particles_Break").GetComponent<TTSID>().Remove();
-
-        SyncState();
-    }
+    
 
     void SlowTrain()
     {
@@ -129,6 +114,10 @@ public class WheelBreak : MonoBehaviour
 
         if (frontBroken) acc -= accelerationDrop;
         if (backBroken) acc -= accelerationDrop;
+        if (acc < 0.0f)
+        {
+            Debug.Log("Slow by " + acc.ToString());
+        }
 
         tc.ChangeAcceleration(acc);
     }
