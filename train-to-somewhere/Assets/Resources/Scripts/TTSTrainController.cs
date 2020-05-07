@@ -114,14 +114,14 @@ public class TTSTrainController : MonoBehaviour
                 trainEngineAcceleration = 0;
 
             // Every physics timestep the train moves according to the train engine's output
-            float accel = 0f;
-            if (trainEngineAcceleration > frictionAcceleration)
-                accel = Math.Sign(trainEngineAcceleration) * (Math.Abs(trainEngineAcceleration) - frictionAcceleration);
-            speed += accel * Time.fixedDeltaTime;
+            speed += trainEngineAcceleration * Time.fixedDeltaTime;
+            float frictionDeltaSpeed = Math.Min(Math.Abs(speed), frictionAcceleration);
+            speed += -Math.Sign(speed) * frictionDeltaSpeed;
+
             Vector3 forward = -transform.forward;
             transform.Translate(forward * speed * Time.fixedDeltaTime);
 
-             wheelSpeed = speed / 5.45f;
+            wheelSpeed = speed / 5.45f;
 
             foreach (GameObject wAnim in WheelAnimators)
             {
