@@ -5,10 +5,14 @@ TagManager:
   serializedVersion: 2
   tags:
   - CameraAnchor
-  - NetworkManager
   - LocalPlayer
-  - Coal
+  - StartMenu
+  - Network
+  - Pickup
   - Train
+  - WheelAnimator
+  - Ice
+  - Interact
   layers:
   - Default
   - TransparentFX
@@ -18,7 +22,7 @@ TagManager:
   - UI
   - 
   - 
-  - InteractableLayer
+  - 
   - 
   - 
   - 
