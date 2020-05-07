@@ -405,13 +405,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2214407456483217486}
-  m_LocalRotation: {x: 0.0671896, y: 0.761848, z: -0.08007344, w: 0.63926643}
-  m_LocalPosition: {x: -16.64, y: 9.37, z: 4.65}
+  m_LocalRotation: {x: 0.15823793, y: 0.7170275, z: -0.16010055, w: 0.65969706}
+  m_LocalPosition: {x: -20, y: 10, z: 1.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3556112153225307502}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 26, y: 95, z: 1}
 --- !u!1 &2597154625640123002
 GameObject:
   m_ObjectHideFlags: 0
@@ -519,7 +519,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bf0e24c663491c4ca4c6447977b7b41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabID: ChanginerCar
+  prefabID: ChangingCar
 --- !u!114 &2749172716974120854
 MonoBehaviour:
   m_ObjectHideFlags: 0

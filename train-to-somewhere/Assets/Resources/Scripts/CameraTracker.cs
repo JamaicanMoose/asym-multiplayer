@@ -15,8 +15,10 @@ public class CameraTracker : MonoBehaviour
 
     Transform localPlayer = null;
 
+
     private void Awake()
     {
+
         GameObject.FindGameObjectWithTag("Network")
             .GetComponent<TTSGeneric>().GameStarted += GameStarted;
     }
