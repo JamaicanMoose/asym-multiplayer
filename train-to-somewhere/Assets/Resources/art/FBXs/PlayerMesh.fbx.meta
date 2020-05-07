@@ -51,7 +51,37 @@ ModelImporter:
   - first:
       74: 1945247135317139222
     second: jobCannonStand
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: playerBody_m
+    second: {fileID: 2100000, guid: c2380499201d6e94bae8ed57b74cea21, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: playerFace_m
+    second: {fileID: 2100000, guid: a55e66de0da81d149853dded327bc951, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: playerHair_m
+    second: {fileID: 2100000, guid: e10010862cc94ae49890eba9ca37453c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: playerHats_m
+    second: {fileID: 2100000, guid: c3b52bffc83cc414d84f480b3c450a4d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: playerProps_m
+    second: {fileID: 2100000, guid: e2633affb0c4ce54895c9b72165b467b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: playerSkin_m
+    second: {fileID: 2100000, guid: 4983917595ca9d949a31ec8eff3b6994, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
