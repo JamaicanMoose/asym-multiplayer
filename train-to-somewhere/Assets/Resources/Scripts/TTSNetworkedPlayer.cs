@@ -8,27 +8,31 @@ namespace TTS {
     public class NetworkedPlayerMessage : TDataMessagePart
     {
         float foodLevel;
-
+        string jobTag;
         public NetworkedPlayerMessage() { }
 
-        public NetworkedPlayerMessage(float foodLevel)
+        public NetworkedPlayerMessage(float foodLevel, string jobTag)
         {
             this.foodLevel = foodLevel;
+            this.jobTag = jobTag;
         }
 
         public override void Serialize(SerializeEvent e)
         {
             e.Writer.Write(foodLevel);
+            e.Writer.Write(jobTag);
         }
 
         public override void Deserialize(DeserializeEvent e)
         {
             foodLevel = e.Reader.ReadSingle();
+            jobTag = e.Reader.ReadString();
         }
 
         public override void Load(Transform target)
         {
             target.GetComponent<TTSNetworkedPlayer>().foodLevel = foodLevel;
+            target.GetComponent<TTSNetworkedPlayer>().SetJob(jobTag);
         }
     }
 }
@@ -68,6 +72,13 @@ public class TTSNetworkedPlayer : MonoBehaviour
     private PickupGeneric heldPickup = null;
     private InteractGeneric interactObj = null;
 
+    public GameObject hatParent;
+    public GameObject toolParent;
+
+    public string JobTag = "Engineer";
+
+    List<GameObject> hats = new List<GameObject>();
+    List<GameObject> tools = new List<GameObject>();
 
     bool isServer;
 
@@ -88,6 +99,21 @@ public class TTSNetworkedPlayer : MonoBehaviour
         else
         {
             Destroy(GetComponent<Rigidbody>());
+        }
+
+        for(int i = 0; i < hatParent.transform.childCount; i++)
+        {
+            if(!hatParent.transform.GetChild(i).CompareTag("Hair"))
+            {
+                hats.Add(hatParent.transform.GetChild(i).gameObject);
+            }
+        }
+
+        for (int i = 0; i < toolParent.transform.childCount; i++)
+        {
+           
+            tools.Add(toolParent.transform.GetChild(i).gameObject);
+            
         }
 
     }
@@ -121,7 +147,7 @@ public class TTSNetworkedPlayer : MonoBehaviour
     {
         if (trackedDataAvailable)
         {
-            TTS.NetworkedPlayerMessage m = new TTS.NetworkedPlayerMessage(foodLevel);
+            TTS.NetworkedPlayerMessage m = new TTS.NetworkedPlayerMessage(foodLevel, JobTag);
             e.messages.Add(m);
             trackedDataAvailable = false;
         }
@@ -253,6 +279,38 @@ public class TTSNetworkedPlayer : MonoBehaviour
         {
             GetComponentInChildren<MeshRenderer>().material.color = defaultColor;
         }
+    }
+
+    public void SetJob(string jobTag)
+    {
+
+        JobTag = jobTag;
+        foreach(GameObject hat in hats)
+        {
+            if(hat.CompareTag(jobTag))
+            {
+                hat.SetActive(true);
+            }
+            else
+            {
+                hat.SetActive(false);
+            }
+        }
+
+        foreach(GameObject tool in tools)
+        {
+            if(tool.CompareTag(jobTag))
+            {
+                tool.SetActive(true);
+            }
+            else
+            {
+                tool.SetActive(false);
+            }
+        }
+
+        trackedDataAvailable = true;
+        GetComponent<TTSID>().trackedDataAvailable = true;
     }
 
 

@@ -47,7 +47,7 @@ GameObject:
   - component: {fileID: -494589026277298688}
   m_Layer: 0
   m_Name: NetworkPlayer
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -118,6 +118,8 @@ MonoBehaviour:
   foodLevel: 100
   defaultColor: {r: 0, g: 0, b: 0, a: 0}
   lastSyncPostion: {x: 0, y: 0, z: 0}
+  hatParent: {fileID: 2176716933797074171}
+  toolParent: {fileID: 8062149599103496412}
 --- !u!54 &-2884879588505320950
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -254,20 +256,40 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8949056545565057376, guid: 72e7f8062f1f0d54388c165659975ab3,
+        type: 3}
+      propertyPath: m_TagString
+      value: Hair
+      objectReference: {fileID: 0}
     - target: {fileID: -7418887159873548316, guid: 72e7f8062f1f0d54388c165659975ab3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7418887159873548316, guid: 72e7f8062f1f0d54388c165659975ab3,
+        type: 3}
+      propertyPath: m_TagString
+      value: Chef
+      objectReference: {fileID: 0}
+    - target: {fileID: -4454921161829576567, guid: 72e7f8062f1f0d54388c165659975ab3,
         type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -4454921161829576567, guid: 72e7f8062f1f0d54388c165659975ab3,
         type: 3}
-      propertyPath: m_IsActive
-      value: 1
+      propertyPath: m_TagString
+      value: Engineer
       objectReference: {fileID: 0}
     - target: {fileID: -4383625008350586456, guid: 72e7f8062f1f0d54388c165659975ab3,
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4383625008350586456, guid: 72e7f8062f1f0d54388c165659975ab3,
+        type: 3}
+      propertyPath: m_TagString
+      value: Chef
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 72e7f8062f1f0d54388c165659975ab3,
         type: 3}
@@ -364,10 +386,25 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1679983984185642171, guid: 72e7f8062f1f0d54388c165659975ab3,
+        type: 3}
+      propertyPath: m_TagString
+      value: Conductor
+      objectReference: {fileID: 0}
     - target: {fileID: 1875749998412205871, guid: 72e7f8062f1f0d54388c165659975ab3,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1875749998412205871, guid: 72e7f8062f1f0d54388c165659975ab3,
+        type: 3}
+      propertyPath: m_TagString
+      value: Hair
+      objectReference: {fileID: 0}
+    - target: {fileID: 1875749998412205871, guid: 72e7f8062f1f0d54388c165659975ab3,
+        type: 3}
+      propertyPath: m_Name
+      value: Player_head1
       objectReference: {fileID: 0}
     - target: {fileID: 7039160453233219115, guid: 72e7f8062f1f0d54388c165659975ab3,
         type: 3}
@@ -379,20 +416,60 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7428724777576011526, guid: 72e7f8062f1f0d54388c165659975ab3,
+        type: 3}
+      propertyPath: m_Name
+      value: prop_Wrench
+      objectReference: {fileID: 0}
+    - target: {fileID: 7428724777576011526, guid: 72e7f8062f1f0d54388c165659975ab3,
+        type: 3}
+      propertyPath: m_TagString
+      value: Engineer
+      objectReference: {fileID: 0}
     - target: {fileID: 7519010765215643545, guid: 72e7f8062f1f0d54388c165659975ab3,
         type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7519010765215643545, guid: 72e7f8062f1f0d54388c165659975ab3,
+        type: 3}
+      propertyPath: m_TagString
+      value: Hair
+      objectReference: {fileID: 0}
+    - target: {fileID: 7519010765215643545, guid: 72e7f8062f1f0d54388c165659975ab3,
+        type: 3}
+      propertyPath: m_Name
+      value: Player_head2
       objectReference: {fileID: 0}
     - target: {fileID: 7555709344509756922, guid: 72e7f8062f1f0d54388c165659975ab3,
         type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7555709344509756922, guid: 72e7f8062f1f0d54388c165659975ab3,
+        type: 3}
+      propertyPath: m_Name
+      value: prop_Shovel
+      objectReference: {fileID: 0}
+    - target: {fileID: 7555709344509756922, guid: 72e7f8062f1f0d54388c165659975ab3,
+        type: 3}
+      propertyPath: m_TagString
+      value: Conductor
+      objectReference: {fileID: 0}
     - target: {fileID: 8774029195559202248, guid: 72e7f8062f1f0d54388c165659975ab3,
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8774029195559202248, guid: 72e7f8062f1f0d54388c165659975ab3,
+        type: 3}
+      propertyPath: m_TagString
+      value: Gunner
+      objectReference: {fileID: 0}
+    - target: {fileID: 8774029195559202248, guid: 72e7f8062f1f0d54388c165659975ab3,
+        type: 3}
+      propertyPath: m_Name
+      value: Player_capGunner
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 72e7f8062f1f0d54388c165659975ab3, type: 3}
@@ -405,6 +482,18 @@ GameObject:
 --- !u!4 &5285952912949115944 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 72e7f8062f1f0d54388c165659975ab3,
+    type: 3}
+  m_PrefabInstance: {fileID: 874207287950726962}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2176716933797074171 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -7920549296471997495, guid: 72e7f8062f1f0d54388c165659975ab3,
+    type: 3}
+  m_PrefabInstance: {fileID: 874207287950726962}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8062149599103496412 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -2034698228003018770, guid: 72e7f8062f1f0d54388c165659975ab3,
     type: 3}
   m_PrefabInstance: {fileID: 874207287950726962}
   m_PrefabAsset: {fileID: 0}
