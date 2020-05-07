@@ -10,7 +10,10 @@ public class WheelManager : MonoBehaviour
     
     private void Start()
     {
-        InvokeRepeating("BreakWheel", timeBeforeFirstBreak, breakTickRate);
+        if (GameObject.FindGameObjectWithTag("Network").GetComponent<DarkRift.Server.Unity.XmlUnityServer>() != null)
+        {
+            InvokeRepeating("BreakWheel", timeBeforeFirstBreak, breakTickRate);
+        }
     }
 
     void BreakWheel()
@@ -22,11 +25,17 @@ public class WheelManager : MonoBehaviour
             // Randomly break either the front or back wheel in some car, unless one is already broken
             int idx = Random.Range(0, wheels.Length);
             bool isFront;
-            
-            if (wheels[idx].frontBroken)
+            bool frontBroken = wheels[idx].frontBroken;
+            bool backBroken = wheels[idx].backBroken;
+
+            if (frontBroken && backBroken)
+            {
+                return;
+            }
+            else if (frontBroken)
             {
                 isFront = false;
-            } else if (wheels[idx].backBroken)
+            } else if (backBroken)
             {
                 isFront = true;
             } else
