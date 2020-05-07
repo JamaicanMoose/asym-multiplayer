@@ -1076,6 +1076,7 @@ GameObject:
   - component: {fileID: 1394759560}
   - component: {fileID: 1394759561}
   - component: {fileID: 1394759562}
+  - component: {fileID: 1394759563}
   m_Layer: 0
   m_Name: Train
   m_TagString: Train
@@ -1133,6 +1134,21 @@ MonoBehaviour:
   maxTrainEngineAcceleration: 7
   trainEngineCooldownRate: 0.2
   frictionAcceleration: 0.1
+--- !u!114 &1394759563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1394759559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c7cbed49fcb5f840a5b8e94c596c8d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  breakChance: 0.1
+  timeBeforeFirstBreak: 10
+  breakTickRate: 1.5
 --- !u!1001 &1427171688
 PrefabInstance:
   m_ObjectHideFlags: 0

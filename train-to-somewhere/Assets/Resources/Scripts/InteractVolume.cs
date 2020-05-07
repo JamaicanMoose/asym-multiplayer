@@ -22,7 +22,7 @@ public class InteractVolume : MonoBehaviour
         if (other.CompareTag("Interact"))
         {
             InteractGeneric inter = other.GetComponent<InteractGeneric>();
-            if (inter.inUse == false)
+            if (inter != null && inter.inUse == false)
             {
                 potentialInteracts.Add(other.transform);
             }
@@ -35,7 +35,7 @@ public class InteractVolume : MonoBehaviour
         if (other.CompareTag("Interact"))
         {
             InteractGeneric inter = other.GetComponent<InteractGeneric>();
-            if (inter.inUse == true)
+            if (inter != null && inter.inUse == true)
             {
                 if (potentialInteracts.Contains(other.transform))
                 {
@@ -52,7 +52,7 @@ public class InteractVolume : MonoBehaviour
         {
             if (other.GetComponent<InteractGeneric>() == interactingObj)
             {
-                if (interactingObj.inUse)
+                if (interactingObj != null && interactingObj.inUse)
                 {
                     interactingObj.AbortUse();
                 }

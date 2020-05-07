@@ -551,6 +551,7 @@ GameObject:
   - component: {fileID: 8017489785888029203}
   - component: {fileID: 4594870899963276157}
   - component: {fileID: 8664089332286226667}
+  - component: {fileID: 6230411678857705693}
   m_Layer: 0
   m_Name: TrainCar
   m_TagString: Untagged
@@ -606,6 +607,24 @@ MonoBehaviour:
   trackedDataAvailable: 0
   syncDistanceTrig: 0.05
   syncRotationTrig: 0.05
+--- !u!114 &6230411678857705693
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8514174286919291631}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8097699b3e441c647a08d6ce07b6fd3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slowTimestep: 2.5
+  accelerationDrop: 0.5
+  frontBroken: 0
+  backBroken: 0
+  sparkPrefab: {fileID: 272006060359467171, guid: 9d2f1f6fd99eb6948a5264df35a4f4c6,
+    type: 3}
 --- !u!1 &8795797313514034439
 GameObject:
   m_ObjectHideFlags: 0
