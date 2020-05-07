@@ -120,6 +120,8 @@ MonoBehaviour:
   lastSyncPostion: {x: 0, y: 0, z: 0}
   hatParent: {fileID: 2176716933797074171}
   toolParent: {fileID: 8062149599103496412}
+  JobTag: Engineer
+  playerAnim: {fileID: 8927423784394597470}
 --- !u!54 &-2884879588505320950
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -365,6 +367,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PlayerMesh
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 72e7f8062f1f0d54388c165659975ab3,
+        type: 3}
+      propertyPath: m_TagString
+      value: PlayerAnimator
       objectReference: {fileID: 0}
     - target: {fileID: 1050133098315589102, guid: 72e7f8062f1f0d54388c165659975ab3,
         type: 3}

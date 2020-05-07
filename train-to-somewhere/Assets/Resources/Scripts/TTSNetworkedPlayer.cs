@@ -77,6 +77,8 @@ public class TTSNetworkedPlayer : MonoBehaviour
 
     public string JobTag = "Engineer";
 
+    public Animator playerAnim;
+
     List<GameObject> hats = new List<GameObject>();
     List<GameObject> tools = new List<GameObject>();
 
@@ -125,6 +127,7 @@ public class TTSNetworkedPlayer : MonoBehaviour
         {
             HandleInteractions();
             HandleMovement();
+            HandleAnimations();
         }
       
     }
@@ -224,6 +227,9 @@ public class TTSNetworkedPlayer : MonoBehaviour
             {
                 GetComponentInChildren<MeshRenderer>().material.color = Color.red;
             }
+
+            
+
         }
         if (dashing)
         {
@@ -245,6 +251,55 @@ public class TTSNetworkedPlayer : MonoBehaviour
         {
             transform.forward = Vector3.RotateTowards(transform.forward, lastMoveVector, 10 * Time.deltaTime, 0.0f);
             Debug.DrawRay(transform.position, lastMoveVector, Color.red);
+        }
+    }
+
+    void HandleAnimations()
+    {
+        bool moving;
+        bool holding;
+
+        if (lastMoveVector != Vector3.zero)
+            moving = true;
+        else
+            moving = false;
+
+        if (heldPickup != null)
+            holding = true;
+        else
+            holding = false;
+
+        if (dashing)
+        {
+            playerAnim.SetFloat("WalkSpeed", dashSpeed);
+        }
+        else
+        {
+            playerAnim.SetFloat("WalkSpeed", 1);
+        }
+
+        if (moving)
+        {
+          
+            if (holding)
+            {
+                playerAnim.SetBool("Walk", false);
+                playerAnim.SetBool("WalkBox", true);                
+            }
+            else
+            {
+                playerAnim.SetBool("WalkBox", false);
+                playerAnim.SetBool("Walk", true);                
+            }
+       
+        }
+        else
+        {
+            playerAnim.SetBool("Walk", false);
+            playerAnim.SetBool("WalkBox", false);
+            playerAnim.SetFloat("WalkSpeed", 1);
+
+      
         }
     }
 
@@ -283,7 +338,8 @@ public class TTSNetworkedPlayer : MonoBehaviour
 
     public void SetJob(string jobTag)
     {
-
+    
+       
         JobTag = jobTag;
         foreach(GameObject hat in hats)
         {
