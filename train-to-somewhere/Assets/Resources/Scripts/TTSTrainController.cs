@@ -81,7 +81,6 @@ public class TTSTrainController : MonoBehaviour
         {
             GameObject carPrefab = Resources.Load($"Prefabs/{carPrefabID}", typeof(GameObject)) as GameObject;
             GameObject car = GameObject.Instantiate(carPrefab, previousCar.position + carOffset, Quaternion.identity, transform);
-          //  car.transform.position = previousCar.position + carOffset;
             car.GetComponent<TTSID>().Init();
 
             previousCar.Find("Colliders/Back").gameObject.SetActive(false);

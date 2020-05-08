@@ -281,22 +281,22 @@ public class TTSNetworkedPlayer : MonoBehaviour
         if (moving)
         {
 
-            playerAnim.SetWalk(true);
+            playerAnim.SetBool(1, true);
        
         }
         else
         {
-            playerAnim.SetWalk(false);      
-      
+            playerAnim.SetBool(1, false);
+
         }
 
         if(holding)
         {
-            playerAnim.SetisHolding(true);
+            playerAnim.SetBool(4, true);
         }
         else
         {
-            playerAnim.SetisHolding(false);
+            playerAnim.SetBool(4, false);
         }
     }
 

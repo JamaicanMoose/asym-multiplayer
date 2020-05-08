@@ -19,7 +19,7 @@ public class WheelInteract : InteractGeneric
         {
             if (interactingTransform.GetComponent<TTSNetworkedPlayer>().JobTag == "Engineer")
             {
-                interactingTransform.GetComponent<TTSPlayerAnimator>().SetFix(true);
+                interactingTransform.GetComponent<TTSPlayerAnimator>().SetBool(8, true);
                 inUse = true;
                 playerIV = interactingTransform.GetComponentInChildren<InteractVolume>();
                 StartCoroutine(useTimer());
@@ -30,14 +30,14 @@ public class WheelInteract : InteractGeneric
 
     public override void AbortUse()
     {
-        playerIV.GetComponentInParent<TTSPlayerAnimator>().SetFix(false);
+        playerIV.GetComponentInParent<TTSPlayerAnimator>().SetBool(8, false);
         abortedUse = true;
         inUse = false;
     }
 
     public override void AfterUse()
     {
-        playerIV.GetComponentInParent<TTSPlayerAnimator>().SetFix(false);
+        playerIV.GetComponentInParent<TTSPlayerAnimator>().SetBool(8, false);
 
         GetComponent<TTSID>().Remove();
 
