@@ -1,9 +1,14 @@
 fileFormatVersion: 2
-guid: 730d42a83be362740979b057fb80a50c
+guid: 786ff3e956f62234184caee6527abef2
 ModelImporter:
   serializedVersion: 19300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: CoalBox
+    second: {fileID: 2100000, guid: 39af99a95e717d041b57b9e30a828f43, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0

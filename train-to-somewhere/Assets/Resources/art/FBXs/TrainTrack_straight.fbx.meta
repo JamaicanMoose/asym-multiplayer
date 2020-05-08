@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 8b14c9e486bb8794fb4f4c4ac0d9d43f
+guid: b6f9b9ddb3896b947a32b183164789b6
 ModelImporter:
   serializedVersion: 19300
   internalIDToNameTable: []
@@ -7,8 +7,8 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: lambert1
-    second: {fileID: 2100000, guid: f2e84f9ca1ef426458ad3ec90ede0ed4, type: 2}
+      name: TrainTracks_m
+    second: {fileID: 2100000, guid: aec687304bbeda04493999f3f35e2240, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0

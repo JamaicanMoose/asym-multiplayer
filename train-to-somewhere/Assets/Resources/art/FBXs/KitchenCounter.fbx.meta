@@ -3,7 +3,17 @@ guid: 0a6bad79a90f24c49b8af4a39a3bdf2e
 ModelImporter:
   serializedVersion: 19300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: OvenCounter_m
+    second: {fileID: 2100000, guid: 7c02d9e27ebfbab409900a9f6ab0fb96, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert1
+    second: {fileID: 2100000, guid: aec687304bbeda04493999f3f35e2240, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0

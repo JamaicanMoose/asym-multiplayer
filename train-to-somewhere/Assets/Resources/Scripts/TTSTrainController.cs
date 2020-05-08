@@ -39,11 +39,13 @@ public class TTSTrainController : MonoBehaviour
 {
     bool gameStarted = false;
 
-    List<string> trainCars = new List<string>()
-        {
-            "TrainCar",
-            "KitchenCar",
-            "TrainCar"
+    List<string> trainCars = new List<string>(){
+		"TrainCar",
+		"KitchenCar",
+		"TrainCar",
+		"CoalCar",
+		"FridgeCar",
+		"TrainCar"
         };
 
     public float speed = 2f;

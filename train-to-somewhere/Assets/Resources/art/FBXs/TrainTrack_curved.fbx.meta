@@ -1,9 +1,14 @@
 fileFormatVersion: 2
-guid: a87b50dd458289b47a4414deb8539e95
+guid: 8eed24d58cbb8214db56a1781489607f
 ModelImporter:
   serializedVersion: 19300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: TrainTracks_m
+    second: {fileID: 2100000, guid: aec687304bbeda04493999f3f35e2240, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0

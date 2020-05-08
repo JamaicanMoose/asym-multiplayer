@@ -109,12 +109,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6354aac2a261c2a478f7d3cd0bc09a1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 2.5
+  moveSpeed: 5
   dashSpeed: 15
   dashTime: 0.3
   fire1ButtonDown: 0
   fire2ButtonDown: 0
-  dashFoodCost: 0.25
+  dashFoodCost: 0.05
   foodLevel: 100
   defaultColor: {r: 0, g: 0, b: 0, a: 0}
   lastSyncPostion: {x: 0, y: 0, z: 0}
