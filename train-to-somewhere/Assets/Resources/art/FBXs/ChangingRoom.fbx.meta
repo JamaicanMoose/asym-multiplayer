@@ -139,7 +139,7 @@ ModelImporter:
       name: DoorOpened
       takeName: Take 001
       internalID: 0
-      firstFrame: 30
+      firstFrame: 29
       lastFrame: 30
       wrapMode: 0
       orientationOffsetY: 0
@@ -163,7 +163,7 @@ ModelImporter:
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 1
+      additiveReferencePoseFrame: 29
     isReadable: 0
   meshes:
     lODScreenPercentages: []

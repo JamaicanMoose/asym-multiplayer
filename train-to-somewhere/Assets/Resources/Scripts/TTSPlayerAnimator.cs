@@ -42,6 +42,38 @@ namespace TTS
             target.GetComponent<TTSPlayerAnimator>().SetBool(Parameter, Value);
         }
     }
+
+    public class PlayerAnimTrigger : TDataMessagePart
+    {
+
+        ushort Parameter;
+ 
+
+        public PlayerAnimTrigger() { }
+
+        public PlayerAnimTrigger(ushort param)
+        {
+
+            this.Parameter = param;
+   
+
+        }
+
+        public override void Serialize(SerializeEvent e)
+        {
+            e.Writer.Write(Parameter);
+        }
+
+        public override void Deserialize(DeserializeEvent e)
+        {
+            Parameter = e.Reader.ReadUInt16();
+        }
+
+        public override void Load(Transform target)
+        {
+            target.GetComponent<TTSPlayerAnimator>().SetTrigger(Parameter);
+        }
+    }
 }
 public class TTSPlayerAnimator : MonoBehaviour
 {
@@ -56,7 +88,8 @@ public class TTSPlayerAnimator : MonoBehaviour
     
     private bool isServer = false;
 
-    private List<ushort> changes = new List<ushort>();
+    private List<ushort> animChanges = new List<ushort>();
+    private List<ushort> triggerChanges = new List<ushort>();
 
 
     private void Awake()
@@ -107,14 +140,21 @@ public class TTSPlayerAnimator : MonoBehaviour
     void TrackedDataHandler(object sender, TTS.TrackedDataSerializeEventArgs e)
     {
        
-            while(changes.Count > 0)
+            while(animChanges.Count > 0)
             {
-                TTS.PlayerAnimationMessage m = new TTS.PlayerAnimationMessage(changes[0], animParams[paramTags[changes[0]]]);
+                TTS.PlayerAnimationMessage m = new TTS.PlayerAnimationMessage(animChanges[0], animParams[paramTags[animChanges[0]]]);
                 e.messages.Add(m);
-                changes.RemoveAt(0);
-            }         
-          
-        
+                animChanges.RemoveAt(0);
+            }
+
+        while (triggerChanges.Count > 0)
+        {
+            TTS.PlayerAnimTrigger m = new TTS.PlayerAnimTrigger(triggerChanges[0]);
+            e.messages.Add(m);
+            triggerChanges.RemoveAt(0);
+        }
+
+
     }
 
 
@@ -127,9 +167,20 @@ public class TTSPlayerAnimator : MonoBehaviour
             
             if (isServer)
             {
-                changes.Add(paramTag);
+                animChanges.Add(paramTag);
                 GetComponent<TTSID>().trackedDataAvailable = true;           
             }
+        }
+    }
+
+    public void SetTrigger(ushort paramTag)
+    {
+        playerAnim.SetTrigger(paramTags[paramTag]);
+
+        if (isServer)
+        {
+            triggerChanges.Add(paramTag);
+            GetComponent<TTSID>().trackedDataAvailable = true;
         }
     }
     
