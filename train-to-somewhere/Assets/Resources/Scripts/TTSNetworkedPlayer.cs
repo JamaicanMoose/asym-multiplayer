@@ -274,7 +274,7 @@ public class TTSNetworkedPlayer : MonoBehaviour
 
         if (dashing)
         {
-            playerAnim.SetWalkSpeed(dashSpeed);
+            playerAnim.SetWalkSpeed(dashSpeed / 2);
         }
         else
         {

@@ -6,6 +6,8 @@ public class CoalBoxInteract : InteractGeneric
 {
     public GameObject coalPrefab;
 
+    private Transform interactTransform = null;
+
     public override void StartUse(Transform interactingTransform)
     {
         if (inUse)
@@ -15,6 +17,8 @@ public class CoalBoxInteract : InteractGeneric
         else
         {
             inUse = true;
+            interactTransform = interactingTransform;
+            interactTransform.GetComponent<TTSPlayerAnimator>().SetBool(9, true);
             StartCoroutine(useTimer());
         }
     }
@@ -23,13 +27,14 @@ public class CoalBoxInteract : InteractGeneric
     {
         abortedUse = true;
         inUse = false;
+        interactTransform.GetComponent<TTSPlayerAnimator>().SetBool(9, false);
     }
 
     public override void AfterUse()
     {
         //spawn food object here
         Debug.Log("Spawn coal");
-
+        interactTransform.GetComponent<TTSPlayerAnimator>().SetBool(9, false);
         GameObject coal = Instantiate(coalPrefab, gameObject.transform.position + new Vector3(0, 1.55f, 0), Quaternion.identity);
         coal.transform.parent = GameObject.FindGameObjectWithTag("Train").transform;
         coal.GetComponent<TTSID>().Init();

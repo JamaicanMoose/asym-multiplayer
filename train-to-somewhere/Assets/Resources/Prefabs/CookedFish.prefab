@@ -96,7 +96,9 @@ MonoBehaviour:
   isHeld: 0
   holdingTransform: {fileID: 0}
   pickupTag: 
-  foodValue: 0
+  requiresCostume: 0
+  costume: 
+  foodValue: 25
 --- !u!65 &2064847132056150228
 BoxCollider:
   m_ObjectHideFlags: 0
