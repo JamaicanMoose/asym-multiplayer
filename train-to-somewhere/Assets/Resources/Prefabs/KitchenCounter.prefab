@@ -126,4 +126,6 @@ MonoBehaviour:
   inUse: 0
   abortedUse: 0
   useTime: 0.5
+  requiresCostume: 1
+  costume: Chef
   foods: []

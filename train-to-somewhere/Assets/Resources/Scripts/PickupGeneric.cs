@@ -8,6 +8,9 @@ public abstract class PickupGeneric : MonoBehaviour
     public Transform holdingTransform = null;
     public string pickupTag;
 
+    public bool requiresCostume = false;
+    public string costume;
+
     public abstract void Hold(Transform holding);
 
     public abstract void Drop();

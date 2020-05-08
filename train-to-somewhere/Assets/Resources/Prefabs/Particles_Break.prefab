@@ -96,6 +96,8 @@ MonoBehaviour:
   inUse: 0
   abortedUse: 0
   useTime: 3.5
+  requiresCostume: 1
+  costume: Engineer
   car: {fileID: 0}
   isFront: 0
   playerIV: {fileID: 0}

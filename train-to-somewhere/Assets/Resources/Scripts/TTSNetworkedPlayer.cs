@@ -178,8 +178,11 @@ public class TTSNetworkedPlayer : MonoBehaviour
                 if(iVolume.potentialInteracts.Count > 0)
                 {
                     interactObj = iVolume.potentialInteracts[0].GetComponent<InteractGeneric>();
-                    interactObj.StartUse(transform);
-                    iVolume.interactingObj = interactObj;
+                    if (!interactObj.requiresCostume || interactObj.costume == JobTag)
+                    {
+                        interactObj.StartUse(transform);
+                        iVolume.interactingObj = interactObj;
+                    }
                  }
             }
         }
@@ -198,7 +201,10 @@ public class TTSNetworkedPlayer : MonoBehaviour
                 if (pVolume.potentialPickups.Count > 0)
                 {                 
                     heldPickup = pVolume.potentialPickups[0].GetComponent<PickupGeneric>();
-                    heldPickup.Hold(transform);
+                    if (!heldPickup.requiresCostume || heldPickup.costume == JobTag)
+                    {
+                        heldPickup.Hold(transform);
+                    }
                 }
             }
           

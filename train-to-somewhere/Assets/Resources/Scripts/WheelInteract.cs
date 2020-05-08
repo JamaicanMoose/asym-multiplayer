@@ -17,13 +17,10 @@ public class WheelInteract : InteractGeneric
         }
         else
         {
-            if (interactingTransform.GetComponent<TTSNetworkedPlayer>().JobTag == "Engineer")
-            {
-                interactingTransform.GetComponent<TTSPlayerAnimator>().SetBool(8, true);
-                inUse = true;
-                playerIV = interactingTransform.GetComponentInChildren<InteractVolume>();
-                StartCoroutine(useTimer());
-            }
+            interactingTransform.GetComponent<TTSPlayerAnimator>().SetBool(8, true);
+            inUse = true;
+            playerIV = interactingTransform.GetComponentInChildren<InteractVolume>();
+            StartCoroutine(useTimer());
 
         }
     }
@@ -48,7 +45,9 @@ public class WheelInteract : InteractGeneric
         {
             car.backBroken = false;
         }
-        
+
+        return;
+
         if (playerIV != null)
         {
             if (playerIV.potentialInteracts.Count > 0)
