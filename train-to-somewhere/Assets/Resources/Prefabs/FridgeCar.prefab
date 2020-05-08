@@ -283,7 +283,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bf0e24c663491c4ca4c6447977b7b41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabID: KitchenCar
+  prefabID: FridgeCar
 --- !u!114 &4275099385531531859
 MonoBehaviour:
   m_ObjectHideFlags: 0
