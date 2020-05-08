@@ -77,7 +77,7 @@ public class TTSNetworkedPlayer : MonoBehaviour
 
     public string JobTag = "Engineer";
 
-    public Animator playerAnim;
+    public TTSPlayerAnimator playerAnim;
 
     List<GameObject> hats = new List<GameObject>();
     List<GameObject> tools = new List<GameObject>();
@@ -271,35 +271,32 @@ public class TTSNetworkedPlayer : MonoBehaviour
 
         if (dashing)
         {
-            playerAnim.SetFloat("WalkSpeed", dashSpeed);
+            playerAnim.SetWalkSpeed(dashSpeed);
         }
         else
         {
-            playerAnim.SetFloat("WalkSpeed", 1);
+            playerAnim.SetWalkSpeed( 1);
         }
 
         if (moving)
         {
-          
-            if (holding)
-            {
-                playerAnim.SetBool("Walk", false);
-                playerAnim.SetBool("WalkBox", true);                
-            }
-            else
-            {
-                playerAnim.SetBool("WalkBox", false);
-                playerAnim.SetBool("Walk", true);                
-            }
+
+            playerAnim.SetWalk(true);
        
         }
         else
         {
-            playerAnim.SetBool("Walk", false);
-            playerAnim.SetBool("WalkBox", false);
-            playerAnim.SetFloat("WalkSpeed", 1);
-
+            playerAnim.SetWalk(false);      
       
+        }
+
+        if(holding)
+        {
+            playerAnim.SetisHolding(true);
+        }
+        else
+        {
+            playerAnim.SetisHolding(false);
         }
     }
 

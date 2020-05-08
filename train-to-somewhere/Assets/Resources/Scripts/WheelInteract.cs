@@ -17,20 +17,28 @@ public class WheelInteract : InteractGeneric
         }
         else
         {
-            inUse = true;
-            playerIV = interactingTransform.GetComponentInChildren<InteractVolume>();
-            StartCoroutine(useTimer());
+            if (interactingTransform.GetComponent<TTSNetworkedPlayer>().JobTag == "Engineer")
+            {
+                interactingTransform.GetComponent<TTSPlayerAnimator>().SetFix(true);
+                inUse = true;
+                playerIV = interactingTransform.GetComponentInChildren<InteractVolume>();
+                StartCoroutine(useTimer());
+            }
+
         }
     }
 
     public override void AbortUse()
     {
+        playerIV.GetComponentInParent<TTSPlayerAnimator>().SetFix(false);
         abortedUse = true;
         inUse = false;
     }
 
     public override void AfterUse()
     {
+        playerIV.GetComponentInParent<TTSPlayerAnimator>().SetFix(false);
+
         GetComponent<TTSID>().Remove();
 
         if (isFront)

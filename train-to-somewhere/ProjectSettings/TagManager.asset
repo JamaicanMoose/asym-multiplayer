@@ -18,6 +18,7 @@ TagManager:
   - Chef
   - Conductor
   - Engineer
+  - PlayerAnimator
   layers:
   - Default
   - TransparentFX

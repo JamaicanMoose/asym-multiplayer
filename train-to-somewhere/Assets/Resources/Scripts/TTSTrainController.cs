@@ -40,7 +40,7 @@ public class TTSTrainController : MonoBehaviour
     bool gameStarted = false;
 
     List<string> trainCars = new List<string>(){
-		"TrainCar",
+		"ChangingCar",
 		"KitchenCar",
 		"TrainCar",
 		"CoalCar",
@@ -80,8 +80,8 @@ public class TTSTrainController : MonoBehaviour
         foreach (string carPrefabID in trainCars)
         {
             GameObject carPrefab = Resources.Load($"Prefabs/{carPrefabID}", typeof(GameObject)) as GameObject;
-            GameObject car = GameObject.Instantiate(carPrefab, transform);
-            car.transform.position = previousCar.position + carOffset;
+            GameObject car = GameObject.Instantiate(carPrefab, previousCar.position + carOffset, Quaternion.identity, transform);
+          //  car.transform.position = previousCar.position + carOffset;
             car.GetComponent<TTSID>().Init();
 
             previousCar.Find("Colliders/Back").gameObject.SetActive(false);
