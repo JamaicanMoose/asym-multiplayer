@@ -13,6 +13,11 @@ TagManager:
   - WheelAnimator
   - Ice
   - Interact
+  - Hair
+  - Gunner
+  - Chef
+  - Conductor
+  - Engineer
   layers:
   - Default
   - TransparentFX

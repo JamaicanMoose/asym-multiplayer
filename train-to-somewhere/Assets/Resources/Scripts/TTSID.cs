@@ -94,6 +94,16 @@ public class TTSID : MonoBehaviour
         Destroy(gameObject);
     }
 
+    public void Reparent(ushort newParentID)
+    {
+        GameObject net = GameObject.FindGameObjectWithTag("Network");
+        if (net.GetComponent<XmlUnityServer>() != null)
+        {
+            transform.parent = net.GetComponent<TTSIDMap>().getTransform(newParentID);
+            net.GetComponent<TTS.ObjectSync>().trackedDataBuffer.Add(new TTS.GameObjectTDataMessage(transform, new List<TTS.TDataMessagePart>()));
+        }
+    }
+
     public bool ShouldSyncMovement()
     {
         return (Vector3.Distance(transform.localPosition, lastSyncedPosition) >= syncDistanceTrig) ||
