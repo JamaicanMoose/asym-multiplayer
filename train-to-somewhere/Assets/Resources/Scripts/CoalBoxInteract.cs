@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CoalBoxInteract : InteractGeneric
 {
-    public GameObject coalPrefab;
+    public GameObject[] coalPrefabs;
 
     private Transform interactTransform = null;
 
@@ -35,7 +35,7 @@ public class CoalBoxInteract : InteractGeneric
         //spawn food object here
         Debug.Log("Spawn coal");
         interactTransform.GetComponent<TTSPlayerAnimator>().SetBool(9, false);
-        GameObject coal = Instantiate(coalPrefab, gameObject.transform.position + new Vector3(0, 1.55f, 0), Quaternion.identity);
+        GameObject coal = Instantiate(coalPrefabs[Random.Range(0, coalPrefabs.Length)], gameObject.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
         coal.transform.parent = GameObject.FindGameObjectWithTag("Train").transform;
         coal.GetComponent<TTSID>().Init();
         TTS.GameObjectInitMessage initMessage = new TTS.GameObjectInitMessage(coal);

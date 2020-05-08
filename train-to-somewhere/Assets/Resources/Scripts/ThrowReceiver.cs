@@ -23,7 +23,7 @@ public class ThrowReceiver : MonoBehaviour
             if (p && p.pickupTag == te.thrownObjectPickupTag)
             {
                 te.onThrowReceive.Invoke();
-                Destroy(other.gameObject);
+                other.GetComponent<TTSID>().Remove();
                 return;
             }
         }
