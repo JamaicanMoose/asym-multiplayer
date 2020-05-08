@@ -49,4 +49,5 @@ public class PickupFood : PickupGeneric
         holdingTransform.GetComponent<TTSNetworkedPlayer>().EatFood(foodValue);
         GetComponent<TTSID>().Remove();
     }
+
 }

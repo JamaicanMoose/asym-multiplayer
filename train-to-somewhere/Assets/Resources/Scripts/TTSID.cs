@@ -63,6 +63,9 @@ public class TTSID : MonoBehaviour
     {
         if (id == 0)
             id = GameObject.FindGameObjectWithTag("Network").GetComponent<TTSIDCounter>().GenerateID();
+
+        lastSyncedPosition = transform.localPosition;
+        lastSyncedRotation = transform.localRotation;
     }
 
     private void Start()
@@ -79,6 +82,14 @@ public class TTSID : MonoBehaviour
             trackedDataBuffer = os.trackedDataBuffer;
             lastSyncedPosition = transform.localPosition;
             lastSyncedRotation = transform.localRotation;
+        }
+        else
+        {
+            Destroy(GetComponent<Rigidbody>());
+            if(GetComponent<BoxCollider>() != null)
+            {
+                Destroy(GetComponent<BoxCollider>());
+            }
         }
     }
 

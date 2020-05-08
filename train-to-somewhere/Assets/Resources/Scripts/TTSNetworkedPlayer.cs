@@ -98,10 +98,7 @@ public class TTSNetworkedPlayer : MonoBehaviour
             GetComponent<TTSID>().trackedDataSerialize += TrackedDataHandler;
             defaultColor = GetComponentInChildren<MeshRenderer>().material.color;
         }
-        else
-        {
-            Destroy(GetComponent<Rigidbody>());
-        }
+      
 
         for(int i = 0; i < hatParent.transform.childCount; i++)
         {

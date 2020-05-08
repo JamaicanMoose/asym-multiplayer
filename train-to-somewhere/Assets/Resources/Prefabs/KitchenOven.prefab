@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 1691084736460222515}
   - component: {fileID: 4444699620774555523}
   - component: {fileID: -8017733638881322606}
+  - component: {fileID: 8261256261361943413}
   m_Layer: 0
   m_Name: KitchenOven
-  m_TagString: Untagged
+  m_TagString: Interact
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -111,6 +112,21 @@ MonoBehaviour:
   trackedDataAvailable: 0
   syncDistanceTrig: 0.05
   syncRotationTrig: 0.05
+--- !u!114 &8261256261361943413
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1102016964279780591}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c04165b5e0b08541b50612da529a0ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inUse: 0
+  abortedUse: 0
+  useTime: 2
 --- !u!1001 &4274118915939576807
 PrefabInstance:
   m_ObjectHideFlags: 0

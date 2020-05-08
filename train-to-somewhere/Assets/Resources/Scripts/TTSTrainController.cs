@@ -40,11 +40,11 @@ public class TTSTrainController : MonoBehaviour
     bool gameStarted = false;
 
     List<string> trainCars = new List<string>(){
-		"ChangingCar",
-		"KitchenCar",
+        "ChangingCar",
+        "FridgeCar",
+        "KitchenCar",       
 		"TrainCar",
-		"CoalCar",
-		"FridgeCar",
+		"CoalCar",		
 		"TrainCar"
         };
 

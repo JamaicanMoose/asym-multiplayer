@@ -39,7 +39,10 @@ public class InteractVolume : MonoBehaviour
             {
                 if (potentialInteracts.Contains(other.transform))
                 {
-                    potentialInteracts.Remove(other.transform);
+                    while (potentialInteracts.Contains(other.transform))
+                    {
+                        potentialInteracts.Remove(other.transform);
+                    }
                 }
             }
         }
@@ -57,9 +60,14 @@ public class InteractVolume : MonoBehaviour
                     interactingObj.AbortUse();
                 }
             }
-            else if (potentialInteracts.Contains(other.transform))
+
+            if (potentialInteracts.Contains(other.transform))
             {
-                potentialInteracts.Remove(other.transform);
+                while(potentialInteracts.Contains(other.transform))
+                {
+                    potentialInteracts.Remove(other.transform);
+                }
+               
             }
         }
       

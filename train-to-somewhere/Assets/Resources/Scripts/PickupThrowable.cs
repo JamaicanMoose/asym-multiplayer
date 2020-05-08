@@ -11,7 +11,7 @@ public class PickupThrowable : PickupGeneric
     public float throwScale = 3;
 
 
-    bool isServer;
+    public bool isServer;
     private void Awake()
     {
         isServer = GameObject.FindGameObjectWithTag("Network")

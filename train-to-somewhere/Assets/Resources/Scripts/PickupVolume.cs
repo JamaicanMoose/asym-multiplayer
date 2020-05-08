@@ -38,7 +38,17 @@ public class PickupVolume : MonoBehaviour
             {
                 if (potentialPickups.Contains(other.transform))
                 {
-                    potentialPickups.Remove(other.transform);
+                    while (potentialPickups.Contains(other.transform))
+                    {
+                        potentialPickups.Remove(other.transform);
+                    }
+                }
+            }
+            else
+            {
+                if (!potentialPickups.Contains(other.transform))
+                {
+                    potentialPickups.Add(other.transform);
                 }
             }
         }
@@ -49,7 +59,11 @@ public class PickupVolume : MonoBehaviour
         if (!isServer) return;
         if (potentialPickups.Contains(other.transform))
         {
-            potentialPickups.Remove(other.transform);
+            while(potentialPickups.Contains(other.transform))
+            {
+                potentialPickups.Remove(other.transform);
+            }
+          
         }
     }
 }
