@@ -367,6 +367,8 @@ public class TTSNetworkedPlayer : MonoBehaviour
 
         trackedDataAvailable = true;
         GetComponent<TTSID>().trackedDataAvailable = true;
+
+        playerAnim.SetTrigger(12);
     }
 
 
