@@ -172,7 +172,8 @@ public class TTSNetworkedPlayer : MonoBehaviour
             }
             else
             {
-                if(iVolume.potentialInteracts.Count > 0)
+                iVolume.potentialInteracts.RemoveAll(item => item == null);
+                if (iVolume.potentialInteracts.Count > 0)
                 {
                     interactObj = iVolume.potentialInteracts[0].GetComponent<InteractGeneric>();
                     if (!interactObj.requiresCostume || interactObj.costume == JobTag)
@@ -195,8 +196,9 @@ public class TTSNetworkedPlayer : MonoBehaviour
             }
             else
             {
+                pVolume.potentialPickups.RemoveAll(item => item == null);
                 if (pVolume.potentialPickups.Count > 0)
-                {                 
+                {
                     heldPickup = pVolume.potentialPickups[0].GetComponent<PickupGeneric>();
                     if (!heldPickup.requiresCostume || heldPickup.costume == JobTag)
                     {
