@@ -55,7 +55,7 @@ public class TTSServerPlayerController : MonoBehaviour
         moveDirection.y = 0f;
         moveDirection.Normalize();
 
-        dashing = Input.GetKey(KeyCode.Space);
+        dashing = Input.GetButton("Jump");
 
         bool newInput = false;
 
