@@ -45,6 +45,8 @@ public class CostumeSwitch : MonoBehaviour
     Animator doorAnimator;
     bool occupied= false;
 
+    public GameObject changeSystem;
+
     private void Awake()
     {
         isServer = GameObject.FindGameObjectWithTag("Network")
@@ -78,6 +80,12 @@ public class CostumeSwitch : MonoBehaviour
                 occupied = true;
                 SetBool(true);
                 GetComponent<TTSID>().trackedDataAvailable = true;
+
+                foreach (ParticleSystem pS in changeSystem.GetComponentsInChildren<ParticleSystem>())
+                {
+                    pS.Play();
+                }
+
             }
         }
     
