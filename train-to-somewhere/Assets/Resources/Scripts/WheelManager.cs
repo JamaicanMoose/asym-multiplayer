@@ -30,25 +30,27 @@ public class WheelManager : MonoBehaviour
 
     void BreakWheel()
     {
-        if(tc.speed < .1f)
-        {
-            breakChance = 0;
-        }
-        else if(tc.speed < 5f)
+        float magnitude = tc.rb.velocity.magnitude;
+
+        if(magnitude < .1f)
         {
             breakChance = .05f;
         }
-        else if(tc.speed < 10f)
+        else if(magnitude < 5f)
         {
             breakChance = .1f;
         }
-        else if(tc.speed < 20f)
+        else if(magnitude < 10f)
         {
             breakChance = .15f;
         }
+        else if(magnitude < 20f)
+        {
+            breakChance = .25f;
+        }
         else
         {
-            breakChance = .2f;
+            breakChance = .3f;
         }
         if (UnityEngine.Random.value <= breakChance)
         {

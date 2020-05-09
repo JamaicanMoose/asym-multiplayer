@@ -8,6 +8,8 @@ public class PickupFood : PickupGeneric
     Rigidbody rb;
     bool isServer;
 
+    Collider col;
+
     private void Awake()
     {
         isServer = GameObject.FindGameObjectWithTag("Network")
@@ -16,6 +18,11 @@ public class PickupFood : PickupGeneric
         if (!isServer)
         {
             Destroy(rb);
+           
+        }
+        else
+        {
+            col = GetComponent<Collider>();
         }
 
 
@@ -36,16 +43,32 @@ public class PickupFood : PickupGeneric
     {
         isHeld = true;
         holdingTransform = holding;
+
+        if(isServer)
+        {
+            col.enabled = false;
+        }
     }
 
     public override void Drop()
     {
         isHeld = false;
         holdingTransform = null;
+
+        if(isServer)
+        {
+            rb.AddForce(Vector3.up * 2, ForceMode.Impulse);
+            col.enabled = true;
+        }
     }
 
     public override void Interact()
     {
+        if(isServer)
+        {
+            col.enabled = true;
+        }
+     
         holdingTransform.GetComponent<TTSNetworkedPlayer>().EatFood(foodValue, GetComponent<TTSID>());
         
     }

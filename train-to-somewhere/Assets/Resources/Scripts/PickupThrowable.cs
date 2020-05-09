@@ -10,6 +10,7 @@ public class PickupThrowable : PickupGeneric
 
     public float throwScale = 3;
 
+    private Collider col;
 
     public bool isServer;
     private void Awake()
@@ -20,6 +21,10 @@ public class PickupThrowable : PickupGeneric
         if(!isServer)
         {
             Destroy(rb);
+        }
+        else
+        {
+            col = GetComponent<Collider>();
         }
 
       
@@ -40,16 +45,32 @@ public class PickupThrowable : PickupGeneric
     {
         isHeld = true;
         holdingTransform = holding;
+
+        if(isServer)
+        {
+            col.enabled = false;
+        }
     }
 
     public override void Drop()
     {
         isHeld = false;
         holdingTransform = null;
+
+        if (isServer)
+        {
+            rb.AddForce(Vector3.up * 2, ForceMode.Impulse);
+            col.enabled = true;
+        }
     }
 
     public override void Interact()
     {
+
+        if (isServer)
+        {
+            col.enabled = true;
+        }
         isHeld = false;
         Vector3 throwDirection = holdingTransform.forward + Vector3.up * 2;
         rb.velocity = Vector3.zero;

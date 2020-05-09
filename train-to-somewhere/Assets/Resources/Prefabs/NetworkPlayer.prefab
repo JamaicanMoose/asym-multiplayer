@@ -46,6 +46,7 @@ GameObject:
   - component: {fileID: -2884879588505320950}
   - component: {fileID: -494589026277298688}
   - component: {fileID: 5200333658201192644}
+  - component: {fileID: 5583779958410766820}
   m_Layer: 0
   m_Name: NetworkPlayer
   m_TagString: Player
@@ -123,6 +124,8 @@ MonoBehaviour:
   toolParent: {fileID: 8062149599103496412}
   JobTag: Engineer
   playerAnim: {fileID: 5200333658201192644}
+  holdingCollider: {fileID: 5583779958410766820}
+  defaultCollider: {fileID: -494589026277298688}
 --- !u!54 &-2884879588505320950
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -166,6 +169,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerAnim: {fileID: 8927423784394597470}
+--- !u!65 &5583779958410766820
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4530945268662287021}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Size: {x: 0.5, y: 1.5, z: 1.1}
+  m_Center: {x: 0, y: 0.2, z: 0.3}
 --- !u!1 &7170009624961181869
 GameObject:
   m_ObjectHideFlags: 0
