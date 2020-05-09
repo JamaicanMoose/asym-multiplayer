@@ -30,7 +30,7 @@ public class CounterInteract : InteractGeneric
         //spawn food object here
         Debug.Log("Spawn food object");
         
-        GameObject food = Instantiate(foods[Random.Range(0, foods.Length)], gameObject.transform.position + new Vector3(0, 1.55f, 0), Quaternion.identity);
+        GameObject food = Instantiate(foods[Random.Range(0, foods.Length)], gameObject.transform.position + new Vector3(-1, 1.55f, 0), Quaternion.identity);
         food.transform.parent = GameObject.FindGameObjectWithTag("Train").transform;
         food.GetComponent<TTSID>().Init();
         TTS.GameObjectInitMessage initMessage = new TTS.GameObjectInitMessage(food);
