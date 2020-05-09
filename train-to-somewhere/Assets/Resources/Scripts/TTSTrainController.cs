@@ -39,14 +39,20 @@ public class TTSTrainController : MonoBehaviour
 {
     bool gameStarted = false;
 
-    List<string> trainCars = new List<string>(){
+    public List<string> trainCars = new List<string>(){
         "ChangingCar",
         "FridgeCar",
         "CoalCar",
+        "TrainCar",
         "KitchenCar",       
-		"TrainCar",		
-		"TrainCar"
         };
+
+    public List<string> additionalLoop = new List<string>() {
+        "ChangingCar",
+        "TrainCar",
+        "FridgeCar",
+        "KitchenCar"
+    };
 
     [HideInInspector]
     public Rigidbody rb;

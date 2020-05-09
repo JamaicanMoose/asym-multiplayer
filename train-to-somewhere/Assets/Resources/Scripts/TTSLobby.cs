@@ -80,6 +80,19 @@ public class TTSLobby : MonoBehaviour
     {
         Transform world = GameObject.Find("World").transform;
 
+        TTSTrainController tc = GameObject.Find("Train").GetComponent<TTSTrainController>();
+        int i = 0, loopPos = 0;
+        foreach (IClient c in darkRiftServer.Server.ClientManager.GetAllClients())
+        {
+            if ((i % 4) == 0)
+            {
+                tc.trainCars.Add(tc.additionalLoop[loopPos]);
+                loopPos = (loopPos + 1) % (tc.additionalLoop.Count - 1);
+            }
+
+            i++;
+        }
+
         GameObject.Find("Train").GetComponent<TTSTrainController>().BuildTrain();
 
         // Instantiate players
