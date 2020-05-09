@@ -31,6 +31,14 @@ public class HUDTimer : MonoBehaviour
 
         int seconds = secondsLeft % 60;
 
-        timerText.text = minutes + ":" + seconds;
+        if(seconds < 10)
+        {
+            timerText.text = minutes + ":0" + seconds;
+        }
+        else
+        {
+            timerText.text = minutes + ":" + seconds;
+        }
+        
     }
 }
