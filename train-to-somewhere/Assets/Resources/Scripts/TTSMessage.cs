@@ -83,6 +83,13 @@ namespace TTS
             GameObject go;
             if (prefabID != "")
             {
+                //Debug.Log(name);
+                //Debug.Log(prefabID); // prefabID = "T"
+                if (prefabID == "T")
+                {
+                    prefabID = "TrainTrack";
+                }
+                //Debug.Log(prefabID);
                 go = GameObject.Instantiate(Resources.Load($"Prefabs/{prefabID}", typeof(GameObject))) as GameObject;
                 go.name = name;
             }
