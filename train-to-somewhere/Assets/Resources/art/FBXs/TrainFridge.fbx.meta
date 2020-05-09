@@ -3,7 +3,12 @@ guid: 0dfb8727bbca4e94fa7ebb5e4f404acd
 ModelImporter:
   serializedVersion: 19300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: trainCooler
+    second: {fileID: 2100000, guid: 97b715dfff54f3d4589f4c024c80fafc, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
