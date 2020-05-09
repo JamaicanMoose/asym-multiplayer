@@ -82,6 +82,9 @@ public class TTSNetworkedPlayer : MonoBehaviour
     List<GameObject> hats = new List<GameObject>();
     List<GameObject> tools = new List<GameObject>();
 
+    public Collider holdingCollider;
+    public Collider defaultCollider;
+
     bool isServer;
 
     private void Awake()
@@ -167,8 +170,9 @@ public class TTSNetworkedPlayer : MonoBehaviour
         {
             if(heldPickup != null)
             {
+                SetCollider(false);
                 heldPickup.Interact();
-                heldPickup = null;
+                heldPickup = null;               
             }
             else
             {
@@ -190,8 +194,9 @@ public class TTSNetworkedPlayer : MonoBehaviour
       
             if(heldPickup != null)
             {
+                SetCollider(false);
                 heldPickup.Drop();
-                heldPickup = null;          
+                heldPickup = null;               
              
             }
             else
@@ -203,6 +208,7 @@ public class TTSNetworkedPlayer : MonoBehaviour
                     if (!heldPickup.requiresCostume || heldPickup.costume == JobTag)
                     {
                         heldPickup.Hold(transform);
+                        SetCollider(true);
                     }
                 }
             }
@@ -408,5 +414,19 @@ public class TTSNetworkedPlayer : MonoBehaviour
 
     }
 
+    private void SetCollider(bool holding)
+    {
+        if(holding)
+        {
+            holdingCollider.enabled = true;
+            defaultCollider.enabled = false;
+
+        }
+        else
+        {
+            holdingCollider.enabled = false;
+            defaultCollider.enabled = true;
+        }
+    }
 
 }
