@@ -48,9 +48,9 @@ public class TTSTrainController : MonoBehaviour
 		"TrainCar"
         };
 
+    [HideInInspector]
     public Rigidbody rb;
     ConstantForce cf;
-    public float speed = 2f;
     public float trainEngineAcceleration = 0.0f;
     public float maxTrainEngineAcceleration = 7.0f;
     [Tooltip("Portion of trainEngineAcceleration lost each second.")]
