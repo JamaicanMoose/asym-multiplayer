@@ -172,7 +172,8 @@ public class TTSNetworkedPlayer : MonoBehaviour
             }
             else
             {
-                if(iVolume.potentialInteracts.Count > 0)
+                iVolume.potentialInteracts.RemoveAll(item => item == null);
+                if (iVolume.potentialInteracts.Count > 0)
                 {
                     interactObj = iVolume.potentialInteracts[0].GetComponent<InteractGeneric>();
                     if (!interactObj.requiresCostume || interactObj.costume == JobTag)
@@ -195,8 +196,9 @@ public class TTSNetworkedPlayer : MonoBehaviour
             }
             else
             {
+                pVolume.potentialPickups.RemoveAll(item => item == null);
                 if (pVolume.potentialPickups.Count > 0)
-                {                 
+                {
                     heldPickup = pVolume.potentialPickups[0].GetComponent<PickupGeneric>();
                     if (!heldPickup.requiresCostume || heldPickup.costume == JobTag)
                     {
@@ -221,7 +223,7 @@ public class TTSNetworkedPlayer : MonoBehaviour
         if (!dashing && onDashButtonDown && currentMoveVector != Vector3.zero)
         {
             float costPerDash = dashFoodCost * (dashTime / Time.deltaTime);
-            if (foodLevel >= costPerDash)
+            if (foodLevel > 0)
             {
                 dashing = true;
                 StartCoroutine(DashTimer());
@@ -229,6 +231,8 @@ public class TTSNetworkedPlayer : MonoBehaviour
             else
             {
                 GetComponentInChildren<MeshRenderer>().material.color = Color.red;
+                dashing = false;
+                foodLevel = 0;
             }
 
             
@@ -261,6 +265,7 @@ public class TTSNetworkedPlayer : MonoBehaviour
     {
         bool moving;
         bool holding;
+        bool tired;
 
         if (lastMoveVector != Vector3.zero)
             moving = true;
@@ -272,13 +277,22 @@ public class TTSNetworkedPlayer : MonoBehaviour
         else
             holding = false;
 
+        if(foodLevel <= 0)
+        {
+            tired = true;
+        }
+        else
+        {
+            tired = false;
+        }
+
         if (dashing)
         {
             playerAnim.SetWalkSpeed(dashSpeed / 2);
         }
         else
         {
-            playerAnim.SetWalkSpeed( 1);
+            playerAnim.SetWalkSpeed(1);
         }
 
         if (moving)
@@ -300,6 +314,15 @@ public class TTSNetworkedPlayer : MonoBehaviour
         else
         {
             playerAnim.SetBool(4, false);
+        }
+
+        if (tired)
+        {
+            playerAnim.SetBool(3, true);
+        }
+        else
+        {
+            playerAnim.SetBool(3, false);
         }
     }
 
@@ -324,7 +347,7 @@ public class TTSNetworkedPlayer : MonoBehaviour
         prevFire2ButtonDown = prevFire2Down;
     }
 
-    public void EatFood(float foodValue)
+    public void EatFood(float foodValue, TTSID toRemove)
     {
         foodLevel += foodValue;
         trackedDataAvailable = true;
@@ -334,41 +357,55 @@ public class TTSNetworkedPlayer : MonoBehaviour
         {
             GetComponentInChildren<MeshRenderer>().material.color = defaultColor;
         }
+
+        playerAnim.SetBool(5, true);
+        StartCoroutine(EatAnim(toRemove));
     }
 
     public void SetJob(string jobTag)
     {
     
-       
-        JobTag = jobTag;
-        foreach(GameObject hat in hats)
+       if(JobTag != jobTag)
         {
-            if(hat.CompareTag(jobTag))
+            JobTag = jobTag;
+            foreach (GameObject hat in hats)
             {
-                hat.SetActive(true);
+                if (hat.CompareTag(jobTag))
+                {
+                    hat.SetActive(true);
+                }
+                else
+                {
+                    hat.SetActive(false);
+                }
             }
-            else
+
+            foreach (GameObject tool in tools)
             {
-                hat.SetActive(false);
+                if (tool.CompareTag(jobTag))
+                {
+                    tool.SetActive(true);
+                }
+                else
+                {
+                    tool.SetActive(false);
+                }
             }
+
+            trackedDataAvailable = true;
+            GetComponent<TTSID>().trackedDataAvailable = true;
+            playerAnim.SetTrigger(12);
         }
+        
+    
+    }
 
-        foreach(GameObject tool in tools)
-        {
-            if(tool.CompareTag(jobTag))
-            {
-                tool.SetActive(true);
-            }
-            else
-            {
-                tool.SetActive(false);
-            }
-        }
+    IEnumerator EatAnim(TTSID toRemove)
+    {
+        yield return new WaitForSeconds(.8f);
+        playerAnim.SetBool(5, false);
+        toRemove.Remove();
 
-        trackedDataAvailable = true;
-        GetComponent<TTSID>().trackedDataAvailable = true;
-
-        playerAnim.SetTrigger(12);
     }
 
 

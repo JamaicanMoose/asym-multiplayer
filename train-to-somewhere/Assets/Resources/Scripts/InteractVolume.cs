@@ -72,10 +72,4 @@ public class InteractVolume : MonoBehaviour
         }
       
     }
-
-    private void Update()
-    {
-        // Quick and dirty bug fix -- purge all null interact items
-        potentialInteracts.RemoveAll(item => item == null);
-    }
 }
