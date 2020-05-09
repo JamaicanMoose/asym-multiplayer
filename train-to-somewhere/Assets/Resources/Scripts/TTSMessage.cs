@@ -83,13 +83,13 @@ namespace TTS
             GameObject go;
             if (prefabID != "")
             {
-                //Debug.Log(name);
-                //Debug.Log(prefabID); // prefabID = "T"
+                Debug.Log("Name: " + name);
+                Debug.Log("prefabID: " + prefabID); // prefabID = "T"
                 if (prefabID == "T")
                 {
                     prefabID = "TrainTrack";
                 }
-                //Debug.Log(prefabID);
+                Debug.Log("new prefabID: " + prefabID);
                 go = GameObject.Instantiate(Resources.Load($"Prefabs/{prefabID}", typeof(GameObject))) as GameObject;
                 go.name = name;
             }
@@ -119,6 +119,7 @@ namespace TTS
             tag = e.Reader.ReadString();
             name = e.Reader.ReadString();
             prefabID = e.Reader.ReadString();
+            Debug.Log(e.Reader.ReadString());
         }
 
         public override void Serialize(SerializeEvent e)
@@ -130,6 +131,7 @@ namespace TTS
             e.Writer.Write(tag);
             e.Writer.Write(name);
             e.Writer.Write(prefabID);
+            e.Writer.Write("CHECK");
         }
     }
 
