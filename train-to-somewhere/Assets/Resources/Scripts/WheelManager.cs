@@ -22,6 +22,11 @@ public class WheelManager : MonoBehaviour
         {
             WheelBreak[] wheels = GetComponentsInChildren<WheelBreak>();
 
+            if (wheels.Length == 0)
+            {
+                return;
+            }
+
             // Randomly break either the front or back wheel in some car, unless one is already broken
             int idx = Random.Range(0, wheels.Length);
             bool isFront;
