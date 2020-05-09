@@ -11,20 +11,6 @@ public class TTSPrefabID : MonoBehaviour
     {
         isServer = GameObject.FindGameObjectWithTag("Network")
             .GetComponent<DarkRift.Server.Unity.XmlUnityServer>() != null;
-        if(isServer)
-        {
-            if (GetComponent<PickupGeneric>() != null)
-            {
-                Transform trainTransform = GameObject.FindGameObjectWithTag("Train").transform;
-          
-                transform.parent = trainTransform;
-
-                GetComponent<TTSID>().Init();
-        
-            }
-            
-            
-        }
     }
 
     public static string Get(GameObject go)

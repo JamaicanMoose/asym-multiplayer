@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1008066880295944178}
   - component: {fileID: 3657453287800646236}
   m_Layer: 0
-  m_Name: TrainTrack
+  m_Name: TrackPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -64,7 +64,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bf0e24c663491c4ca4c6447977b7b41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabID: TrainTrack
+  prefabID: TrackPrefab
 --- !u!54 &5278196235054752138
 Rigidbody:
   m_ObjectHideFlags: 0
