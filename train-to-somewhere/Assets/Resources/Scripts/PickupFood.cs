@@ -46,8 +46,8 @@ public class PickupFood : PickupGeneric
 
     public override void Interact()
     {
-        holdingTransform.GetComponent<TTSNetworkedPlayer>().EatFood(foodValue);
-        GetComponent<TTSID>().Remove();
+        holdingTransform.GetComponent<TTSNetworkedPlayer>().EatFood(foodValue, GetComponent<TTSID>());
+        
     }
 
 }

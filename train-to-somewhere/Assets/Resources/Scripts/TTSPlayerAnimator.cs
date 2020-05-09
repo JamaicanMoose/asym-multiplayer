@@ -74,6 +74,38 @@ namespace TTS
             target.GetComponent<TTSPlayerAnimator>().SetTrigger(Parameter);
         }
     }
+
+    public class PlayerWalkSpeed : TDataMessagePart
+    {
+
+        float WalkSpeed;
+
+
+        public PlayerWalkSpeed() { }
+
+        public PlayerWalkSpeed(float walkSpeed)
+        {
+
+            this.WalkSpeed = walkSpeed;
+
+
+        }
+
+        public override void Serialize(SerializeEvent e)
+        {
+            e.Writer.Write(WalkSpeed);
+        }
+
+        public override void Deserialize(DeserializeEvent e)
+        {
+            WalkSpeed = e.Reader.ReadSingle();
+        }
+
+        public override void Load(Transform target)
+        {
+            target.GetComponent<TTSPlayerAnimator>().SetWalkSpeed(WalkSpeed);
+        }
+    }
 }
 public class TTSPlayerAnimator : MonoBehaviour
 {
@@ -95,7 +127,6 @@ public class TTSPlayerAnimator : MonoBehaviour
     private void Awake()
     {
         animParams.Add("Walk", false);
-        animParams.Add("WalkTired", false);
         animParams.Add("isTired", false);
         animParams.Add("isHolding", false);
         animParams.Add("Eat", false);
@@ -110,7 +141,6 @@ public class TTSPlayerAnimator : MonoBehaviour
         animParams.Add("Win", false);
 
         paramTags.Add(1, "Walk");
-        paramTags.Add(2, "WalkTired");
         paramTags.Add(3, "isTired");
         paramTags.Add(4, "isHolding");
         paramTags.Add(5, "Eat");
@@ -154,6 +184,9 @@ public class TTSPlayerAnimator : MonoBehaviour
             triggerChanges.RemoveAt(0);
         }
 
+        TTS.PlayerWalkSpeed wS = new TTS.PlayerWalkSpeed(WalkSpeed);
+        e.messages.Add(wS);
+
 
     }
 
@@ -193,6 +226,7 @@ public class TTSPlayerAnimator : MonoBehaviour
 
             if (isServer)
             {
+                GetComponent<TTSID>().trackedDataAvailable = true;
             }
         }
     }    
