@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &2492428702740159024
+--- !u!1 &3102882677218434854
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,88 +8,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7779539716981986549}
-  - component: {fileID: 3756602993321178048}
-  - component: {fileID: 2868235691867532623}
-  m_Layer: 0
-  m_Name: Penguin_Arm_L
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7779539716981986549
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2492428702740159024}
-  m_LocalRotation: {x: -0.10425073, y: 0, z: -0, w: 0.99455106}
-  m_LocalPosition: {x: -71.895485, y: 11.675658, z: -25.378075}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 5120047143578825246}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &3756602993321178048
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2492428702740159024}
-  m_Mesh: {fileID: 6310630444570222367, guid: 653d5e052b20d324aa077817551e8d1b, type: 3}
---- !u!23 &2868235691867532623
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2492428702740159024}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 09e2d822c9f4b814391a13251be4e080, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
---- !u!1 &2838984347286887101
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5120047143578825246}
-  - component: {fileID: 3194638484615776069}
-  - component: {fileID: 4964282334777124326}
+  - component: {fileID: 5433507042351937413}
+  - component: {fileID: 2322763000947950302}
+  - component: {fileID: 5227854642181808253}
   m_Layer: 0
   m_Name: PenguinBody
   m_TagString: Untagged
@@ -97,37 +18,37 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5120047143578825246
+--- !u!4 &5433507042351937413
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2838984347286887101}
+  m_GameObject: {fileID: 3102882677218434854}
   m_LocalRotation: {x: 0, y: 0, z: 0.026120644, w: 0.9996588}
   m_LocalPosition: {x: -4.21214, y: 98.76244, z: 14.113136}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 7779539716981986549}
-  - {fileID: 3654444306854691552}
-  m_Father: {fileID: 7846190232210336538}
+  - {fileID: 7466902510779601262}
+  - {fileID: 4530216459434542971}
+  m_Father: {fileID: 6956647538010484353}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &3194638484615776069
+--- !u!33 &2322763000947950302
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2838984347286887101}
+  m_GameObject: {fileID: 3102882677218434854}
   m_Mesh: {fileID: 6106250215230672794, guid: 653d5e052b20d324aa077817551e8d1b, type: 3}
---- !u!23 &4964282334777124326
+--- !u!23 &5227854642181808253
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2838984347286887101}
+  m_GameObject: {fileID: 3102882677218434854}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -139,7 +60,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 09e2d822c9f4b814391a13251be4e080, type: 2}
+  - {fileID: 2100000, guid: cc66bcd84ef0d9f4ca84d1f8468a8f0a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -160,7 +81,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!1 &3918866256754726405
+--- !u!1 &3386527497849675691
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -168,9 +89,88 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3073865664282274065}
-  - component: {fileID: 6206359314060574965}
-  - component: {fileID: 7615520081953653733}
+  - component: {fileID: 7466902510779601262}
+  - component: {fileID: 4056508405038151259}
+  - component: {fileID: 3145688783800821972}
+  m_Layer: 0
+  m_Name: Penguin_Arm_L
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7466902510779601262
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3386527497849675691}
+  m_LocalRotation: {x: -0.10425073, y: 0, z: -0, w: 0.99455106}
+  m_LocalPosition: {x: -71.895485, y: 11.675658, z: -25.378075}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5433507042351937413}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &4056508405038151259
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3386527497849675691}
+  m_Mesh: {fileID: 6310630444570222367, guid: 653d5e052b20d324aa077817551e8d1b, type: 3}
+--- !u!23 &3145688783800821972
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3386527497849675691}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: cc66bcd84ef0d9f4ca84d1f8468a8f0a, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!1 &4182474590512862110
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2792564831124466826}
+  - component: {fileID: 6505683358871717230}
+  - component: {fileID: 7333686793508685438}
   m_Layer: 0
   m_Name: Penguin_Foot_R
   m_TagString: Untagged
@@ -178,35 +178,35 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3073865664282274065
+--- !u!4 &2792564831124466826
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3918866256754726405}
+  m_GameObject: {fileID: 4182474590512862110}
   m_LocalRotation: {x: -0.065921605, y: 0.0038292382, z: 0.031343177, w: 0.99732506}
   m_LocalPosition: {x: 32.033165, y: -13.025058, z: 51.32667}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 7846190232210336538}
+  m_Father: {fileID: 6956647538010484353}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &6206359314060574965
+--- !u!33 &6505683358871717230
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3918866256754726405}
+  m_GameObject: {fileID: 4182474590512862110}
   m_Mesh: {fileID: -6560277134051348018, guid: 653d5e052b20d324aa077817551e8d1b, type: 3}
---- !u!23 &7615520081953653733
+--- !u!23 &7333686793508685438
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3918866256754726405}
+  m_GameObject: {fileID: 4182474590512862110}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -218,7 +218,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 09e2d822c9f4b814391a13251be4e080, type: 2}
+  - {fileID: 2100000, guid: cc66bcd84ef0d9f4ca84d1f8468a8f0a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -239,7 +239,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!1 &5063039514883912566
+--- !u!1 &5344147675574400749
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -247,7 +247,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7846190232210336538}
+  - component: {fileID: 6956647538010484353}
   m_Layer: 0
   m_Name: Penuin_CTRL_Root
   m_TagString: Untagged
@@ -255,24 +255,24 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7846190232210336538
+--- !u!4 &6956647538010484353
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5063039514883912566}
+  m_GameObject: {fileID: 5344147675574400749}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 13.025058, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 4466689689895039806}
-  - {fileID: 3073865664282274065}
-  - {fileID: 5120047143578825246}
-  m_Father: {fileID: 4901571448373429888}
+  - {fileID: 3572868504328304293}
+  - {fileID: 2792564831124466826}
+  - {fileID: 5433507042351937413}
+  m_Father: {fileID: 5218650664372159259}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &7435954683225849045
+--- !u!1 &7735054410600462670
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -280,9 +280,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3654444306854691552}
-  - component: {fileID: 8435520093982167578}
-  - component: {fileID: 7787788714779961055}
+  - component: {fileID: 4530216459434542971}
+  - component: {fileID: 8753100704597841793}
+  - component: {fileID: 6951999752661492548}
   m_Layer: 0
   m_Name: Penguin_Arm_R
   m_TagString: Untagged
@@ -290,35 +290,35 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3654444306854691552
+--- !u!4 &4530216459434542971
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7435954683225849045}
+  m_GameObject: {fileID: 7735054410600462670}
   m_LocalRotation: {x: 0.10425073, y: -0, z: -0, w: 0.99455106}
   m_LocalPosition: {x: 71.914825, y: 12.651873, z: -25.918701}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 5120047143578825246}
+  m_Father: {fileID: 5433507042351937413}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &8435520093982167578
+--- !u!33 &8753100704597841793
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7435954683225849045}
+  m_GameObject: {fileID: 7735054410600462670}
   m_Mesh: {fileID: -3851667410020593310, guid: 653d5e052b20d324aa077817551e8d1b, type: 3}
---- !u!23 &7787788714779961055
+--- !u!23 &6951999752661492548
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7435954683225849045}
+  m_GameObject: {fileID: 7735054410600462670}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -330,7 +330,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 09e2d822c9f4b814391a13251be4e080, type: 2}
+  - {fileID: 2100000, guid: cc66bcd84ef0d9f4ca84d1f8468a8f0a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -351,7 +351,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!1 &8241227347532461203
+--- !u!1 &8316542030594032450
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -359,40 +359,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4901571448373429888}
-  m_Layer: 0
-  m_Name: FBX_Penguin_Updated
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4901571448373429888
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8241227347532461203}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 33.07696, y: 449.3651, z: -136.47505}
-  m_LocalScale: {x: 0.01, y: 0.010315832, z: 0.01}
-  m_Children:
-  - {fileID: 7846190232210336538}
-  m_Father: {fileID: 0}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &9152427749755143897
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4466689689895039806}
-  - component: {fileID: 8497710779669434188}
-  - component: {fileID: 3630775132384806328}
+  - component: {fileID: 3572868504328304293}
+  - component: {fileID: 8756212139477748439}
+  - component: {fileID: 4470566849291141155}
   m_Layer: 0
   m_Name: Penguin_Foot_L
   m_TagString: Untagged
@@ -400,35 +369,35 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4466689689895039806
+--- !u!4 &3572868504328304293
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9152427749755143897}
+  m_GameObject: {fileID: 8316542030594032450}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -32.01022, y: -13.025058, z: 52.174282}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 7846190232210336538}
+  m_Father: {fileID: 6956647538010484353}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &8497710779669434188
+--- !u!33 &8756212139477748439
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9152427749755143897}
+  m_GameObject: {fileID: 8316542030594032450}
   m_Mesh: {fileID: -3372842784688044198, guid: 653d5e052b20d324aa077817551e8d1b, type: 3}
---- !u!23 &3630775132384806328
+--- !u!23 &4470566849291141155
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9152427749755143897}
+  m_GameObject: {fileID: 8316542030594032450}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -440,7 +409,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 09e2d822c9f4b814391a13251be4e080, type: 2}
+  - {fileID: 2100000, guid: cc66bcd84ef0d9f4ca84d1f8468a8f0a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -461,3 +430,34 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!1 &9094745642761498888
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5218650664372159259}
+  m_Layer: 0
+  m_Name: Final_penguin_5-9 1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5218650664372159259
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9094745642761498888}
+  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -11.30353, y: 10.139816, z: -7.0774965}
+  m_LocalScale: {x: 0.01, y: 0.010315832, z: 0.01}
+  m_Children:
+  - {fileID: 6956647538010484353}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
