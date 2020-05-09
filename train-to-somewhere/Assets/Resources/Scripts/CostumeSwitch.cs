@@ -51,7 +51,7 @@ public class CostumeSwitch : MonoBehaviour
            .GetComponent<DarkRift.Server.Unity.XmlUnityServer>() != null;
 
   
-        doorAnimator = GetComponent<Animator>();
+        doorAnimator = GetComponentInChildren<Animator>();
 
         if (isServer)
         {

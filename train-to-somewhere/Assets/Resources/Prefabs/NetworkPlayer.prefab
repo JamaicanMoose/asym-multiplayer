@@ -180,7 +180,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 0
   serializedVersion: 2
-  m_Size: {x: 0.5, y: 1.5, z: 1.1}
+  m_Size: {x: 0.5, y: 1.4, z: 1.1}
   m_Center: {x: 0, y: 0.2, z: 0.3}
 --- !u!1 &7170009624961181869
 GameObject:
@@ -306,7 +306,7 @@ PrefabInstance:
     - target: {fileID: -4454921161829576567, guid: 72e7f8062f1f0d54388c165659975ab3,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -4454921161829576567, guid: 72e7f8062f1f0d54388c165659975ab3,
         type: 3}

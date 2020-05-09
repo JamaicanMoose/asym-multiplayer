@@ -337,6 +337,7 @@ MonoBehaviour:
   backBroken: 0
   sparkPrefab: {fileID: 272006060359467171, guid: 9d2f1f6fd99eb6948a5264df35a4f4c6,
     type: 3}
+  tc: {fileID: 0}
 --- !u!114 &6066834017391098553
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -349,11 +350,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab9b2e9e339655144a596013f4c7bb7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chefRoom: {fileID: 5730383381695436160, guid: 260b19f10d3ebb34f8c59f09b8d56079,
+  chefRoom: {fileID: 4135217376583705371, guid: 260b19f10d3ebb34f8c59f09b8d56079,
     type: 3}
-  engineerRoom: {fileID: 1336930140338168782, guid: 0f6d1e0852962854881b72d3c51c37e1,
+  engineerRoom: {fileID: 2684220116725465801, guid: 0f6d1e0852962854881b72d3c51c37e1,
     type: 3}
-  conductorRoom: {fileID: 5295544293843636670, guid: 016bd3518a529b34db51144b57c6ddb9,
+  conductorRoom: {fileID: 4755091206151678492, guid: 016bd3518a529b34db51144b57c6ddb9,
     type: 3}
 --- !u!1 &4922205034348974474
 GameObject:
