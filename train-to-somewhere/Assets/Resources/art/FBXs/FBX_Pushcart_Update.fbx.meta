@@ -18,7 +18,12 @@ ModelImporter:
   - first:
       74: 6066998084399068258
     second: Push_Full
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: blinn17
+    second: {fileID: 2100000, guid: 0039b9e19ced3e949ae2ad4dc883882b, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
