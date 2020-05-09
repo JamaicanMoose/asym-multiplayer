@@ -46,6 +46,9 @@ public class WheelInteract : InteractGeneric
             car.backBroken = false;
         }
 
+        // Remove extra drag this wheel caused
+        car.tc.AddDrag(-WheelBreak.dragDelta);
+
         return;
 
         if (playerIV != null)

@@ -23,7 +23,7 @@ namespace TTS
                 {
                     Transform first = transform.parent.GetChild(0);
                     Transform last = transform.parent.GetChild(transform.parent.childCount - 1);
-                    Debug.Log($"trig: {name}; first: {first.name}; last: {last.name}");
+                    //Debug.Log($"trig: {name}; first: {first.name}; last: {last.name}");
                     first.position = last.position + -other.transform.forward * 16;
                     first.SetAsLastSibling();
                 }

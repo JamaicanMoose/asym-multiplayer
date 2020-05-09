@@ -42,18 +42,21 @@ public class TTSTrainController : MonoBehaviour
     List<string> trainCars = new List<string>(){
         "ChangingCar",
         "FridgeCar",
+        "CoalCar",
         "KitchenCar",       
-		"TrainCar",
-		"CoalCar",		
+		"TrainCar",		
 		"TrainCar"
         };
 
+    public Rigidbody rb;
+    ConstantForce cf;
     public float speed = 2f;
     public float trainEngineAcceleration = 0.0f;
     public float maxTrainEngineAcceleration = 7.0f;
-    [Tooltip("Rate at which trainEngineAcceleration decreases.")]
+    [Tooltip("Portion of trainEngineAcceleration lost each second.")]
     public float trainEngineCooldownRate = 0.2f;
-    public float frictionAcceleration = 0.1f;
+
+    // Friction Calculation
 
     GameObject[] WheelAnimators;
     private float prevWheelSpeed;
@@ -61,6 +64,8 @@ public class TTSTrainController : MonoBehaviour
 
     private void Awake()
     {
+        rb = GameObject.Find("TrainAnchor").GetComponent<Rigidbody>();
+        cf = GameObject.Find("TrainAnchor").GetComponent<ConstantForce>();
         GameObject.FindGameObjectWithTag("Network").GetComponent<TTSGeneric>().GameStarted += StartTrain;
         GetComponent<TTSID>().trackedDataSerialize += TrackedDataHandler;
     }
@@ -95,8 +100,8 @@ public class TTSTrainController : MonoBehaviour
 
         WheelAnimators = GameObject.FindGameObjectsWithTag("WheelAnimator");
 
-        wheelSpeed = speed / 5.45f;
-        prevWheelSpeed = speed;
+        wheelSpeed = rb.velocity.magnitude / 5.45f;
+        prevWheelSpeed = rb.velocity.magnitude;
         foreach (GameObject wAnim in WheelAnimators)
         {
             wAnim.GetComponent<Animator>().SetFloat("WheelSpeed", wheelSpeed);
@@ -108,22 +113,26 @@ public class TTSTrainController : MonoBehaviour
     {
         if (gameStarted)
         {
-            // Every physics timestep the engine's output is decreased at the cooldown rate
-            if (trainEngineAcceleration > trainEngineCooldownRate)
-                trainEngineAcceleration = Math.Sign(trainEngineAcceleration) * (Math.Abs(trainEngineAcceleration) - (trainEngineCooldownRate * Time.fixedDeltaTime));
-            else
-                trainEngineAcceleration = 0;
+            // Train engine cap
+            if (Math.Abs(trainEngineAcceleration) > maxTrainEngineAcceleration)
+                trainEngineAcceleration = Math.Sign(trainEngineAcceleration) * maxTrainEngineAcceleration;
 
-            // Every physics timestep the train moves according to the train engine's output
-            speed += trainEngineAcceleration * Time.fixedDeltaTime;
-            float frictionDeltaSpeed = Math.Min(Math.Abs(speed), frictionAcceleration);
-            speed += -Math.Sign(speed) * frictionDeltaSpeed;
+            // Train engine cooldown
+            trainEngineAcceleration *= 1 - (trainEngineCooldownRate * Time.fixedDeltaTime);
 
-            Vector3 forward = -transform.forward;
-            transform.Translate(forward * speed * Time.fixedDeltaTime);
+            cf.relativeForce = new Vector3(0, 0, -trainEngineAcceleration);
 
-            wheelSpeed = speed / 5.45f;
+            wheelSpeed = rb.velocity.magnitude / 5.45f;
 
+            //Keep Train in sync with TrainAnchor
+            transform.position = rb.position;
+        }
+    }
+
+    private void Update()
+    {
+        if (gameStarted)
+        {
             foreach (GameObject wAnim in WheelAnimators)
             {
                 wAnim.GetComponent<Animator>().SetFloat("WheelSpeed", wheelSpeed);
@@ -139,5 +148,10 @@ public class TTSTrainController : MonoBehaviour
     public void ChangeAcceleration(float change)
     {
         trainEngineAcceleration += change;
+    }
+
+    public void AddDrag(float delta)
+    {
+        rb.drag += delta;
     }
 }

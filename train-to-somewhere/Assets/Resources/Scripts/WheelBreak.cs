@@ -42,6 +42,7 @@ public class WheelBreak : MonoBehaviour
 {
     public float slowTimestep = 2.5f;
     public float accelerationDrop = 0.5f;
+    public static float dragDelta = .05f;
 
     public bool frontBroken = false;
     public bool backBroken = false;
@@ -49,14 +50,13 @@ public class WheelBreak : MonoBehaviour
     public GameObject sparkPrefab;
 
     private bool trackedDataAvailable = false;
-    private TTSTrainController tc;
+    public TTSTrainController tc;
     
     private void Awake()
     {
         if (GameObject.FindGameObjectWithTag("Network").GetComponent<DarkRift.Server.Unity.XmlUnityServer>() != null)
         {
             tc = GameObject.FindGameObjectWithTag("Train").GetComponent<TTSTrainController>();
-            InvokeRepeating("SlowTrain", 0.0f, slowTimestep);
 
             GetComponent<TTSID>().trackedDataSerialize += TrackedDataHandler;
         }
@@ -88,6 +88,9 @@ public class WheelBreak : MonoBehaviour
             backBroken = true;
         }
 
+        // Add extra drag to train
+        tc.AddDrag(dragDelta);
+
         // Spawn interactable w/ particles
         GameObject sparks = Instantiate(sparkPrefab, GameObject.FindGameObjectWithTag("Train").transform);
         sparks.transform.position = transform.position + sparks.transform.localPosition;
@@ -105,20 +108,5 @@ public class WheelBreak : MonoBehaviour
         os.initBuffer.Add(initMessage);
 
         SyncState();
-    }
-    
-
-    void SlowTrain()
-    {
-        float acc = 0.0f;
-
-        if (frontBroken) acc -= accelerationDrop;
-        if (backBroken) acc -= accelerationDrop;
-        if (acc < 0.0f)
-        {
-            Debug.Log("Slow by " + acc.ToString());
-        }
-
-        tc.ChangeAcceleration(acc);
     }
 }

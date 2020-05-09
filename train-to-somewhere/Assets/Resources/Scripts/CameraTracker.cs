@@ -36,6 +36,7 @@ public class CameraTracker : MonoBehaviour
             Transform currentTrainCar = localPlayer.GetComponent<TTSNetworkedPlayer>().GetCurrentCar();
             if(currentTrainCar != null)
             {
+                transform.parent = currentTrainCar;
                 Transform cameraAnchor = currentTrainCar.Find("CameraAnchor");
                 targetPos = cameraAnchor.position;
                 targetRotation = cameraAnchor.rotation;
