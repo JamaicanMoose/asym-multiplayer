@@ -60,5 +60,4 @@ crashlytics-build.properties
 
 # Custom meta file clauses
 *.ini.meta
-*.png.meta
 
