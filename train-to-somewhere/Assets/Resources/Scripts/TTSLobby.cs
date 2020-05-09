@@ -21,11 +21,15 @@ public class TTSLobby : MonoBehaviour
 
     TTSServer server;
 
+    public GameObject hudCanvas;
+
     private void Awake()
     {
         externalIP.text = new WebClient().DownloadString("http://icanhazip.com");
         darkRiftServer = gameObject.GetComponent<XmlUnityServer>();
         server = gameObject.GetComponent<TTSServer>();
+
+        hudCanvas.SetActive(false);
     }
 
 
@@ -109,6 +113,7 @@ public class TTSLobby : MonoBehaviour
         acceptingConnections = false;
         TSSInitGame();
         GameObject.FindGameObjectWithTag("StartMenu").SetActive(false);
+        hudCanvas.SetActive(true);
 
         GameObject.FindGameObjectWithTag("Network").GetComponent<TTSGeneric>().GameStart();
 

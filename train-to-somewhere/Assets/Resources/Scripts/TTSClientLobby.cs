@@ -18,6 +18,7 @@ public class TTSClientLobby : MonoBehaviour
 
     private bool connected = false;
 
+    public GameObject hudCanvas;
     private void Awake()
     {
         client = gameObject.GetComponent<UnityClient>();
@@ -25,6 +26,8 @@ public class TTSClientLobby : MonoBehaviour
         client.Disconnected += TTSDisconnectHandler;
 
         ttsClient = gameObject.GetComponent<TTSClient>();
+
+        hudCanvas.SetActive(false);
     }
 
     public void TTSOnConnectClick()
@@ -74,5 +77,6 @@ public class TTSClientLobby : MonoBehaviour
         while (!client.initSyncFinished || client.localPlayerId == 0) yield return new WaitForSeconds(.1f);
         client.GameStart();
         GameObject.FindGameObjectWithTag("StartMenu").SetActive(false);
+        hudCanvas.SetActive(true);
     }
 }

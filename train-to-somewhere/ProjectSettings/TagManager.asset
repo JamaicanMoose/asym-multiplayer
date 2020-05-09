@@ -19,6 +19,7 @@ TagManager:
   - Conductor
   - Engineer
   - PlayerAnimator
+  - HUDCanvas
   layers:
   - Default
   - TransparentFX
