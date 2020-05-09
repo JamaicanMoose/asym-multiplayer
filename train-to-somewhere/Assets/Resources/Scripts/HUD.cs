@@ -4,31 +4,39 @@ using UnityEngine;
 using System;
 using UnityEngine.UI;
 
-public class HUDTimer : MonoBehaviour
+public class HUD : MonoBehaviour
 {
 
     public Text timerText;
+    public Text speedText;
+    public Text posText;
 
-    private int secondsLeft = 60 * 10;
+    private int secondsLeft = 10 * 60;
+
+    Transform train;
+    float prevPos;
 
     bool isServer;
 
     private void Awake()
     {
-        GameObject.FindGameObjectWithTag("Network").GetComponent<TTSGeneric>().GameStarted += StartTimer;
+        GameObject.FindGameObjectWithTag("Network").GetComponent<TTSGeneric>().GameStarted += StartGame;
 
         timerText.text = "10:00";
 
         isServer = GameObject.FindGameObjectWithTag("Network")
-            .GetComponent<DarkRift.Server.Unity.XmlUnityServer>() != null;
+          .GetComponent<DarkRift.Server.Unity.XmlUnityServer>() != null;
     }
 
-    void StartTimer(object sender, EventArgs e)
+    void StartGame(object sender, EventArgs e)
     {
-        InvokeRepeating("UpdateTimer", 1.0f, 1.0f);
+        train = GameObject.FindGameObjectWithTag("Train").transform;
+        prevPos = train.position.z;
+        posText.text = $"{Math.Round(Math.Abs(prevPos), 0)} m";
+        InvokeRepeating("UpdateHUD", 1.0f, 1.0f);
     }
 
-    void UpdateTimer()
+    void UpdateHUD()
     {
         if(secondsLeft > 0)
         {
@@ -47,7 +55,11 @@ public class HUDTimer : MonoBehaviour
                 timerText.text = minutes + ":" + seconds;
             }
 
-            if (secondsLeft == 0 && isServer)
+            speedText.text = $"{Math.Round(Math.Abs(train.position.z - prevPos), 0)} m/s";
+            prevPos = train.position.z;
+            posText.text = $"{Math.Round(Math.Abs(prevPos), 0)} m";
+
+            if(secondsLeft == 0 && isServer)
             {
                 SetWin();
             }
@@ -63,9 +75,6 @@ public class HUDTimer : MonoBehaviour
             {
                 t.GetComponent<TTSPlayerAnimator>().SetTrigger(14);
             }
-          
         }
     }
-
-
 }
