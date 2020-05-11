@@ -35,7 +35,7 @@ public class TTSClientLobby : MonoBehaviour
         if(!connected)
         {
             IPAddress ip = IPAddress.Parse(ipField.text);
-            client.Connect(ip, 4296, IPVersion.IPv4);
+            client.Connect(ip, 4296, false);
         }
 
         if (client.ConnectionState == ConnectionState.Connected)
