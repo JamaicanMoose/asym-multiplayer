@@ -45,8 +45,8 @@ public class CameraTracker : MonoBehaviour
 
             if (transform.position != targetPos)
             {
-                transform.position = Vector3.Lerp(transform.position, targetPos, .05f);
-                transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, .1f);
+                transform.position = Vector3.Lerp(transform.position, targetPos, .03f);
+                transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, .05f);
                 if (Vector3.Distance(transform.position, targetPos) < .1f)
                 {
                     transform.position = targetPos;
